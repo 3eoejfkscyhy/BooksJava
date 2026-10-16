@@ -59,7 +59,6 @@
     <groupId>org.mapstruct</groupId>
     <artifactId>mapstruct</artifactId>
     <version>1.6.3</version>
-    <scope>runtime</scope>
 </dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -81,12 +80,7 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<dependency>
-    <groupId>org.mapstruct</groupId>
-    <artifactId>mapstruct</artifactId>
-    <version>1.6.3</version>
-    <scope>test</scope>
-</dependency>
+
 	</dependencies>
 
 	<build>
