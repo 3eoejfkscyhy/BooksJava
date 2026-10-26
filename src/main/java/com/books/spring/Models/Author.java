@@ -2,11 +2,12 @@ package com.books.spring.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.Getter;
-import lombok.Setter;
+
 
 @Entity
-@Table(name = "books")
+@Table(name = "authors")
+@AllArgsConstructor 
+@NoArgsConstructor 
 @Getter
 @Setter
 public class Author {
@@ -19,7 +20,7 @@ public class Author {
     private String firstName;
 
     @Column(name = "last_name", length = 20)
-    private String lastname;
+    private String lastName;
 
     @Column(name = "age", nullable = false)
     private int age;

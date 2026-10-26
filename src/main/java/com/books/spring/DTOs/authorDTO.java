@@ -2,11 +2,12 @@ package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
 
+@AllArgsConstructor 
+@NoArgsConstructor 
 @Getter
 @Setter
-public class authorDTO {
+public class AuthorDTO {
     private Long id;
 
     @NotBlank(message = "First name is required")
