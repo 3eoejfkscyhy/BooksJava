@@ -21,5 +21,10 @@ public class Author {
     @Column(name = "last_name", length = 20)
     private String lastname;
 
+    @Column(name = "age", nullable = false)
+    private int age;
+
+    @Column(name = "booksWritten", nullable = false)
+    private int booksWritten;
 
 }
