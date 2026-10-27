@@ -1,5 +1,7 @@
 package com.books.spring.Models;
 
+import java.util.*;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 20)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "email", nullable = false)
@@ -23,5 +25,11 @@ public class User {
 
     @Column(name = "status")
     private String status;
+
+    @OneToOne(mappedBy = "writtenBy")
+    private Review reviews;
+
+    @OneToMany(mappedBy = "user",orphanRemoval = true)
+    private Set<Collection> collections = new HashSet<>();
 
 }
