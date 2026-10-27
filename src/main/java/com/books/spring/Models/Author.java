@@ -15,7 +15,7 @@ public class Author {
     @Id
     @Column(name = "author_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long authorID;
 
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
@@ -35,6 +35,6 @@ public class Author {
         joinColumns = @JoinColumn (name = "book_isbn"), 
         inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private  Set<Book> authorBooks = new HashSet<>();
+    private  Set<Long> isbns;
 
 }
