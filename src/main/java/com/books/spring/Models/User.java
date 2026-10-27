@@ -15,7 +15,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userID;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -26,8 +26,8 @@ public class User {
     @Column(name = "status")
     private String status;
 
-    @OneToOne(mappedBy = "writtenBy")
-    private Review reviews;
+    @OneToMany(mappedBy = "writtenBy")
+    private Set<Review> reviews = new HashSet<>();
 
     @OneToMany(mappedBy = "user",orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();

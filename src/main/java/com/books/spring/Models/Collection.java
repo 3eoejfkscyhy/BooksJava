@@ -15,7 +15,7 @@ public class Collection {
     @Id 
     @Column(name = "collection_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long collectionID;
 
     @Column (name = "collection_name", nullable = false )
     private String collectionName = "Unnamed Collection";
