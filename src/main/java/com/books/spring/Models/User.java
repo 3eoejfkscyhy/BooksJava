@@ -15,7 +15,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userID;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -26,7 +26,7 @@ public class User {
     @Column(name = "status")
     private String status;
 
-    @OneToOne(mappedBy = "writtenBy")
+    @OneToMany(mappedBy = "writtenBy")
     private Review reviews;
 
     @OneToMany(mappedBy = "user",orphanRemoval = true)

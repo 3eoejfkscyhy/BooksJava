@@ -17,10 +17,10 @@ public class Book {
     private Long isbn;
 
     @Column(name = "book_name", nullable = false)
-    private String book_name;
+    private String bookName;
 
     @Column(name = "book_length",nullable = false)
-    private Long book_length;
+    private Long bookLength;
 
     @Column(name = "chapter_amount") 
     private int chapters;
