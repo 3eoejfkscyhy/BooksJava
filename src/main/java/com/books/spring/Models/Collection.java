@@ -18,12 +18,13 @@ public class Collection {
     private Long collectionID;
 
     @Column (name = "collection_name", nullable = false )
-    private String collectionName = "Unnamed Collection";
+    private String collectionName; 
+    //Use for Seeder
    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
-    private User user;
+    private User user; //Use for Seeder
 
     @ManyToMany 
     @JoinTable(
@@ -32,5 +33,6 @@ public class Collection {
         inverseJoinColumns = @JoinColumn(name = "book_isbn")
     )
     private Set<Book> books = new HashSet<>();
+        //Ask about Sets in Seeder
     
 }

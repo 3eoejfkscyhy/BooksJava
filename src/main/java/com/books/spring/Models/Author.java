@@ -18,16 +18,16 @@ public class Author {
     private Long authorID;
 
     @Column(name = "first_name", nullable = false, length = 20)
-    private String firstName;
+    private String firstName;   //Use for Seeder
 
     @Column(name = "last_name", length = 20)
-    private String lastName;
+    private String lastName;   //Use for Seeder
 
     @Column(name = "age", nullable = false)
-    private int age;
+    private int age;   //Use for Seeder
 
     @Column(name = "booksWritten", nullable = false)
-    private int booksWritten;
+    private int booksWritten;   //Use for Seeder
 
     @ManyToMany 
     @JoinTable (
@@ -36,5 +36,6 @@ public class Author {
         inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private  Set<Book> isbns = new HashSet<>();
+    //Ask about Sets in Seeder
 
 }

@@ -14,23 +14,23 @@ import lombok.*;
 public class Review {
     @Id
     @Column (name = "review_id")
-    private Long reviewID;
+    private Long reviewID; 
 
     @Column (name = "headline", nullable = false)
-    private String headline;
+    private String headline;  //Use for Seeder
     //Limited size for headlines
 
     @Column (name = "body")
-    private String body;
+    private String body;  //Use for Seeder
 
     @Column(name = "stars", nullable = false)
-    private BigDecimal stars;
+    private BigDecimal stars;  //Use for Seeder
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
-    private User writtenBy;
+    private User writtenBy;  //Use for Seeder
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_isbn", nullable = false)
-    private Book book;
+    private Book book;  //Use for Seeder
 }
