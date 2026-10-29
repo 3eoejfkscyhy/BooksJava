@@ -1,7 +1,7 @@
 package com.books.spring.Models;
 
 import lombok.*;
-import  java.util.*;
+import java.util.*;
 import jakarta.persistence.*;
 
 
@@ -19,7 +19,7 @@ public class Collection {
 
     @Column (name = "collection_name", nullable = false )
     private String collectionName = "Unnamed Collection";
-    // Should have default name?
+   
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)

@@ -1,8 +1,8 @@
 package com.books.spring.DTOs;
 
-import com.books.spring.Models.Review;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +20,10 @@ public class reviewDTO {
     @Size(max = 500, message = "Review must be under 500 characters")
     private String body;
 
-    //Review.Stars stars
+    //BigDecimal stars
+    @Pattern(regexp = "[0-5]\\.[0,5]", message = "The given rating must be between 0 and 5 stars")
     @NotNull(message = "Rating is mandatory to post a review")
-    private Review.Stars stars;
+    private BigDecimal stars;
 
     @NotNull(message = "Book ISBN is required")
     private Long isbn;

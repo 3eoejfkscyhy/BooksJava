@@ -2,7 +2,7 @@ package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-
+import com.books.spring.Models.Book;
 import java.util.Set;
 
 @AllArgsConstructor 
@@ -27,6 +27,6 @@ public class authorDTO {
     @PositiveOrZero(message = "Number of written books is required")
     private int booksWritten;
 
-    private Set<Long> isbns;
+    private Set<Book> isbns;
 
 }

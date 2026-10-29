@@ -2,6 +2,7 @@ package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @AllArgsConstructor 
 @NoArgsConstructor 
@@ -20,5 +21,8 @@ public class userDTO {
     private String email;
 
     private String status;
+
+    @PositiveOrZero(message = "The balance must be positive or empty")
+    private BigDecimal balance;
 
 }

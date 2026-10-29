@@ -3,6 +3,7 @@ package com.books.spring.DTOs;
 import com.books.spring.Models.Book;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class bookDTO {
     private int chapters;
 
     @PositiveOrZero(message = "Price is mandatory")
-    private float price;
+    private BigDecimal price;
 
     public Book.Status bookStatus;
 

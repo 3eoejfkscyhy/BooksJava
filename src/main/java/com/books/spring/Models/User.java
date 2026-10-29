@@ -1,7 +1,6 @@
 package com.books.spring.Models;
-
+import java.math.BigDecimal;
 import java.util.*;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,10 +25,13 @@ public class User {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(mappedBy = "writtenBy")
-    private Review reviews;
+    @Column(name = "balance")
+    private BigDecimal balance = new BigDecimal("0.00");
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "writtenBy")
+    private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();
 
 }

@@ -3,7 +3,8 @@ package com.books.spring.Models;
 import jakarta.persistence.*;
 import lombok.*;
 import  java.util.*;
-// import org.springframework.format.number.money.MonetaryAmountFormatter;
+import  java.math.BigDecimal;
+
 
 @Entity
 @Table(name = "books")
@@ -26,9 +27,7 @@ public class Book {
     private int chapters;
 
     @Column(name = "price", nullable = false)
-    private float price; 
-    //Replaced for testing purposes, find money alternative
-
+    private BigDecimal price; 
 
     public enum Status {
         Not_Owned, Owned, Rented, Timed
@@ -43,7 +42,7 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();
 
-    @ManyToMany(mappedBy = "authorBooks")
+    @ManyToMany(mappedBy = "isbns")
     private Set<Author> authors = new HashSet<>();
 
     @ManyToMany(mappedBy = "genreBooks")

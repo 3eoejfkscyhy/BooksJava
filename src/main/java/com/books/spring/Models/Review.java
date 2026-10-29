@@ -1,5 +1,6 @@
 package com.books.spring.Models;
 
+import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,16 +23,11 @@ public class Review {
     @Column (name = "body")
     private String body;
 
-     public enum Stars
-     {
-        Zero,ZeroHalf,One,OneHalf,Two,TwoHalf,Three,ThreeHalf,Four,FourHalf,Five
-     }// Temp values
-     @Enumerated(EnumType.STRING)
     @Column(name = "stars", nullable = false)
-    private Stars stars;
+    private BigDecimal stars;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writtenBy",referencedColumnName = "user_id")
+    @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
     private User writtenBy;
 
     @ManyToOne(fetch = FetchType.LAZY)

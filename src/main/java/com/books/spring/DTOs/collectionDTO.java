@@ -1,6 +1,9 @@
 package com.books.spring.DTOs;
 
 import java.util.Set;
+
+import com.books.spring.Models.Book;
+
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -19,6 +22,6 @@ public class collectionDTO {
     @Positive(message = "User ID must be valid")
     private Long userID;
 
-    private Set<Long> isbn;
+    private Set<Book> isbn;
 
 }
