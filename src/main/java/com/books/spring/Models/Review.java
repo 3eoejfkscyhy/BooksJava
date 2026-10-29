@@ -30,10 +30,6 @@ public class Review {
     @Column(name = "stars", nullable = false)
     private Stars stars;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn (name = "book_isbn",nullable=false)
-    // private Book book;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writtenBy",referencedColumnName = "user_id")
     private User writtenBy;

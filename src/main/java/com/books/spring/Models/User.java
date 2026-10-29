@@ -29,7 +29,7 @@ public class User {
     @OneToMany(mappedBy = "writtenBy")
     private Review reviews;
 
-    @OneToMany(mappedBy = "user",orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();
 
 }

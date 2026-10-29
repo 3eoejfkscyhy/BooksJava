@@ -37,8 +37,8 @@ public class Book {
     @Column(name = "status")
     private Status bookStatus;
   
-    // @OneToMany(mappedBy = "book",orphanRemoval = true)
-    // private Set<Review> reviews = new HashSet<>();
+    @OneToMany(mappedBy = "book",orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
 
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();

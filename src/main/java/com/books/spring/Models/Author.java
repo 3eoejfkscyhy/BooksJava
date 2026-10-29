@@ -35,6 +35,6 @@ public class Author {
         joinColumns = @JoinColumn (name = "book_isbn"), 
         inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private  Set<Long> isbns;
+    private  Set<Book> isbns = new HashSet<>();
 
 }
