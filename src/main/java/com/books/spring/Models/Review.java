@@ -11,9 +11,11 @@ import lombok.*;
 @NoArgsConstructor 
 @Getter
 @Setter 
+@Builder
 public class Review {
     @Id
     @Column (name = "review_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewID; 
 
     @Column (name = "headline", nullable = false)
@@ -30,7 +32,7 @@ public class Review {
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
     private User writtenBy;  //Use for Seeder
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_isbn", nullable = false)
-    private Book book;  //Use for Seeder
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "book_isbn", nullable = false)
+    // private Book book;  //Use for Seeder
 }

@@ -11,10 +11,10 @@ import com.books.spring.Models.User;
 
 
 @Repository 
-public interface UserRepo extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
  List<User> findByUsername(String username);
 
- List<User> findByUserID(Long userID);
+ Optional<User> findByUserID(Long userID);
 
  Optional<User> findByEmail(String email);
 

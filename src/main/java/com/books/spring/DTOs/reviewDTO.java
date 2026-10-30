@@ -25,7 +25,7 @@ public class reviewDTO {
     @NotNull(message = "Rating is mandatory to post a review")
     private BigDecimal stars;
 
-    @NotNull(message = "Book ISBN is required")
-    private Long isbn;
+    // @NotNull(message = "Book ISBN is required")
+    // private Long isbn;
 
 }

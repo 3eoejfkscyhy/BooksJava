@@ -42,9 +42,9 @@ public class Book {
     private Status bookStatus;
     //Use for Seeder
   
-    @OneToMany(mappedBy = "book",orphanRemoval = true)
-    private Set<Review> reviews = new HashSet<>();
-    //Ask about Sets in Seeder
+    // @OneToMany(mappedBy = "book",orphanRemoval = true)
+    // private Set<Review> reviews = new HashSet<>();
+    // //Ask about Sets in Seeder
 
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();

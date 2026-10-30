@@ -1,11 +1,12 @@
 package com.books.spring.Seeders;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.books.spring.Models.User;
 
-import com.books.spring.Repositories.UserRepo;
+import com.books.spring.Repositories.UserRepository;
 
 
 import  lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ import java.math.BigDecimal;
 @Slf4j
 @Component 
 @RequiredArgsConstructor
-
+@Order(1)
 public class UserSeeder implements CommandLineRunner {
-     private final UserRepo userRepo;
+     private final UserRepository userRepo;
      @Override
      public void run(String... args) throws Exception  {
         if(userRepo.count()>0)
