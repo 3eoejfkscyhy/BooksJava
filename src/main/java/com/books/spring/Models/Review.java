@@ -19,20 +19,20 @@ public class Review {
     private Long reviewID; 
 
     @Column (name = "headline", nullable = false)
-    private String headline;  //Use for Seeder
+    private String headline;  
     //Limited size for headlines
 
     @Column (name = "body")
-    private String body;  //Use for Seeder
+    private String body;  
 
     @Column(name = "stars", nullable = false)
-    private BigDecimal stars;  //Use for Seeder
+    private BigDecimal stars;  
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
-    private User writtenBy;  //Use for Seeder
+    private User writtenBy;  
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "book_isbn", nullable = false)
-    // private Book book;  //Use for Seeder
+    // private Book book;  
 }

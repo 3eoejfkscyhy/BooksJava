@@ -20,6 +20,9 @@ public class userDTO {
     @Size(max = 200, message = "Email length has to be valid")
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be atleast 8 characters long")
+    @Pattern(regexp = "[a-zA-Z0-9]", message = "The password must only include letters and/or numbers")
     private String status;
 
     @PositiveOrZero(message = "The balance must be positive or empty")

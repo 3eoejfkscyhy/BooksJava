@@ -15,3 +15,10 @@
 //   Book findBookByISBN(Long isbn);
 
 // }
+
+
+//Tierry Henry: Lonely at the Top
+//Cook with Jamie
+//Code complete
+//Sto na sto Stoichkov
+//

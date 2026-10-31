@@ -16,28 +16,29 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID; //Use for Seeder
+    private Long userID; 
 
     @Column(name = "username", nullable = false)
-    private String username; //Use for Seeder
+    private String username; 
 
     @Column(name = "email", nullable = false)
-    private String email; //Use for Seeder
+    private String email; 
+
+     @Column(name = "password",nullable = false)
+    private String password;  
 
     @Column(name = "status")
-    private String status; //Use for Seeder
+    private String status; 
 
     @Column(name = "balance")
-    private BigDecimal balance;  //Use for Seeder
+    private BigDecimal balance;  
 
     @Builder.Default
     @OneToMany(mappedBy = "writtenBy")
     private Set<Review> reviews = new HashSet<>();
-    //Ask about Sets in Seeder
 
     @Builder.Default
     @OneToMany(mappedBy = "user",orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();
-      //Ask about Sets in Seeder
 
 }

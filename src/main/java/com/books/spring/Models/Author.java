@@ -2,7 +2,7 @@ package com.books.spring.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.*;
+import java.time.LocalDate;
 
 
 @Entity
@@ -11,6 +11,7 @@ import java.util.*;
 @NoArgsConstructor 
 @Getter
 @Setter
+@Builder 
 public class Author {
     @Id
     @Column(name = "author_id")
@@ -18,24 +19,23 @@ public class Author {
     private Long authorID;
 
     @Column(name = "first_name", nullable = false, length = 20)
-    private String firstName;   //Use for Seeder
+    private String firstName;  
 
     @Column(name = "last_name", length = 20)
-    private String lastName;   //Use for Seeder
+    private String lastName;  
 
     @Column(name = "age", nullable = false)
-    private int age;   //Use for Seeder
+    private LocalDate age;  
 
     @Column(name = "booksWritten", nullable = false)
-    private int booksWritten;   //Use for Seeder
+    private int booksWritten;  
 
-    @ManyToMany 
-    @JoinTable (
-        name = "book_authors",
-        joinColumns = @JoinColumn (name = "book_isbn"), 
-        inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
-    private  Set<Book> isbns = new HashSet<>();
-    //Ask about Sets in Seeder
+    // @ManyToMany 
+    // @JoinTable (
+    //     name = "book_authors",
+    //     joinColumns = @JoinColumn (name = "book_isbn"), 
+    //     inverseJoinColumns = @JoinColumn(name = "author_id")
+    // )
+    // private  Set<Book> isbns = new HashSet<>();
 
 }

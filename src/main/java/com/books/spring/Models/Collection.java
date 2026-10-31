@@ -1,7 +1,7 @@
 package com.books.spring.Models;
 
 import lombok.*;
-import java.util.*;
+//import java.util.*;
 import jakarta.persistence.*;
 
 
@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor 
 @Getter 
 @Setter 
+@Builder
 public class Collection {
     @Id 
     @Column(name = "collection_id")
@@ -19,20 +20,18 @@ public class Collection {
 
     @Column (name = "collection_name", nullable = false )
     private String collectionName; 
-    //Use for Seeder
    
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
-    private User user; //Use for Seeder
+    private User user;
 
-    @ManyToMany 
-    @JoinTable(
-        name = "collection_book",
-        joinColumns = @JoinColumn (name = "collection_id"),
-        inverseJoinColumns = @JoinColumn(name = "book_isbn")
-    )
-    private Set<Book> books = new HashSet<>();
-        //Ask about Sets in Seeder
+    // @ManyToMany 
+    // @JoinTable(
+    //     name = "collection_book",
+    //     joinColumns = @JoinColumn (name = "collection_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "book_isbn")
+    // )
+    // private Set<Book> books = new HashSet<>();
+
     
 }

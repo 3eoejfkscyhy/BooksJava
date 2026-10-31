@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor 
 @Getter 
 @Setter
+@Builder
 public class Genre {
  @Id 
  @Column(name = "genre_id")
@@ -17,8 +18,9 @@ public class Genre {
  private Long genreID;  
 
  @Column (name = "genre_name", nullable = false)
- private String genreName;  //Use for Seeder
+ private String genreName; 
 
+ @Builder.Default
  @ManyToMany
  @JoinTable(
     name = "book_genres",
@@ -26,5 +28,5 @@ public class Genre {
     inverseJoinColumns = @JoinColumn (name="genre_id")
  )    
  private Set<Book> genreBooks = new HashSet<>();
-     //Ask about Sets in Seeder
+  
 }

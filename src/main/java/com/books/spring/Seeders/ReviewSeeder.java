@@ -10,7 +10,7 @@ import com.books.spring.Models.User;
 
 import com.books.spring.Repositories.ReviewRepository;
 import com.books.spring.Repositories.UserRepository;
-// import  com.books.spring.Repositories.BookRepository;
+
 import  lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
@@ -29,37 +29,45 @@ public class ReviewSeeder implements CommandLineRunner {
      public void run(String... args) throws Exception  {
         if(reviewRepo.count()>0)
         {
-            log.info("oefnn");
+            log.info("Reviews already exists. Skipping seeding reviews.");
             return;  
         }
 
-     Review Jones = Review.builder()
-     .headline("oyoyoyo")
-     .body("HUhd")
-     .stars(new BigDecimal(2.5))
-     .writtenBy(findUser((long) 2))
-     //.book(findBook(("9781784758240")))
+     Review Henry = Review.builder()
+     .headline("This Book is awesome!!")
+     .body("I read this book in 3 days and it was a very interesting dive into Henry's history. Definitely check it out!")
+     .stars(new BigDecimal(4.5))
+     .writtenBy(findUser(2L))
      .build();
 
-  Review Skips = Review.builder()
-     .headline("oyoyodmfpmeyo")
-     .body("HU04er22k0hd")
+  Review Jamie = Review.builder()
+     .headline("The worst cookbook i ever read!")
+     .body("So i'm a chef and wanted to expand my skill set, so i bought this book and i was very dissapointed. I cooked the fried rice and it was awful, Don't recommend!")
+     .stars(new BigDecimal(0.0))
+    .writtenBy(findUser(3L))
+     .build();
+
+       Review Stoichkov = Review.builder()
+     .headline("Could have been better")
+     .body("So i am a fan of Barcelona and it's legends. So when i heard about this book, i was pretty excited. When i read it though i was very disapointed. It was very shallow and boring.")
      .stars(new BigDecimal(2.0))
-    .writtenBy(findUser((long) 2))
-    //.book(findBook(("9781784758240")))
+    .writtenBy(findUser(2L))
+     .build();
+     
+       Review Steve = Review.builder()
+     .headline("The book is informative.")
+     .body("")
+     .stars(new BigDecimal(3.5))
+    .writtenBy(findUser(4L))
      .build();
 
-         reviewRepo.saveAll(List.of(Jones,Skips));
+         reviewRepo.saveAll(List.of(Henry,Jamie,Stoichkov,Steve));
      
-     log.info("Done");
+     log.info("Reviews succesfully seeded!");
    }
    private User findUser(Long user_id)
    {
       return userRepo.findByUserID(user_id).orElseThrow(()-> new IllegalStateException("Cannot seed Reviews: user don't exits"));
    }
-   // private Book findBook(String isbn)
-   // {
-   //    return bookRepo.findBookByISBN(new Long(isbn));
-   // }
 }
 

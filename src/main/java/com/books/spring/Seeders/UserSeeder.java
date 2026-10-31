@@ -24,28 +24,46 @@ public class UserSeeder implements CommandLineRunner {
      public void run(String... args) throws Exception  {
         if(userRepo.count()>0)
         {
-            log.info("oefnn");
+            log.info("Users already exists. Skipping seeding users.");
             return;  
         }
 
-     User Jones = User.builder()
-     .username("Mdkcs")
-     .email("Hops@cjd.ru")
-     .status("Killyu")
-     .balance(new BigDecimal(2.30))
+     User Mike = User.builder()
+     .username("MikeMike1020")
+     .email("MikeMikeMike10@Hotmail.com")
+     .password("W1deEyedMike")
+     .status("")
+     .balance(new BigDecimal(0.00))
      .build();
 
 
-        User Skips = User.builder()
-     .username("dkcmIi")
-     .email("Husoc@gidm.brs")
-     .status("ahahah")
+        User Antony = User.builder()
+     .username("AntonyReal")
+     .email("FutBallG0at@yahoo.com")
+     .password("RealDiaB3tis")
+     .status("I am a smart dude, I can read the pitch")
      .balance(new BigDecimal(10.30))
      .build();
 
-         userRepo.saveAll(List.of(Jones,Skips));
+      User Max = User.builder()
+     .username("ChefMaxGuye")
+     .email("MaxTheC00k@gmail.com")
+     .password("lowandslow")
+     .status("I love to cook many foods, my favourite type is french")
+     .balance(new BigDecimal(2.10))
+     .build();
+
+        User Doug = User.builder()
+     .username("DougDougDougDoug")
+     .email("DouglasDoglas3@aol.com")
+     .password("Hiitsbillymayswithzorbees")
+     .status("Currently reading Twitch for dummies!")
+     .balance(new BigDecimal(23.33))
+     .build();
+
+         userRepo.saveAll(List.of(Mike,Antony,Max,Doug));
      
-     log.info("Done");
+     log.info("Users successfully seeded!");
    }
 }
 
