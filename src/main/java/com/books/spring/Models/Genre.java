@@ -20,13 +20,8 @@ public class Genre {
  @Column (name = "genre_name", nullable = false)
  private String genreName; 
 
- @Builder.Default
- @ManyToMany
- @JoinTable(
-    name = "book_genres",
-    joinColumns = @JoinColumn(name = "book_isbn"),
-    inverseJoinColumns = @JoinColumn (name="genre_id")
- )    
- private Set<Book> genreBooks = new HashSet<>();
+   @Builder.Default
+   @ManyToMany(mappedBy = "booksGenres")
+   private Set<Book> books = new HashSet<>();
   
 }

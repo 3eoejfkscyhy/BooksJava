@@ -1,9 +1,9 @@
 package com.books.spring.Models;
+
 import java.math.BigDecimal;
 import java.util.*;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Entity
 @Table(name = "users")
@@ -24,7 +24,7 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email; 
 
-     @Column(name = "password",nullable = false)
+    @Column(name = "password",nullable = false)
     private String password;  
 
     @Column(name = "status")

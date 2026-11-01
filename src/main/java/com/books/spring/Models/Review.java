@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity 
 @Table(name= "reviews")
 @AllArgsConstructor 
@@ -32,7 +31,7 @@ public class Review {
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
     private User writtenBy;  
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "book_isbn", nullable = false)
-    // private Book book;  
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_isbn", nullable = false)
+    private Book book;  
 }

@@ -2,9 +2,8 @@ package com.books.spring.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
-//import  java.util.*;
+import  java.util.*;
 import  java.math.BigDecimal;
-
 
 @Entity
 @Table(name = "books")
@@ -12,6 +11,7 @@ import  java.math.BigDecimal;
 @NoArgsConstructor 
 @Getter
 @Setter
+@Builder 
 public class Book {
     @Id
     @Column(name = "book_isbn")
@@ -22,32 +22,44 @@ public class Book {
    
     @Column(name = "book_length",nullable = false)
     private Long bookLength;
-   
-    @Column(name = "chapter_amount") 
-    private int chapters;
+
+      @Column(name = "language",nullable = false)
+    private String language;
    
     @Column(name = "price", nullable = false)
-    private BigDecimal price; 
+    private BigDecimal price;
+    
+    // public enum Status {
+    //     Not_Owned, Owned, Rented, Timed
+    // } //Temp values
+    // @Enumerated(EnumType.STRING)
+    // @Column(name = "status")
+    // private Status bookStatus;
    
-    public enum Status {
-        Not_Owned, Owned, Rented, Timed
-    } //Temp values
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private Status bookStatus;
-   
-  
-    // @OneToMany(mappedBy = "book",orphanRemoval = true)
-    // private Set<Review> reviews = new HashSet<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "book",orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
     
-    // @ManyToMany(mappedBy = "books")
-    // private Set<Collection> collections = new HashSet<>();
+    @Builder.Default
+    @ManyToMany 
+    @JoinTable (
+        name = "book_authors",
+        joinColumns = @JoinColumn (name = "book_isbn"), 
+        inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> bookAuthors = new HashSet<>();
     
-    // @ManyToMany(mappedBy = "isbns")
-    // private Set<Author> authors = new HashSet<>();
-    
-    // @ManyToMany(mappedBy = "genreBooks")
-    // private Set<Genre> genres = new HashSet<>();
+  @Builder.Default
+  @ManyToMany
+  @JoinTable(
+    name = "book_genres",
+    joinColumns = @JoinColumn(name = "book_isbn"),
+    inverseJoinColumns = @JoinColumn (name="genre_id")
+  )    
+  private Set<Genre> booksGenres = new HashSet<>();
 
+    @Builder.Default
+    @ManyToMany(mappedBy = "books")
+    private Set<Collection> collections = new HashSet<>();
 
 }

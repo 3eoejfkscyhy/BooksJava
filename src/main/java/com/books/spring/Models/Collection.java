@@ -1,9 +1,8 @@
 package com.books.spring.Models;
 
 import lombok.*;
-//import java.util.*;
+import java.util.*;
 import jakarta.persistence.*;
-
 
 @Entity 
 @Table(name="collections")
@@ -25,13 +24,14 @@ public class Collection {
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-    // @ManyToMany 
-    // @JoinTable(
-    //     name = "collection_book",
-    //     joinColumns = @JoinColumn (name = "collection_id"),
-    //     inverseJoinColumns = @JoinColumn(name = "book_isbn")
-    // )
-    // private Set<Book> books = new HashSet<>();
+    @Builder.Default
+    @ManyToMany 
+    @JoinTable(
+        name = "collection_books",
+        joinColumns = @JoinColumn (name = "collection_id"),
+        inverseJoinColumns = @JoinColumn(name = "book_isbn")
+    )
+    private Set<Book> books = new HashSet<>();
 
     
 }

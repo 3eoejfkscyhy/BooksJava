@@ -3,6 +3,7 @@ package com.books.spring.Models;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.*;
 
 
 @Entity
@@ -29,13 +30,9 @@ public class Author {
 
     @Column(name = "booksWritten", nullable = false)
     private int booksWritten;  
-
-    // @ManyToMany 
-    // @JoinTable (
-    //     name = "book_authors",
-    //     joinColumns = @JoinColumn (name = "book_isbn"), 
-    //     inverseJoinColumns = @JoinColumn(name = "author_id")
-    // )
-    // private  Set<Book> isbns = new HashSet<>();
+ 
+    @Builder.Default
+    @ManyToMany(mappedBy = "bookAuthors")
+    private Set<Book> books = new HashSet<>();
 
 }

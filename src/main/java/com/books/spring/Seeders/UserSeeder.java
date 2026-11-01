@@ -1,14 +1,11 @@
 package com.books.spring.Seeders;
+
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
 import com.books.spring.Models.User;
-
 import com.books.spring.Repositories.UserRepository;
-
-
 import  lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
