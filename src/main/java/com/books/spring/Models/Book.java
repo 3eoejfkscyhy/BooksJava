@@ -28,13 +28,6 @@ public class Book {
    
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-    
-    // public enum Status {
-    //     Not_Owned, Owned, Rented, Timed
-    // } //Temp values
-    // @Enumerated(EnumType.STRING)
-    // @Column(name = "status")
-    // private Status bookStatus;
    
     @Builder.Default
     @OneToMany(mappedBy = "book",orphanRemoval = true)
@@ -61,5 +54,8 @@ public class Book {
     @Builder.Default
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();
+
+    @OneToMany(mappedBy = "book")
+    private Set<UserBooks> BookSide;
 
 }
