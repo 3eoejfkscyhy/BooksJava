@@ -34,7 +34,7 @@ public class BookSeeder implements CommandLineRunner{
         }
   Book THLatT = Book.builder()
   .isbn(9870230748392L)
-  .bookName("Tierry Henry: Lonely at the Top")
+  .title("Tierry Henry: Lonely at the Top")
   .bookLength(352L)
   .language("English")
   .price(new BigDecimal(2.00))
@@ -44,7 +44,7 @@ public class BookSeeder implements CommandLineRunner{
 
     Book CwJ = Book.builder()
   .isbn(9870141019703L)
-  .bookName("Cook with Jamie")
+  .title("Cook with Jamie")
   .bookLength(448L)
   .language("English")
   .price(new BigDecimal(10.17))
@@ -55,7 +55,7 @@ public class BookSeeder implements CommandLineRunner{
 
    Book SnSS = Book.builder()
   .isbn(9789545280320L)
-  .bookName("Sto na sto Stoichkov")
+  .title("Sto na sto Stoichkov")
   .bookLength(208L)
   .language("Bulgarian")
   .price(new BigDecimal(15.29))
@@ -67,7 +67,7 @@ public class BookSeeder implements CommandLineRunner{
 
   Book CC = Book.builder()
   .isbn(9788178530857L)
-  .bookName("Code Complete")
+  .title("Code Complete")
   .bookLength(960L)
   .language("English")
   .price(new BigDecimal(47.99))

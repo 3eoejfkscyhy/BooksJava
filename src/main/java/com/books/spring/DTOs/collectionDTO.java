@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 public class collectionDTO {
-    private Long id;
+    private Long collectionID;
 
     @NotBlank(message = "Collection name is required")
     @Size(max = 200, message = "Collection name must not exceed 200 characters")
@@ -20,6 +20,6 @@ public class collectionDTO {
     @Positive(message = "User ID must be valid")
     private Long userID;
 
-    private Set<Book> isbn;
+    private Set<Book> books;
 
 }

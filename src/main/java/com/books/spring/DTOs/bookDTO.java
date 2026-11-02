@@ -14,7 +14,7 @@ public class bookDTO {
     private long isbn;
 
     @NotBlank(message = "Book title is required")
-    private String bookName;
+    private String title;
 
     @Positive(message = "Book length has to be valid")
     private Long bookLength;
@@ -22,6 +22,7 @@ public class bookDTO {
     @Pattern(regexp = "[A-Za-z]",message = "The language must be written with latin letters")
     private String language;
 
+    @NotNull
     @PositiveOrZero(message = "Price is mandatory")
     private BigDecimal price;
 

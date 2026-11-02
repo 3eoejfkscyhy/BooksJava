@@ -3,6 +3,8 @@ package com.books.spring.DTOs;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import com.books.spring.Models.Book;
+
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor 
@@ -10,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class authorDTO {
-    private Long id;
+    private Long authorID;
 
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 20, message = "First name must be between 2 and 20 characters")
@@ -22,11 +24,11 @@ public class authorDTO {
     private String lastName;
 
     @Positive(message = "Age is required")
-    private int age;
+    private LocalDate age;
 
     @PositiveOrZero(message = "Number of written books is required")
     private int booksWritten;
 
-    private Set<Book> isbns;
+    private Set<Book> books;
 
 }

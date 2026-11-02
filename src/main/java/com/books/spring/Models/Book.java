@@ -18,7 +18,7 @@ public class Book {
     private Long isbn;
 
     @Column(name = "book_name", nullable = false)
-    private String bookName;
+    private String title;
    
     @Column(name = "book_length",nullable = false)
     private Long bookLength;
