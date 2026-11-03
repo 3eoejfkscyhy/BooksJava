@@ -1,14 +1,16 @@
 package com.books.spring.DTOs;
 
+import com.books.spring.Models.Author;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class bookDTO {
+public class BookDTO {
     @Size(min=13, max=13, message = "The ISBN must be the ISBN-13 format")
     @Pattern(regexp = "97[8-9]", message = "The Begining must eighter start with 978 or 979")
     private long isbn;
@@ -26,5 +28,5 @@ public class bookDTO {
     @PositiveOrZero(message = "Price is mandatory")
     private BigDecimal price;
 
-
+    private Set<Long> authorIDs;
 }

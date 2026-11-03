@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class reviewDTO {
+public class ReviewDTO {
     private Long reviewID;
 
     @NotBlank(message = "Headline is mandatory")

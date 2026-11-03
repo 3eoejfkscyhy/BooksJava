@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class collectionDTO {
+public class CollectionDTO {
     private Long collectionID;
 
     @NotBlank(message = "Collection name is required")

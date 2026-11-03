@@ -40,7 +40,7 @@ public class Book {
         joinColumns = @JoinColumn (name = "book_isbn"), 
         inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<Author> bookAuthors = new HashSet<>();
+    private Set<Author> bookAuthors;
     
   @Builder.Default
   @ManyToMany

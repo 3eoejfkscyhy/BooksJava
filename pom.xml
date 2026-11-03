@@ -54,6 +54,10 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<!-- Not sure if runtime is needed or the test is needed, have to ask later -->
 <dependency>
     <groupId>org.mapstruct</groupId>

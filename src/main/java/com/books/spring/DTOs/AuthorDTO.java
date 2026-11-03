@@ -11,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor 
 @Getter
 @Setter
-public class authorDTO {
+public class AuthorDTO {
     private Long authorID;
 
     @NotBlank(message = "First name is required")

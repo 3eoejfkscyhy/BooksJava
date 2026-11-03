@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class genreDTO {
+public class GenreDTO {
     private Long genreID;
 
     @NotBlank(message = "Genre name is mandatory")
