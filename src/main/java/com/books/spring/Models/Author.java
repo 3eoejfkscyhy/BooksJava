@@ -35,4 +35,6 @@ public class Author {
     @ManyToMany(mappedBy = "bookAuthors")
     private Set<Book> books = new HashSet<>();
 
+    private Set<Long> isbns;
+
 }

@@ -25,7 +25,7 @@ public class Review {
     private String body;  
 
     @Column(name = "stars", nullable = false)
-    private BigDecimal stars;  
+    private BigDecimal stars;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
@@ -33,5 +33,5 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_isbn", nullable = false)
-    private Book book;  
+    private Book book;
 }

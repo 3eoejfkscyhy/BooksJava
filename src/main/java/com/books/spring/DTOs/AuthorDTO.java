@@ -30,5 +30,5 @@ public class AuthorDTO {
     private int booksWritten;
 
     private Set<Book> books;
-
+    private Set<Long> isbns;
 }

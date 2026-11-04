@@ -9,8 +9,5 @@ import com.books.spring.Models.User;
 @Repository 
 public interface UserRepository extends JpaRepository<User,Long> {
 
- List<User> findByUsername(String username);
  Optional<User> findByUserID(Long userID);
- Optional<User> findByEmail(String email);
- boolean existsByEmail(String email);
 }

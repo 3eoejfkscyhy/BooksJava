@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +23,8 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorService authorService;
+    private final GenreService genreService;
+    private final CollectionService collectionService;
 
     public List<BookDTO> getAll() {
         return bookRepository.findAll().stream()
@@ -37,15 +40,27 @@ public class BookService {
         Book book = bookMapper.toEntity(dto);
 
         book.setBookAuthors(authorService.findAuthors(dto.getAuthorIDs()));
+        book.setBookGenres(genreService.findGenres(dto.getGenreIDs()));
 
         return bookMapper.toDto(bookRepository.save(book));
+    }
 
+    public BookDTO update(Long isbn, BookDTO dto) {
+        Book book = findBook(isbn);
+
+        book.setTitle(dto.getTitle());
+        book.setBookAuthors(authorService.findAuthors(dto.getAuthorIDs()));
+        book.setLanguage(dto.getLanguage());
+        book.setBookLength(dto.getBookLength());
+        book.setPrice(dto.getPrice());
+        book.setBookGenres(genreService.findGenres(dto.getGenreIDs()));
+        book.setCollections(collectionService.findCollections(dto.getCollectionIDs()));
+
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     private Book findBook(Long isbn) {
         return bookRepository.findByisbn(isbn)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book" + isbn + " was not found"));
     }
-
-
 }

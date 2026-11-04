@@ -4,6 +4,7 @@ import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Mappers.AuthorMapper;
 import com.books.spring.Models.Author;
 import com.books.spring.Repositories.AuthorRepository;
+import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorService {
     private final AuthorRepository authorRepository;
-    private final BookService bookService;
+    private final BookRepository bookRepository;
     private final AuthorMapper authorMapper;
 
     public List<AuthorDTO> findAll(){
@@ -35,6 +36,26 @@ public class AuthorService {
     public AuthorDTO create(AuthorDTO dto) {
         Author author = authorMapper.toEntity(dto);
         author.setAuthorID(null);
+
+        return authorMapper.toDto(authorRepository.save(author));
+    }
+
+    public AuthorDTO update(Long authorID, AuthorDTO dto) {
+        Author author = findAuthor(authorID);
+
+        author.setFirstName(dto.getFirstName());
+        author.setLastName(dto.getLastName());
+        author.setAge(dto.getAge());
+        author.setBooksWritten(dto.getBooksWritten());
+        author.setBooks(
+                dto.getIsbns().stream()
+                        .map(isbn -> bookRepository.findByisbn(isbn)
+                                .orElseThrow(() -> new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND,
+                                        "Book " + isbn + " could not be found"
+                                )))
+                        .collect(Collectors.toSet())
+        );
 
         return authorMapper.toDto(authorRepository.save(author));
     }

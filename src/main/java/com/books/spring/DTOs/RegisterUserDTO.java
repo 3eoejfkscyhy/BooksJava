@@ -4,7 +4,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class RegisterUserDTO {
     @NotBlank(message = "Username is required")
     @Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters")

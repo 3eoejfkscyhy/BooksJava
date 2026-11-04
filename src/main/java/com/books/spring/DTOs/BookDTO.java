@@ -29,4 +29,7 @@ public class BookDTO {
     private BigDecimal price;
 
     private Set<Long> authorIDs;
+    private Set<Long> reviewIDs;
+    private Set<Long> genreIDs;
+    private Set<Long> collectionIDs;
 }

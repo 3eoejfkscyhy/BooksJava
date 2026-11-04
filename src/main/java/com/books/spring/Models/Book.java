@@ -49,7 +49,7 @@ public class Book {
     joinColumns = @JoinColumn(name = "book_isbn"),
     inverseJoinColumns = @JoinColumn (name="genre_id")
   )    
-  private Set<Genre> booksGenres = new HashSet<>();
+  private Set<Genre> bookGenres;
 
     @Builder.Default
     @ManyToMany(mappedBy = "books")

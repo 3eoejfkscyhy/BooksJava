@@ -25,4 +25,7 @@ public class ReviewDTO {
     @NotNull(message = "Book ISBN is required")
     private Long isbn;
 
+    @NotNull(message = "User is required")
+    private Long userID;
+
 }

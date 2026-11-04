@@ -21,5 +21,5 @@ public class CollectionDTO {
     private Long userID;
 
     private Set<Book> books;
-
+    private Set<Long> isbns;
 }
