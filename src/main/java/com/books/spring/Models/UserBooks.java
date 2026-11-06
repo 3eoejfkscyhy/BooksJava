@@ -17,6 +17,7 @@ public class UserBooks{
  @JoinColumn (name = "user_id",referencedColumnName = "user_id")
  private User user;
 
+ @Id
  @ManyToOne
  @JoinColumn (name = "book_isbn",referencedColumnName = "book_isbn")
  private Book book;

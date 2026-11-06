@@ -32,6 +32,5 @@ public class Collection {
         inverseJoinColumns = @JoinColumn(name = "book_isbn")
     )
     private Set<Book> books = new HashSet<>();
-    private Set<Long> isbns;
     
 }

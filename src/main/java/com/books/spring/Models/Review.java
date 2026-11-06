@@ -17,7 +17,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewID; 
 
-    @Column (name = "headline", nullable = false)
+    @Column (name = "headline", nullable = false, length = 40)
     private String headline;  
     //Limited size for headlines
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class UserDTO {
-    private Long userid;
+    private Long userID;
 
     @Size(max = 100, message = "Status must be under 100 characters long")
     private String status;

@@ -2,7 +2,6 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.GenreDTO;
 import com.books.spring.Mappers.GenreMapper;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.BookRepository;
@@ -51,15 +50,6 @@ public class GenreService {
         }
 
         genre.setGenreName(dto.getGenreName());
-        genre.setBooks(
-                dto.getIsbns().stream()
-                        .map(isbn -> bookRepository.findByisbn(isbn)
-                                .orElseThrow(() -> new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        "Book " + isbn + " could not be found"
-                                )))
-                        .collect(Collectors.toSet())
-        );
         Set<Book> books = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findByisbn(isbn)
                         .orElseThrow(() -> new ResponseStatusException(

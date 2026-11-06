@@ -23,12 +23,12 @@ public class AuthorDTO {
     @Size(min = 2, max = 20, message = "Last name must be between 2 and 20 characters")
     private String lastName;
 
-    @Positive(message = "Age is required")
+    @NotNull(message = "Author age is required")
+    @Past(message = "The date of birth must be in the past")
     private LocalDate age;
 
     @PositiveOrZero(message = "Number of written books is required")
     private int booksWritten;
 
-    private Set<Book> books;
     private Set<Long> isbns;
 }

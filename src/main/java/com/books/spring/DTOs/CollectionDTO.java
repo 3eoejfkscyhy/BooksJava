@@ -20,6 +20,5 @@ public class CollectionDTO {
     @Positive(message = "User ID must be valid")
     private Long userID;
 
-    private Set<Book> books;
     private Set<Long> isbns;
 }

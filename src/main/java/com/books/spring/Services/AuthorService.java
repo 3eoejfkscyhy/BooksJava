@@ -3,6 +3,7 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Mappers.AuthorMapper;
 import com.books.spring.Models.Author;
+import com.books.spring.Models.Book;
 import com.books.spring.Repositories.AuthorRepository;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -47,15 +48,14 @@ public class AuthorService {
         author.setLastName(dto.getLastName());
         author.setAge(dto.getAge());
         author.setBooksWritten(dto.getBooksWritten());
-        author.setBooks(
-                dto.getIsbns().stream()
-                        .map(isbn -> bookRepository.findByisbn(isbn)
-                                .orElseThrow(() -> new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        "Book " + isbn + " could not be found"
-                                )))
-                        .collect(Collectors.toSet())
-        );
+
+        Set<Book> newBooks = dto.getIsbns().stream()
+                .map(isbn -> bookRepository.findByisbn(isbn)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
+                .collect(Collectors.toSet());
+        author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
+        author.setBooks(newBooks);
+        newBooks.forEach(book -> book.getBookAuthors().add(author));
 
         return authorMapper.toDto(authorRepository.save(author));
     }

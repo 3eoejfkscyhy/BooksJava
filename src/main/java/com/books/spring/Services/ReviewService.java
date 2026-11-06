@@ -2,14 +2,12 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Mappers.ReviewMapper;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Review;
 import com.books.spring.Repositories.BookRepository;
 import com.books.spring.Repositories.ReviewRepository;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,7 +47,7 @@ public class ReviewService {
                 bookRepository.findByisbn(dto.getIsbn())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getIsbn() + " could not be found"
+                                "Book " + dto.getIsbn() + " could not be found"
                         ))
         );
         return reviewMapper.toDto(reviewRepository.save(review));

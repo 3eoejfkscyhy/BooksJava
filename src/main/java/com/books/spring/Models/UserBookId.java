@@ -4,17 +4,20 @@ package com.books.spring.Models;
 import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Embeddable 
-@NoArgsConstructor 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class UserBookId implements Serializable
 {
- private User user;
- private Book book;
- public UserBookId(User user,Book book)
- {
-    this.user=user;
-    this.book=book;
- }
+ private Long user;
+ private Long book;
+// public UserBookId(User user,Book book)
+// {
+//    this.user=user;
+//    this.book=book;
+// }
 }

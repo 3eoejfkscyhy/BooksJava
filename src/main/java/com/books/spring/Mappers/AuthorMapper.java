@@ -5,7 +5,7 @@ import com.books.spring.Models.Author;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AuthorMapper {
     AuthorDTO toDto(Author author);
 

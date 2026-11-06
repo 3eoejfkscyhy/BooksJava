@@ -21,7 +21,7 @@ public class Genre {
  private String genreName; 
 
    @Builder.Default
-   @ManyToMany(mappedBy = "booksGenres")
+   @ManyToMany(mappedBy = "bookGenres")
    private Set<Book> books = new HashSet<>();
   
 }

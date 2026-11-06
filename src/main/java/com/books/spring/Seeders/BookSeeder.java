@@ -37,8 +37,8 @@ public class BookSeeder implements CommandLineRunner{
   .title("Tierry Henry: Lonely at the Top")
   .bookLength(352L)
   .language("English")
-  .price(new BigDecimal(2.00))
-  .booksGenres(addGenres(new String[]{"Biography","Sports memoir"}))
+  .price(new BigDecimal("2.00"))
+  .bookGenres(addGenres(new String[]{"Biography","Sports memoir"}))
   .bookAuthors(addAuthors(new String[][]{{"Philippe","Auclair"}}))
   .build();
 
@@ -47,8 +47,8 @@ public class BookSeeder implements CommandLineRunner{
   .title("Cook with Jamie")
   .bookLength(448L)
   .language("English")
-  .price(new BigDecimal(10.17))
-  .booksGenres(addGenres(new String[]{"Cookbook"}))
+  .price(new BigDecimal("10.17"))
+  .bookGenres(addGenres(new String[]{"Cookbook"}))
     .bookAuthors(addAuthors(new String[][]{{"Jamie","Oliver"}}))
   .build();
  
@@ -58,8 +58,8 @@ public class BookSeeder implements CommandLineRunner{
   .title("Sto na sto Stoichkov")
   .bookLength(208L)
   .language("Bulgarian")
-  .price(new BigDecimal(15.29))
-   .booksGenres(addGenres(new String[]{"Biography","Sports memoir"}))
+  .price(new BigDecimal("15.29"))
+   .bookGenres(addGenres(new String[]{"Biography","Sports memoir"}))
    .bookAuthors(addAuthors(new String[][]{{"Hristo","Stoichkov"},{"Philippe","Auclair"}}))
   .build();
 
@@ -70,15 +70,15 @@ public class BookSeeder implements CommandLineRunner{
   .title("Code Complete")
   .bookLength(960L)
   .language("English")
-  .price(new BigDecimal(47.99))
-  .booksGenres(addGenres(new String[]{"Technical non-fiction"}))
+  .price(new BigDecimal("47.99"))
+  .bookGenres(addGenres(new String[]{"Technical non-fiction"}))
   .bookAuthors(addAuthors(new String[][]{{"Steve"}}))
   .build();
 
 
     bookRepo.saveAll(List.of(THLatT,CwJ,SnSS,CC));
 
-     log.info("Books succesfully seeded!");
+     log.info("Books successfully seeded!");
     }
    private Set<Genre> addGenres(String[] genreList)
    {
@@ -95,7 +95,7 @@ public class BookSeeder implements CommandLineRunner{
     for (String[] givenAuthor: authorList) {
         if(givenAuthor.length==2)
     tempAuthor.add(authorRepo.findByfirstNameAndLastName(givenAuthor[0],givenAuthor[1]).orElseThrow(()-> new IllegalStateException("Cannot seed Books: Author '"+ givenAuthor[0] +" "+givenAuthor[1]+"' doesn't exist")));
-        else if(authorList.length==1)
+        else if(givenAuthor.length==1)
     tempAuthor.add(authorRepo.findByfirstName(givenAuthor[0]).orElseThrow(()-> new IllegalStateException("Cannot seed Books: Author '"+ givenAuthor[0] +"' doesn't exist")));
         else continue;
     }

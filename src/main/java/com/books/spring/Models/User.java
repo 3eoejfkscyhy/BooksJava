@@ -42,6 +42,6 @@ public class User {
     private Set<Collection> collections = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<UserBooks> UserSide;
+    private Set<UserBooks> UserSide = new HashSet<>();
 
 }

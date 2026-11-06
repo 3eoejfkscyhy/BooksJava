@@ -2,9 +2,8 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.Mappers.BookMapper;
-import com.books.spring.Models.Author;
-import com.books.spring.Services.AuthorService;
 import com.books.spring.Models.Book;
+import com.books.spring.Models.Collection;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -54,7 +52,11 @@ public class BookService {
         book.setBookLength(dto.getBookLength());
         book.setPrice(dto.getPrice());
         book.setBookGenres(genreService.findGenres(dto.getGenreIDs()));
-        book.setCollections(collectionService.findCollections(dto.getCollectionIDs()));
+
+        Set<Collection> newCollections = collectionService.findCollections(dto.getCollectionIDs());
+        book.getCollections().forEach(collection -> collection.getBooks().remove(book));
+        book.setCollections(newCollections);
+        newCollections.forEach(collection -> collection.getBooks().add(book));
 
         return bookMapper.toDto(bookRepository.save(book));
     }

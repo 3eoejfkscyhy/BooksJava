@@ -18,8 +18,9 @@ public class ReviewDTO {
     @Size(max = 500, message = "Review must be under 500 characters")
     private String body;
 
-    @Pattern(regexp = "[0-5]\\.[0,5]", message = "The given rating must be between 0 and 5 stars")
-    @NotNull(message = "Rating is mandatory to post a review")
+    @DecimalMin("0.0")
+    @DecimalMax("5.0")
+    @NotNull
     private BigDecimal stars;
 
     @NotNull(message = "Book ISBN is required")
