@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,7 +23,11 @@ public class RegisterUserDTO {
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be atleast 8 characters long")
-    @Pattern(regexp = "[a-zA-Z0-9]", message = "The password must only include letters and/or numbers")
+    @Pattern(regexp = "[a-zA-Z0-9]+", message = "The password must only include letters and/or numbers")
     private String password;
 
+    @Size(max = 100, message = "Status must be under 100 characters long")
+    private String status;
+
+    private BigDecimal balance;
 }

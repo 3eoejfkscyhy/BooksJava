@@ -38,6 +38,10 @@ public class GenreService {
         if(genreRepository.existsByGenreName(dto.getGenreName())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Genre already exists.");
         }
+        String normalisedName = normaliseGenreName(dto.getGenreName());
+        if(genreRepository.existsByGenreNameIgnoreCase(normalisedName)) {
+            throw new RuntimeException(("Genre already exists"));
+        }
 
         Genre genre = genreMapper.toEntity(dto);
         genre.setGenreID(null);
@@ -53,7 +57,7 @@ public class GenreService {
 
         genre.setGenreName(dto.getGenreName());
         Set<Book> books = dto.getIsbns().stream()
-                .map(isbn -> bookRepository.findByisbn(isbn)
+                .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + isbn + " could not be found"
@@ -85,6 +89,10 @@ public class GenreService {
         return genreIDs.stream()
                 .map(this::findGenre)
                 .collect(Collectors.toSet());
+    }
+
+    private String normaliseGenreName(String name) {
+        return name.trim().toLowerCase();
     }
 }
 

@@ -1,6 +1,5 @@
 package com.books.spring.DTOs;
 
-import com.books.spring.Models.Author;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -11,15 +10,17 @@ import java.util.Set;
 @Getter
 @Setter
 public class BookDTO {
+    @NotBlank
     @Pattern(
-            regexp = "97[8-9]\\d{10}",
-            message = "ISBN must be a valid 13-digit ISBN starting with 978 or 979"
+            regexp = "97[89]\\d{10}",
+            message = "ISBN must contain 13 digits and start with 978 or 979"
     )
     private String isbn;
 
     @NotBlank(message = "Book title is required")
     private String title;
 
+    @NotNull
     @Positive(message = "Book length has to be valid")
     private Long bookLength;
 

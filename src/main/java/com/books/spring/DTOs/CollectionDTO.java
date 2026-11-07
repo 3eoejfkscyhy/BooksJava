@@ -20,7 +20,7 @@ public class CollectionDTO {
     @Positive(message = "User ID must be valid")
     private Long userID;
 
-    private Set<Long> isbns;
+    private Set<String> isbns;
 
     private boolean isDeleted;
 }

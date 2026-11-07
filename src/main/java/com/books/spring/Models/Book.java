@@ -14,8 +14,8 @@ import  java.math.BigDecimal;
 @Builder
 public class Book {
     @Id
-    @Column(name = "book_isbn")
-    private Long isbn;
+    @Column(name = "book_isbn", length = 13)
+    private String isbn;
 
     @Column(name = "book_name", nullable = false)
     private String title;

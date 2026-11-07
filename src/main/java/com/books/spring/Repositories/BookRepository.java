@@ -7,10 +7,9 @@ import com.books.spring.Models.Book;
 
 
 @Repository 
-public interface BookRepository extends JpaRepository<Book,Long> {
+public interface BookRepository extends JpaRepository<Book, String> {
 
-  Optional<Book> findByisbn(Long isbn);
-  Optional<Book> findBytitle(String bookName);
+  Optional<Book> findBytitle(String title);
 
   boolean existsByTitle(String title);
 

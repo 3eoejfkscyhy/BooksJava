@@ -37,7 +37,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("I read this book in 3 days and it was a very interesting dive into Henry's history. Definitely check it out!")
      .stars(new BigDecimal(4.5))
      .writtenBy(findUser(2L))
-     .book(findBook(9870230748392L))
+     .book(findBook("9870230748392"))
      .build();
 
   Review Jamie = Review.builder()
@@ -45,7 +45,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("So i'm a chef and wanted to expand my skill set, so i bought this book and i was very dissapointed. I cooked the fried rice and it was awful, Don't recommend!")
      .stars(new BigDecimal(0.0))
       .writtenBy(findUser(3L))
-      .book(findBook(9870141019703L))
+      .book(findBook("9870141019703"))
      .build();
 
        Review Stoichkov = Review.builder()
@@ -53,7 +53,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("So i am a fan of Barcelona and it's legends. So when i heard about this book, i was pretty excited. When i read it though i was very disapointed. It was very shallow and boring.")
      .stars(new BigDecimal(2.0))
     .writtenBy(findUser(2L))
-    .book(findBook(9789545280320L))
+    .book(findBook("9789545280320"))
      .build();
      
        Review Steve = Review.builder()
@@ -61,7 +61,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("")
      .stars(new BigDecimal(3.5))
      .writtenBy(findUser(4L))
-     .book(findBook(9788178530857L))
+     .book(findBook("9788178530857"))
      .build();
 
          reviewRepo.saveAll(List.of(Henry,Jamie,Stoichkov,Steve));
@@ -72,9 +72,9 @@ public class ReviewSeeder implements CommandLineRunner {
    {
       return userRepo.findByUserID(user_id).orElseThrow(()-> new IllegalStateException("Cannot seed Reviews: User '"+ user_id +"' doesn't exist"));
    }
-      private Book findBook(Long ISBN)
+      private Book findBook(String ISBN)
    {
-      return bookRepo.findByisbn(ISBN).orElseThrow(()-> new IllegalStateException("Cannot seed Reviews: Book with the ISBN:'"+ ISBN +"' doesn't exist"));
+      return bookRepo.findById(ISBN).orElseThrow(()-> new IllegalStateException("Cannot seed Reviews: Book with the ISBN:'"+ ISBN +"' doesn't exist"));
    }
 }
 

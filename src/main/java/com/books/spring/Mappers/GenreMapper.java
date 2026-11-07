@@ -1,8 +1,6 @@
 package com.books.spring.Mappers;
 
-import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.DTOs.GenreDTO;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
 import org.mapstruct.Mapper;
@@ -22,7 +20,7 @@ public interface GenreMapper {
     @Mapping(target = "isDeleted", ignore = true)
     Genre toEntity(GenreDTO dto);
 
-    default Long bookToIsbn(Book book) { return book.getIsbn(); }
+    default String bookToIsbn(Book book) { return book.getIsbn(); }
 
     @Named("activeGenres")
     default Set<GenreDTO> toActiveDtos(Set<Genre> genres) {

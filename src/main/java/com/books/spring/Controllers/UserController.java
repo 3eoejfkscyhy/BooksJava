@@ -1,6 +1,7 @@
 package com.books.spring.Controllers;
 
 import com.books.spring.DTOs.RegisterUserDTO;
+import com.books.spring.DTOs.UpdateUserDTO;
 import com.books.spring.DTOs.UserDTO;
 import com.books.spring.Services.UserService;
 import jakarta.validation.Valid;
@@ -28,13 +29,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO create(@Valid @RequestBody UserDTO dto, @Valid @RequestBody RegisterUserDTO registerDto) {
-        return userService.create(dto, registerDto);
+    public UserDTO create(@Valid @RequestBody RegisterUserDTO dto) {
+        return userService.create(dto);
     }
 
     @PutMapping("/{userID}")
-    public UserDTO update(@PathVariable Long userID, @Valid @RequestBody UserDTO dto, @Valid @RequestBody RegisterUserDTO registerDto) {
-        return userService.update(userID, dto, registerDto);
+    public UserDTO update(@PathVariable Long userID, @Valid @RequestBody UpdateUserDTO dto) {
+        return userService.update(userID, dto);
     }
 
     @DeleteMapping("/{userID}")

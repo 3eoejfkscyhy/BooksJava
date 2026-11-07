@@ -1,6 +1,7 @@
 package com.books.spring.Services;
 
 import com.books.spring.DTOs.RegisterUserDTO;
+import com.books.spring.DTOs.UpdateUserDTO;
 import com.books.spring.DTOs.UserDTO;
 import com.books.spring.Mappers.UserMapper;
 import com.books.spring.Models.Author;
@@ -30,27 +31,28 @@ public class UserService {
 
     public UserDTO getByUserID(Long userID) { return userMapper.toDto(findUser(userID)); }
 
-    public UserDTO create(UserDTO dto, RegisterUserDTO registerDto) {
-        if(userRepository.existsByEmail(registerDto.getEmail())) {
+    public UserDTO create(RegisterUserDTO dto) {
+        if(userRepository.existsByEmail(dto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use.");
         }
-        if(userRepository.existsByUsername(registerDto.getUsername())) {
+        if(userRepository.existsByUsername(dto.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already in use.");
         }
 
-        User user = userMapper.toEntity(dto);
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(registerDto.getPassword());
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
         return userMapper.toDto(userRepository.save(user));
     }
 
-    public UserDTO update(Long userID, UserDTO dto, RegisterUserDTO registerDto) {
+    public UserDTO update(Long userID, UpdateUserDTO dto) {
         User user = findUser(userID);
 
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(registerDto.getPassword());
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setStatus(dto.getStatus());
+        user.setBalance(dto.getBalance());
         return userMapper.toDto(userRepository.save(user));
     }
 

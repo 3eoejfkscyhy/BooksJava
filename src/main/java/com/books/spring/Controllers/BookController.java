@@ -21,7 +21,7 @@ public class BookController {
     }
 
     @GetMapping("/{isbn}")
-    public BookDTO getByIsbn(@PathVariable Long isbn) {
+    public BookDTO getByIsbn(@PathVariable String isbn) {
         return bookService.getByIsbn(isbn);
     }
 
@@ -32,20 +32,20 @@ public class BookController {
     }
 
     @PutMapping("/{isbn}")
-    public BookDTO update(@PathVariable Long isbn, @Valid @RequestBody BookDTO dto) {
+    public BookDTO update(@PathVariable String isbn, @Valid @RequestBody BookDTO dto) {
         return bookService.update(isbn, dto);
     }
 
     @DeleteMapping("/{isbn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long isbn) {
+    public void delete(@PathVariable String isbn) {
         bookService.delete(isbn);
     }
 
     @Deprecated
     @DeleteMapping("/hard-delete/{isbn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long isbn) {
+    public void hardDelete(@PathVariable String isbn) {
         bookService.hardDelete(isbn);
     }
 }

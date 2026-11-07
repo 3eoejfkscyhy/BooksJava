@@ -49,9 +49,10 @@ public class CollectionService {
         );
 
         Set<Book> books = dto.getIsbns().stream()
-                .map(isbn -> bookRepository.findByisbn(isbn)
+                .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + "could not be found")))
                 .collect(Collectors.toSet());
+        collection.setBooks(books);
         return collectionMapper.toDto(collectionRepository.save(collection));
     }
 
@@ -69,7 +70,7 @@ public class CollectionService {
 
 
         Set<Book> newBooks = dto.getIsbns().stream()
-                .map(isbn -> bookRepository.findByisbn(isbn)
+                .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + isbn + " could not be found"

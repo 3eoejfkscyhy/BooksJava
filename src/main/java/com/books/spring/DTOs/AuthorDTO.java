@@ -30,7 +30,7 @@ public class AuthorDTO {
     @PositiveOrZero(message = "Number of written books is required")
     private int booksWritten;
 
-    private Set<Long> isbns;
+    private Set<String> isbns;
 
     private boolean isDeleted;
 }

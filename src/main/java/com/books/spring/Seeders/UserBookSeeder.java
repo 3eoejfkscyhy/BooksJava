@@ -35,31 +35,31 @@ public class UserBookSeeder implements CommandLineRunner{
  
    UserBooks Link1 = UserBooks.builder()
   .user(findUser(1L))
-  .book(findBook(9788178530857L))
+  .book(findBook("9788178530857"))
   .bookStatus(Status.Owned)
   .build();
 
    UserBooks Link2 = UserBooks.builder()
   .user(findUser(3L))
-  .book(findBook(9788178530857L))
+  .book(findBook("9788178530857"))
   .bookStatus(Status.Rented)
   .build();
 
    UserBooks Link3 = UserBooks.builder()
   .user(findUser(3L))
-  .book(findBook(9789545280320L))
+  .book(findBook("9789545280320"))
   .bookStatus(Status.Owned)
   .build();
 
    UserBooks Link4 = UserBooks.builder()
   .user(findUser(2L))
-  .book(findBook(9789545280320L))
+  .book(findBook("9789545280320"))
   .bookStatus(Status.Timed)
   .build();
 
    UserBooks Link5 = UserBooks.builder()
   .user(findUser(4L))
-  .book(findBook(9789545280320L))
+  .book(findBook("9789545280320"))
   .bookStatus(Status.Rented)
   .build();
 
@@ -71,9 +71,9 @@ public class UserBookSeeder implements CommandLineRunner{
    {
       return userRepo.findByUserID(user_id).orElseThrow(()-> new IllegalStateException("Cannot seed User Books: User '"+ user_id +"' doesn't exist"));
    }
-      private Book findBook(Long ISBN)
+      private Book findBook(String ISBN)
    {
-      return bookRepo.findByisbn(ISBN).orElseThrow(()-> new IllegalStateException("Cannot seed User Books: Book with the ISBN:'"+ ISBN +"' doesn't exist"));
+      return bookRepo.findById(ISBN).orElseThrow(()-> new IllegalStateException("Cannot seed User Books: Book with the ISBN:'"+ ISBN +"' doesn't exist"));
    }
 }
    

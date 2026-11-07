@@ -51,7 +51,7 @@ public class AuthorService {
         author.setBooksWritten(dto.getBooksWritten());
 
         Set<Book> newBooks = dto.getIsbns().stream()
-                .map(isbn -> bookRepository.findByisbn(isbn)
+                .map(isbn -> bookRepository.findById(isbn)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));

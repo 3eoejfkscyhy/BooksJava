@@ -35,13 +35,13 @@ public class CollectionSeeder implements CommandLineRunner{
   Collection FM = Collection.builder()
   .collectionName("Football Memoirs")
   .user(findUser(2L))
-  .books(addBooks(new Long[]{9870230748392L,9789545280320L}))
+  .books(addBooks(new String[]{"9870230748392", "9789545280320"}))
   .build();
 
     Collection MB = Collection.builder()
   .collectionName("My Books")
   .user(findUser(1L))
-  .books(addBooks(new Long[]{9870230748392L,9789545280320L,9788178530857L,9870141019703L}))
+  .books(addBooks(new String[]{"9870230748392", "9789545280320", "9788178530857", "9870141019703"}))
   .build();
 
    Collection UC = Collection.builder()
@@ -51,7 +51,7 @@ public class CollectionSeeder implements CommandLineRunner{
 
    Collection I = Collection.builder()
   .collectionName("Info")
-   .books(addBooks(new Long[]{9788178530857L}))
+   .books(addBooks(new String[]{"9788178530857"}))
   .user(findUser(4L))
   .build();
 
@@ -64,11 +64,11 @@ public class CollectionSeeder implements CommandLineRunner{
         return userRepo.findByUserID(user_id).orElseThrow(()-> new IllegalStateException("Cannot seed Collections: User '"+ user_id +"' doesn't exist"));
    }
 
-      private Set<Book> addBooks(Long[] bookList)
+      private Set<Book> addBooks(String[] bookList)
    {
     Set <Book> tempBook = new HashSet<>();
-    for (Long givenBook: bookList) {
-    tempBook.add(bookRepo.findByisbn(givenBook).orElseThrow(()-> new IllegalStateException("Cannot seed Collections: Book with the ISBN '"+ givenBook +"' doesn't exist")));
+    for (String givenBook: bookList) {
+    tempBook.add(bookRepo.findById(givenBook).orElseThrow(()-> new IllegalStateException("Cannot seed Collections: Book with the ISBN '"+ givenBook +"' doesn't exist")));
     }
     return tempBook;
    }

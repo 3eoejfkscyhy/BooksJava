@@ -46,7 +46,7 @@ public class ReviewService {
                         ))
         );
         review.setBook(
-                bookRepository.findByisbn(dto.getIsbn())
+                bookRepository.findById(dto.getIsbn())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + dto.getIsbn() + " could not be found"
@@ -65,10 +65,10 @@ public class ReviewService {
                         ))
         );
         review.setBook(
-                bookRepository.findByisbn(dto.getIsbn())
+                bookRepository.findById(dto.getIsbn())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getIsbn() + " could not be found"
+                                "Review " + dto.getIsbn() + " could not be found"
                         ))
         );
         review.setHeadline(dto.getHeadline());

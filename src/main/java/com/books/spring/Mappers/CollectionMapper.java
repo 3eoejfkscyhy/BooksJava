@@ -24,7 +24,7 @@ public interface CollectionMapper {
     @Mapping(target = "isDeleted", ignore = true)
     Collection toEntity(CollectionDTO dto);
 
-    default Long bookToIsbn(Book book) { return book.getIsbn(); }
+    default String bookToIsbn(Book book) { return book.getIsbn(); }
 
     @Named("activeCollections")
     default Set<CollectionDTO> toActiveDtos(Set<Collection> collections) {

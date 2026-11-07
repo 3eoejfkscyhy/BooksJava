@@ -31,7 +31,7 @@ public class BookService {
                 .toList();
     }
 
-    public BookDTO getByIsbn(Long isbn) {
+    public BookDTO getByIsbn(String isbn) {
         return bookMapper.toDto(findBook(isbn));
     }
 
@@ -44,7 +44,7 @@ public class BookService {
         return bookMapper.toDto(bookRepository.save(book));
     }
 
-    public BookDTO update(Long isbn, BookDTO dto) {
+    public BookDTO update(String isbn, BookDTO dto) {
         Book book = findBook(isbn);
 
         book.setTitle(dto.getTitle());
@@ -62,20 +62,20 @@ public class BookService {
         return bookMapper.toDto(bookRepository.save(book));
     }
 
-    public void delete(Long isbn) {
+    public void delete(String isbn) {
         Book book = findBook(isbn);
         book.setDeleted(true);
         bookRepository.save(book);
     }
 
     @Deprecated
-    public void hardDelete(Long isbn) {
+    public void hardDelete(String isbn) {
         bookRepository.delete(findBook(isbn));
     }
 
-    private Book findBook(Long isbn) {
-        return bookRepository.findByisbn(isbn)
+    private Book findBook(String isbn) {
+        return bookRepository.findById(isbn)
                 .filter(book -> !book.isDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book" + isbn + " was not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " was not found"));
     }
 }

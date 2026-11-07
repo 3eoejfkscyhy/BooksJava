@@ -16,7 +16,7 @@ public class GenreDTO {
     @Size(min = 2, max = 50, message = "Genre name must be between 2 and 50 characters")
     private String genreName;
 
-    private Set<Long> isbns;
+    private Set<String> isbns;
 
     private boolean isDeleted;
 }
