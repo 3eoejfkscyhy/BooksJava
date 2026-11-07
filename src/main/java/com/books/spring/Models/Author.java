@@ -38,4 +38,7 @@ public class Author {
     @ManyToMany(mappedBy = "bookAuthors")
     private Set<Long> isbns;
 
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }

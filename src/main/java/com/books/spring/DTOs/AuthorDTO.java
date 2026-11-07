@@ -31,4 +31,6 @@ public class AuthorDTO {
     private int booksWritten;
 
     private Set<Long> isbns;
+
+    private boolean isDeleted;
 }

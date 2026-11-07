@@ -24,8 +24,9 @@ public class AuthorService {
     private final BookRepository bookRepository;
     private final AuthorMapper authorMapper;
 
-    public List<AuthorDTO> findAll(){
+    public List<AuthorDTO> getAll(){
         return authorRepository.findAll().stream()
+                .filter(author -> !author.isDeleted())
                 .map(authorMapper::toDto)
                 .toList();
     }
@@ -60,8 +61,20 @@ public class AuthorService {
         return authorMapper.toDto(authorRepository.save(author));
     }
 
+    public void delete(Long authorID) {
+        Author author = findAuthor(authorID);
+        author.setDeleted(true);
+        authorRepository.save(author);
+    }
+
+    @Deprecated
+    public void hardDelete(Long authorID) {
+        authorRepository.delete(findAuthor(authorID));
+    }
+
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
+                .filter(author -> !author.isDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author " + authorID + " could not be found"));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {

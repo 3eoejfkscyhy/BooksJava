@@ -29,4 +29,5 @@ public class ReviewDTO {
     @NotNull(message = "User is required")
     private Long userID;
 
+    private boolean isDeleted;
 }

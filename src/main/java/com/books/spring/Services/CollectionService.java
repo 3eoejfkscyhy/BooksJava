@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.CollectionDTO;
 import com.books.spring.Mappers.CollectionMapper;
+import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Collection;
 import com.books.spring.Repositories.BookRepository;
@@ -29,6 +30,7 @@ public class CollectionService {
 
     public List<CollectionDTO> getAll() {
         return collectionRepository.findAll().stream()
+                .filter(collection -> !collection.isDeleted())
                 .map(collectionMapper::toDto)
                 .toList();
     }
@@ -79,8 +81,20 @@ public class CollectionService {
         return collectionMapper.toDto(collectionRepository.save(collection));
     }
 
+    public void delete(Long collectionID) {
+        Collection collection = findCollection(collectionID);
+        collection.setDeleted(true);
+        collectionRepository.save(collection);
+    }
+
+    @Deprecated
+    public void hardDelete(Long collectionID) {
+        collectionRepository.delete(findCollection(collectionID));
+    }
+
     private Collection findCollection(Long collectionID) {
         return collectionRepository.findById(collectionID)
+                .filter(collection -> !collection.isDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection " + collectionID + " was not found"));
     }
 

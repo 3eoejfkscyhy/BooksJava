@@ -21,4 +21,6 @@ public class CollectionDTO {
     private Long userID;
 
     private Set<Long> isbns;
+
+    private boolean isDeleted;
 }

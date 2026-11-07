@@ -26,6 +26,7 @@ public class BookService {
 
     public List<BookDTO> getAll() {
         return bookRepository.findAll().stream()
+                .filter(book -> !book.isDeleted())
                 .map(bookMapper::toDto)
                 .toList();
     }
@@ -61,8 +62,20 @@ public class BookService {
         return bookMapper.toDto(bookRepository.save(book));
     }
 
+    public void delete(Long isbn) {
+        Book book = findBook(isbn);
+        book.setDeleted(true);
+        bookRepository.save(book);
+    }
+
+    @Deprecated
+    public void hardDelete(Long isbn) {
+        bookRepository.delete(findBook(isbn));
+    }
+
     private Book findBook(Long isbn) {
         return bookRepository.findByisbn(isbn)
+                .filter(book -> !book.isDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book" + isbn + " was not found"));
     }
 }

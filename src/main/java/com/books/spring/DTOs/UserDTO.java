@@ -16,4 +16,6 @@ public class UserDTO {
 
     @PositiveOrZero(message = "The balance must be positive or empty")
     private BigDecimal balance;
+
+    private boolean isDeleted;
 }

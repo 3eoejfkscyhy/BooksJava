@@ -34,4 +34,6 @@ public class BookDTO {
     private Set<Long> reviewIDs;
     private Set<Long> genreIDs;
     private Set<Long> collectionIDs;
+
+    private boolean isDeleted;
 }

@@ -32,5 +32,8 @@ public class Collection {
         inverseJoinColumns = @JoinColumn(name = "book_isbn")
     )
     private Set<Book> books = new HashSet<>();
-    
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }

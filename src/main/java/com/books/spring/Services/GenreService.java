@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.GenreDTO;
 import com.books.spring.Mappers.GenreMapper;
+import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.BookRepository;
@@ -26,6 +27,7 @@ public class GenreService {
 
     public List<GenreDTO> getAll() {
         return genreRepository.findAll().stream()
+                .filter(genre -> !genre.isDeleted())
                 .map(genreMapper::toDto)
                 .toList();
     }
@@ -63,8 +65,20 @@ public class GenreService {
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
+    public void delete(Long genreID) {
+        Genre genre = findGenre(genreID);
+        genre.setDeleted(true);
+        genreRepository.save(genre);
+    }
+
+    @Deprecated
+    public void hardDelete(Long genreID) {
+        genreRepository.delete(findGenre(genreID));
+    }
+
     private Genre findGenre(Long genreID) {
         return genreRepository.findBygenreID(genreID)
+                .filter(genre -> !genre.isDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre " + genreID + " could not be found"));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {

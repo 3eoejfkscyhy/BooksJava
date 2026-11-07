@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Mappers.ReviewMapper;
+import com.books.spring.Models.Author;
 import com.books.spring.Models.Review;
 import com.books.spring.Repositories.BookRepository;
 import com.books.spring.Repositories.ReviewRepository;
@@ -27,6 +28,7 @@ public class ReviewService {
 
     public List<ReviewDTO> getAll() {
         return reviewRepository.findAll().stream()
+                .filter(review -> !review.isDeleted())
                 .map(reviewMapper::toDto)
                 .toList();
     }
@@ -76,6 +78,17 @@ public class ReviewService {
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
+    public void delete(Long reviewID) {
+        Review review = findReview(reviewID);
+        review.setDeleted(true);
+        reviewRepository.save(review);
+    }
+
+    @Deprecated
+    public void hardDelete(Long reviewID) {
+        reviewRepository.delete(findReview(reviewID));
+    }
+
     public Set<Review> findReviews(Set<Long> reviewIDs) {
         return reviewIDs.stream()
                 .map(this::findReview)
@@ -84,6 +97,7 @@ public class ReviewService {
 
     private Review findReview(Long reviewID){
         return reviewRepository.findById(reviewID)
+                .filter(review -> !review.isDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review " + reviewID + " was not found"));
     }
 }
