@@ -1,6 +1,7 @@
 package com.books.spring.Controllers;
 
 import com.books.spring.DTOs.BookDTO;
+import com.books.spring.DTOs.FreePeriodDTO;
 import com.books.spring.Services.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,16 @@ public class BookController {
     @PutMapping("/{isbn}")
     public BookDTO update(@PathVariable String isbn, @Valid @RequestBody BookDTO dto) {
         return bookService.update(isbn, dto);
+    }
+
+    @PutMapping("/{isbn}/free-period")
+    public BookDTO setFreePeriod(@PathVariable String isbn, @Valid @RequestBody FreePeriodDTO dto) {
+        return bookService.setFreePeriod(isbn, dto);
+    }
+
+    @DeleteMapping("/{isbn}/free-period")
+    public BookDTO removeFreePeriod(@PathVariable String isbn) {
+        return bookService.removeFreePeriod(isbn);
     }
 
     @DeleteMapping("/{isbn}")

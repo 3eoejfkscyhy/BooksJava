@@ -1,9 +1,12 @@
 package com.books.spring.Services;
 
 import com.books.spring.DTOs.BookDTO;
+import com.books.spring.DTOs.FreePeriodDTO;
 import com.books.spring.Mappers.BookMapper;
+import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Collection;
+import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +41,13 @@ public class BookService {
     public BookDTO create(BookDTO dto) {
         Book book = bookMapper.toEntity(dto);
 
-        book.setBookAuthors(authorService.findAuthors(dto.getAuthorIDs()));
-        book.setBookGenres(genreService.findGenres(dto.getGenreIDs()));
+        Set<Author> authors = authorService.findAuthors(dto.getAuthorIDs());
+        book.setBookAuthors(authors);
+        authors.forEach(author -> author.getBooks().add(book));
+
+        Set<Genre> genres = genreService.findGenres(dto.getGenreIDs());
+        book.setBookGenres(genres);
+        genres.forEach((genre -> genre.getBooks().add(book)));
 
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -48,17 +56,44 @@ public class BookService {
         Book book = findBook(isbn);
 
         book.setTitle(dto.getTitle());
-        book.setBookAuthors(authorService.findAuthors(dto.getAuthorIDs()));
         book.setLanguage(dto.getLanguage());
         book.setBookLength(dto.getBookLength());
         book.setPrice(dto.getPrice());
-        book.setBookGenres(genreService.findGenres(dto.getGenreIDs()));
+
+        Set<Author> newAuthors = authorService.findAuthors(dto.getAuthorIDs());
+        book.getBookAuthors().forEach(author -> author.getBooks().remove(book));
+        book.setBookAuthors(newAuthors);
+        newAuthors.forEach(author -> author.getBooks().add(book));
+
+        Set<Genre> newGenres = genreService.findGenres(dto.getGenreIDs());
+        book.getBookGenres().forEach(genre -> genre.getBooks().remove(book));
+        book.setBookGenres(newGenres);
+        newGenres.forEach(genre -> genre.getBooks().add(book));
 
         Set<Collection> newCollections = collectionService.findCollections(dto.getCollectionIDs());
         book.getCollections().forEach(collection -> collection.getBooks().remove(book));
         book.setCollections(newCollections);
         newCollections.forEach(collection -> collection.getBooks().add(book));
 
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    public BookDTO setFreePeriod(String isbn, FreePeriodDTO dto) {
+        Book book = findBook(isbn);
+
+        if(!dto.getFreeFrom().isBefore(dto.getFreeUntil())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The free period must begin before it ends");
+        }
+
+        book.setFreeFrom(dto.getFreeFrom());
+        book.setFreeUntil(dto.getFreeUntil());
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    public BookDTO removeFreePeriod(String isbn) {
+        Book book = findBook(isbn);
+        book.setFreeFrom(null);
+        book.setFreeUntil(null);
         return bookMapper.toDto(bookRepository.save(book));
     }
 

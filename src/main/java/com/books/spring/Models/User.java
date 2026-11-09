@@ -41,6 +41,7 @@ public class User {
     @OneToMany(mappedBy = "user",orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     private Set<UserBooks> UserSide = new HashSet<>();
 

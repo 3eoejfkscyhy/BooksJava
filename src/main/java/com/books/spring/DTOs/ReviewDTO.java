@@ -23,7 +23,7 @@ public class ReviewDTO {
     @NotNull
     private BigDecimal stars;
 
-    @NotNull(message = "Book ISBN is required")
+    @NotBlank(message = "Book ISBN is required")
     private String isbn;
 
     @NotNull(message = "User is required")

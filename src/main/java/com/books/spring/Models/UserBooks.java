@@ -23,11 +23,11 @@ public class UserBooks{
  private Book book;
 
      public enum Status {
-         Owned, Rented, Timed
+         Wanted, Owned, Read
     } //Temp values
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status bookStatus;
+    private Status readingStatus;
 }
 
 

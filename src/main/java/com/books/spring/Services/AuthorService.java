@@ -52,6 +52,7 @@ public class AuthorService {
 
         Set<Book> newBooks = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
+                        .filter(book -> !book.isDeleted())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));

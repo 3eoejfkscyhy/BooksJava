@@ -2,6 +2,8 @@ package com.books.spring.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import  java.util.*;
 import  java.math.BigDecimal;
 
@@ -29,6 +31,18 @@ public class Book {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "free_from")
+    private LocalDateTime freeFrom;
+
+    @Column(name = "free_until")
+    private LocalDateTime freeUntil;
+
+    public boolean isFree() {
+        LocalDateTime now = LocalDateTime.now();
+
+        return freeFrom != null && freeUntil != null && !now.isBefore(freeFrom) && now.isBefore(freeUntil);
+    }
+
     @Builder.Default
     @OneToMany(mappedBy = "book", orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
@@ -55,8 +69,9 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "book")
-    private Set<UserBooks> BookSide;
+    private Set<UserBooks> BookSide = new HashSet<>();
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)

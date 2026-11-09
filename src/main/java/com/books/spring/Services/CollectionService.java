@@ -42,6 +42,7 @@ public class CollectionService {
         collection.setCollectionID(null);
         collection.setUser(
                 userRepository.findById(dto.getUserID())
+                        .filter(user -> !user.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "User " + dto.getUserID() + " could not be found"
@@ -50,6 +51,7 @@ public class CollectionService {
 
         Set<Book> books = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
+                        .filter(book -> !book.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + "could not be found")))
                 .collect(Collectors.toSet());
         collection.setBooks(books);
@@ -62,6 +64,7 @@ public class CollectionService {
         collection.setCollectionName(dto.getCollectionName());
         collection.setUser(
                 userRepository.findById(dto.getUserID())
+                        .filter(user -> !user.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "User " + dto.getUserID() + " could not be found"
@@ -71,6 +74,7 @@ public class CollectionService {
 
         Set<Book> newBooks = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
+                        .filter(book -> !book.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + isbn + " could not be found"

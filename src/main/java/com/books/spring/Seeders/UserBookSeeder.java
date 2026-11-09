@@ -36,31 +36,31 @@ public class UserBookSeeder implements CommandLineRunner{
    UserBooks Link1 = UserBooks.builder()
   .user(findUser(1L))
   .book(findBook("9788178530857"))
-  .bookStatus(Status.Owned)
+  .readingStatus(Status.Owned)
   .build();
 
    UserBooks Link2 = UserBooks.builder()
   .user(findUser(3L))
   .book(findBook("9788178530857"))
-  .bookStatus(Status.Rented)
+  .readingStatus(Status.Wanted)
   .build();
 
    UserBooks Link3 = UserBooks.builder()
   .user(findUser(3L))
   .book(findBook("9789545280320"))
-  .bookStatus(Status.Owned)
+  .readingStatus(Status.Owned)
   .build();
 
    UserBooks Link4 = UserBooks.builder()
   .user(findUser(2L))
   .book(findBook("9789545280320"))
-  .bookStatus(Status.Timed)
+  .readingStatus(Status.Read)
   .build();
 
    UserBooks Link5 = UserBooks.builder()
   .user(findUser(4L))
   .book(findBook("9789545280320"))
-  .bookStatus(Status.Rented)
+  .readingStatus(Status.Wanted)
   .build();
 
     userBookRepo.saveAll(List.of(Link1,Link2,Link3,Link4,Link5));

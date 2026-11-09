@@ -40,6 +40,7 @@ public class ReviewService {
         review.setReviewID(null);
         review.setWrittenBy(
                 userRepository.findById(dto.getUserID())
+                        .filter(user -> !user.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "User " + dto.getUserID() + " could not be found"
@@ -47,6 +48,7 @@ public class ReviewService {
         );
         review.setBook(
                 bookRepository.findById(dto.getIsbn())
+                        .filter(book -> !book.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + dto.getIsbn() + " could not be found"
@@ -59,6 +61,7 @@ public class ReviewService {
         Review review = findReview(reviewID);
         review.setWrittenBy(
                 userRepository.findById(dto.getUserID())
+                        .filter(user -> !user.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "User " + dto.getUserID() + " could not be found"
@@ -66,6 +69,7 @@ public class ReviewService {
         );
         review.setBook(
                 bookRepository.findById(dto.getIsbn())
+                        .filter(book -> !book.isDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Review " + dto.getIsbn() + " could not be found"
