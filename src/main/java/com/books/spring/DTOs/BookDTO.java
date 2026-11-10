@@ -1,5 +1,6 @@
 package com.books.spring.DTOs;
 
+import com.books.spring.Models.Book;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -28,8 +29,14 @@ public class BookDTO {
     private String language;
 
     @NotNull
+    private Book.BookType bookType;
+
+    @NotNull
     @PositiveOrZero(message = "Price is mandatory")
     private BigDecimal price;
+
+    @PositiveOrZero(message = "Rental price cannot be negative")
+    private BigDecimal rentalPrice;
 
     private Set<Long> authorIDs;
     private Set<Long> reviewIDs;

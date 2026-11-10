@@ -41,7 +41,12 @@ public class RentalService {
         Rental rental = new Rental();
         User user = findUser(dto.getUserID());
         Book book = findBook(dto.getIsbn());
-
+        if(book.getBookType() != Book.BookType.EBook) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Ebooks can be rented through the application");
+        }
+        if(user.getBalance().compareTo(book.getRentalPrice()) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance to rent this book");
+        }
         if(rentalRepository.existsActiveRental(user.getUserID(), book.getIsbn(), Rental.RentalStatus.Active)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This user has an active rental for this book already");
         }
@@ -52,6 +57,8 @@ public class RentalService {
         rental.setRentedAt(rentedAt);
         rental.setDueAt(rentedAt.plusDays(20));
         rental.setStatus(Rental.RentalStatus.Active);
+        user.setBalance(user.getBalance().subtract(book.getRentalPrice()));
+        userRepository.save(user);
         return rentalMapper.toDto(rentalRepository.save(rental));
     }
 

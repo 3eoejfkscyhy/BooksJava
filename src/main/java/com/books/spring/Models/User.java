@@ -30,8 +30,9 @@ public class User {
     @Column(name = "status")
     private String status; 
 
+    @Builder.Default
     @Column(name = "balance")
-    private BigDecimal balance;  
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Builder.Default
     @OneToMany(mappedBy = "writtenBy")

@@ -21,6 +21,11 @@ public class UserBookController {
         return userBookService.getByUserID(userID);
     }
 
+    @PostMapping("/user/{userID}/book/{isbn}/purchase")
+    public UserBookDTO purchase(@PathVariable Long userID, @PathVariable String isbn) {
+        return userBookService.purchase(userID, isbn);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserBookDTO create(@Valid @RequestBody UserBookDTO dto) {

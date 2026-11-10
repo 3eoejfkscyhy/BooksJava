@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,11 @@ public class UserController {
     @GetMapping("/{userID}")
     public UserDTO getByIsbn(@PathVariable Long userID) {
         return userService.getByUserID(userID);
+    }
+
+    @PostMapping("/{userID}/balance")
+    public UserDTO addBalance(@PathVariable Long userID, @RequestParam BigDecimal amount) {
+        return userService.addBalance(userID, amount);
     }
 
     @PostMapping

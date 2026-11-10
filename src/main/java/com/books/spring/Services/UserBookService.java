@@ -11,6 +11,7 @@ import com.books.spring.Repositories.UserBookRepository;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,6 +32,40 @@ public class UserBookService {
                 .filter(userBook -> !userBook.getBook().isDeleted())
                 .map(userBookMapper::toDto)
                 .toList();
+    }
+
+    public UserBookDTO purchase(long userID, String isbn) {
+        User user = findUser(userID);
+        Book book = findBook(isbn);
+
+        if(book.getBookType() != Book.BookType.EBook) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Ebooks can be purchased through the application");
+        }
+
+        UserBookId id = new UserBookId(userID, isbn);
+        UserBooks userBooks = userBookRepository.findById(id).orElse(null);
+        if(userBooks != null && userBooks.getReadingStatus() != UserBooks.Status.Wanted) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This user already owns this book");
+        }
+        if(user.getBalance().compareTo(book.getPrice()) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
+        }
+
+        user.setBalance(user.getBalance().subtract(book.getPrice()));
+        userRepository.save(user);
+
+        if(userBooks == null) {
+            userBooks = UserBooks.builder()
+                    .user(user)
+                    .book(book)
+                    .readingStatus(UserBooks.Status.Owned)
+                    .build();
+        }
+        else {
+            userBooks.setReadingStatus(UserBooks.Status.Owned);
+        }
+
+        return userBookMapper.toDto(userBookRepository.save(userBooks));
     }
 
     public UserBookDTO create(UserBookDTO dto) {

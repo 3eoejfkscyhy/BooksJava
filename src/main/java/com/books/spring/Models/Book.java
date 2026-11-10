@@ -31,6 +31,9 @@ public class Book {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "rental_price")
+    private BigDecimal rentalPrice;
+
     @Column(name = "free_from")
     private LocalDateTime freeFrom;
 
@@ -77,4 +80,9 @@ public class Book {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_type", nullable = false)
+    private BookType bookType;
+
+    public enum BookType { EBook, PhysicalBook }
 }

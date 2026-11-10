@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -30,6 +31,15 @@ public class UserService {
     }
 
     public UserDTO getByUserID(Long userID) { return userMapper.toDto(findUser(userID)); }
+
+    public UserDTO addBalance(Long userID, BigDecimal amount) {
+        if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deposit amount must be greater than zero");
+        }
+        User user = findUser(userID);
+        user.setBalance(user.getBalance().add(amount));
+        return userMapper.toDto(userRepository.save(user));
+    }
 
     public UserDTO create(RegisterUserDTO dto) {
         if(userRepository.existsByEmail(dto.getEmail())) {
@@ -52,7 +62,6 @@ public class UserService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setStatus(dto.getStatus());
-        user.setBalance(dto.getBalance());
         return userMapper.toDto(userRepository.save(user));
     }
 

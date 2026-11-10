@@ -40,7 +40,9 @@ public class BookSeeder implements CommandLineRunner{
   .price(new BigDecimal("2.00"))
   .bookGenres(addGenres(new String[]{"Biography","Sports memoir"}))
   .bookAuthors(addAuthors(new String[][]{{"Philippe","Auclair"}}))
-  .build();
+          .bookType(Book.BookType.EBook)
+          .rentalPrice(new BigDecimal("1.00"))
+          .build();
 
     Book CwJ = Book.builder()
   .isbn("9870141019703")
@@ -50,6 +52,8 @@ public class BookSeeder implements CommandLineRunner{
   .price(new BigDecimal("10.17"))
   .bookGenres(addGenres(new String[]{"Cookbook"}))
     .bookAuthors(addAuthors(new String[][]{{"Jamie","Oliver"}}))
+            .bookType(Book.BookType.PhysicalBook)
+            .rentalPrice(null)
   .build();
  
 
@@ -61,6 +65,8 @@ public class BookSeeder implements CommandLineRunner{
   .price(new BigDecimal("15.29"))
    .bookGenres(addGenres(new String[]{"Biography","Sports memoir"}))
    .bookAuthors(addAuthors(new String[][]{{"Hristo","Stoichkov"},{"Philippe","Auclair"}}))
+           .bookType(Book.BookType.EBook)
+           .rentalPrice(new BigDecimal("10.00"))
   .build();
 
 
@@ -73,6 +79,8 @@ public class BookSeeder implements CommandLineRunner{
   .price(new BigDecimal("47.99"))
   .bookGenres(addGenres(new String[]{"Technical non-fiction"}))
   .bookAuthors(addAuthors(new String[][]{{"Steve"}}))
+          .bookType(Book.BookType.EBook)
+          .rentalPrice(new BigDecimal("15.99"))
   .build();
 
 

@@ -39,6 +39,8 @@ public class BookService {
     }
 
     public BookDTO create(BookDTO dto) {
+        validateBookTypeAndRentalPrice(dto);
+
         Book book = bookMapper.toEntity(dto);
 
         Set<Author> authors = authorService.findAuthors(dto.getAuthorIDs());
@@ -53,12 +55,16 @@ public class BookService {
     }
 
     public BookDTO update(String isbn, BookDTO dto) {
+        validateBookTypeAndRentalPrice(dto);
+
         Book book = findBook(isbn);
 
         book.setTitle(dto.getTitle());
         book.setLanguage(dto.getLanguage());
         book.setBookLength(dto.getBookLength());
         book.setPrice(dto.getPrice());
+        book.setBookType(dto.getBookType());
+        book.setRentalPrice(dto.getRentalPrice());
 
         Set<Author> newAuthors = authorService.findAuthors(dto.getAuthorIDs());
         book.getBookAuthors().forEach(author -> author.getBooks().remove(book));
@@ -106,6 +112,18 @@ public class BookService {
     @Deprecated
     public void hardDelete(String isbn) {
         bookRepository.delete(findBook(isbn));
+    }
+
+    private void validateBookTypeAndRentalPrice(BookDTO dto) {
+        if(dto.getBookType() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type is required");
+        }
+        if(dto.getBookType() == Book.BookType.EBook && dto.getRentalPrice() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-books must have a rental price");
+        }
+        if(dto.getBookType() == Book.BookType.PhysicalBook && dto.getRentalPrice() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Physical books cannot be rentable");
+        }
     }
 
     private Book findBook(String isbn) {
