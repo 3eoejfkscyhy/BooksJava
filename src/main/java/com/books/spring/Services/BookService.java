@@ -7,6 +7,7 @@ import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Collection;
 import com.books.spring.Models.Genre;
+import com.books.spring.Models.Review;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,12 @@ public class BookService {
     private final BookMapper bookMapper;
     private final AuthorService authorService;
     private final GenreService genreService;
+     private final ReviewService reviewService;
     private final CollectionService collectionService;
 
     public List<BookDTO> getAll() {
         return bookRepository.findAll().stream()
-                .filter(book -> !book.isDeleted())
+                .filter(book -> !book.getIsDeleted())
                 .map(bookMapper::toDto)
                 .toList();
     }
@@ -47,9 +49,16 @@ public class BookService {
         book.setBookAuthors(authors);
         authors.forEach(author -> author.getBooks().add(book));
 
+        Set<Review> reviews = reviewService.findReviews(dto.getReviewIDs());
+        book.setReviews(reviews);
+
         Set<Genre> genres = genreService.findGenres(dto.getGenreIDs());
         book.setBookGenres(genres);
         genres.forEach((genre -> genre.getBooks().add(book)));
+
+        Set<Collection> collections = collectionService.findCollections(dto.getCollectionIDs());
+        book.setCollections(collections);
+       
 
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -105,7 +114,7 @@ public class BookService {
 
     public void delete(String isbn) {
         Book book = findBook(isbn);
-        book.setDeleted(true);
+        book.setIsDeleted(true);
         bookRepository.save(book);
     }
 
@@ -128,7 +137,7 @@ public class BookService {
 
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
-                .filter(book -> !book.isDeleted())
+                .filter(book -> !book.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " was not found"));
     }
 }

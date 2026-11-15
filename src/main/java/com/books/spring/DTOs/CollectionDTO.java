@@ -1,7 +1,6 @@
 package com.books.spring.DTOs;
 
 import java.util.Set;
-import com.books.spring.Models.Book;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -22,5 +21,5 @@ public class CollectionDTO {
 
     private Set<String> isbns;
 
-    private boolean isDeleted;
+    private Boolean isDeleted;
 }

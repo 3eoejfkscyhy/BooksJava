@@ -4,7 +4,6 @@ import com.books.spring.DTOs.RegisterUserDTO;
 import com.books.spring.DTOs.UpdateUserDTO;
 import com.books.spring.DTOs.UserDTO;
 import com.books.spring.Mappers.UserMapper;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -25,7 +24,7 @@ public class UserService {
 
     public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
-                .filter(user -> !user.isDeleted())
+                .filter(user -> !user.getIsDeleted())
                 .map(userMapper::toDto)
                 .toList();
     }
@@ -67,7 +66,7 @@ public class UserService {
 
     public void delete(Long userID) {
         User user = findUser(userID);
-        user.setDeleted(true);
+        user.setIsDeleted(true);
         userRepository.save(user);
     }
 
@@ -78,7 +77,7 @@ public class UserService {
 
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
-                .filter(user -> !user.isDeleted())
+                .filter(user -> !user.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + userID + " could not be found"));
     }
 

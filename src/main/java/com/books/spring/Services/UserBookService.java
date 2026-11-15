@@ -11,7 +11,6 @@ import com.books.spring.Repositories.UserBookRepository;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,7 +28,7 @@ public class UserBookService {
 
     public List<UserBookDTO> getByUserID(Long userID) {
         return userBookRepository.findByUser_UserID(userID).stream()
-                .filter(userBook -> !userBook.getBook().isDeleted())
+                .filter(userBook -> !userBook.getBook().getIsDeleted())
                 .map(userBookMapper::toDto)
                 .toList();
     }
@@ -103,13 +102,13 @@ public class UserBookService {
 
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
-                .filter(user -> !user.isDeleted())
+                .filter(user -> !user.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User could not be found"));
     }
 
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
-                .filter(book -> !book.isDeleted())
+                .filter(book -> !book.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book could not be found"));
     }
 }

@@ -26,7 +26,7 @@ public class AuthorService {
 
     public List<AuthorDTO> getAll(){
         return authorRepository.findAll().stream()
-                .filter(author -> !author.isDeleted())
+                .filter(author -> !author.getIsDeleted())
                 .map(authorMapper::toDto)
                 .toList();
     }
@@ -38,7 +38,14 @@ public class AuthorService {
     public AuthorDTO create(AuthorDTO dto) {
         Author author = authorMapper.toEntity(dto);
         author.setAuthorID(null);
-
+       Set<Book> newBooks = dto.getIsbns().stream()
+                .map(isbn -> bookRepository.findById(isbn)
+                        .filter(book -> !book.getIsDeleted())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
+                .collect(Collectors.toSet());
+        author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
+        author.setBooks(newBooks);
+        newBooks.forEach(book -> book.getBookAuthors().add(author));
         return authorMapper.toDto(authorRepository.save(author));
     }
 
@@ -52,7 +59,7 @@ public class AuthorService {
 
         Set<Book> newBooks = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.isDeleted())
+                        .filter(book -> !book.getIsDeleted())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
@@ -64,7 +71,7 @@ public class AuthorService {
 
     public void delete(Long authorID) {
         Author author = findAuthor(authorID);
-        author.setDeleted(true);
+        author.setIsDeleted(true);
         authorRepository.save(author);
     }
 
@@ -75,7 +82,7 @@ public class AuthorService {
 
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
-                .filter(author -> !author.isDeleted())
+                .filter(author -> !author.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author " + authorID + " could not be found"));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {

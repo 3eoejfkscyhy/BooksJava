@@ -1,8 +1,6 @@
 package com.books.spring.Mappers;
 
-import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.DTOs.ReviewDTO;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,7 +24,7 @@ public interface ReviewMapper {
     @Named("activeReviews")
     default Set<ReviewDTO> toActiveDtos(Set<Review> reviews) {
         return reviews.stream()
-                .filter(review -> !review.isDeleted())
+                .filter(review -> !review.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

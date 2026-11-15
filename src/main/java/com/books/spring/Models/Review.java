@@ -1,6 +1,7 @@
 package com.books.spring.Models;
 
 import java.math.BigDecimal;
+import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,14 +29,16 @@ public class Review {
     private BigDecimal stars;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "writtenBy", referencedColumnName = "user_id")
     private User writtenBy;  
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "book_isbn", nullable = false)
     private Book book;
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

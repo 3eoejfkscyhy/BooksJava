@@ -2,6 +2,7 @@ package com.books.spring.Models;
 
 import java.math.BigDecimal;
 import java.util.*;
+import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,18 +36,21 @@ public class User {
     private BigDecimal balance = BigDecimal.ZERO;
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "writtenBy")
     private Set<Review> reviews = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user",orphanRemoval = true)
     private Set<Collection> collections = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user")
     private Set<UserBooks> UserSide = new HashSet<>();
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

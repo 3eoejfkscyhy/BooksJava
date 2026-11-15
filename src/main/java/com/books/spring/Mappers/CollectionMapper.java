@@ -1,8 +1,6 @@
 package com.books.spring.Mappers;
 
-import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.DTOs.CollectionDTO;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Collection;
 import org.mapstruct.Mapper;
@@ -29,7 +27,7 @@ public interface CollectionMapper {
     @Named("activeCollections")
     default Set<CollectionDTO> toActiveDtos(Set<Collection> collections) {
         return collections.stream()
-                .filter(collection -> !collection.isDeleted())
+                .filter(collection -> !collection.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

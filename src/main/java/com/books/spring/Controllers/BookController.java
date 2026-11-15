@@ -38,11 +38,13 @@ public class BookController {
     }
 
     @PutMapping("/{isbn}/free-period")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO setFreePeriod(@PathVariable String isbn, @Valid @RequestBody FreePeriodDTO dto) {
         return bookService.setFreePeriod(isbn, dto);
     }
 
     @DeleteMapping("/{isbn}/free-period")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO removeFreePeriod(@PathVariable String isbn) {
         return bookService.removeFreePeriod(isbn);
     }

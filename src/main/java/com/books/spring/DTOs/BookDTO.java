@@ -11,7 +11,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class BookDTO {
-    @NotBlank
     @Pattern(
             regexp = "97[89]\\d{10}",
             message = "ISBN must contain 13 digits and start with 978 or 979"
@@ -43,5 +42,5 @@ public class BookDTO {
     private Set<Long> genreIDs;
     private Set<Long> collectionIDs;
 
-    private boolean isDeleted;
+    private Boolean isDeleted;
 }

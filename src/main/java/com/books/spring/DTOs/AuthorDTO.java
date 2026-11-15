@@ -2,7 +2,6 @@ package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import com.books.spring.Models.Book;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -32,5 +31,5 @@ public class AuthorDTO {
 
     private Set<String> isbns;
 
-    private boolean isDeleted;
+    private Boolean isDeleted;
 }

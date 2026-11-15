@@ -2,7 +2,6 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.GenreDTO;
 import com.books.spring.Mappers.GenreMapper;
-import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.BookRepository;
@@ -27,7 +26,7 @@ public class GenreService {
 
     public List<GenreDTO> getAll() {
         return genreRepository.findAll().stream()
-                .filter(genre -> !genre.isDeleted())
+                .filter(genre -> !genre.getIsDeleted())
                 .map(genreMapper::toDto)
                 .toList();
     }
@@ -43,6 +42,17 @@ public class GenreService {
         Genre genre = genreMapper.toEntity(dto);
         genre.setGenreID(null);
         genre.setGenreName(normalisedName);
+        Set<Book> books = dto.getIsbns().stream()
+                .map(isbn -> bookRepository.findById(isbn)
+                        .filter(book -> !book.getIsDeleted())
+                        .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Book " + isbn + " could not be found"
+                        )))
+                .collect(Collectors.toSet());
+        genre.getBooks().forEach(book -> book.getBookGenres().remove(genre));
+        genre.setBooks(books);
+        books.forEach(book -> book.getBookGenres().add(genre));
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
@@ -56,7 +66,7 @@ public class GenreService {
         genre.setGenreName(dto.getGenreName());
         Set<Book> books = dto.getIsbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.isDeleted())
+                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
                                 "Book " + isbn + " could not be found"
@@ -70,7 +80,7 @@ public class GenreService {
 
     public void delete(Long genreID) {
         Genre genre = findGenre(genreID);
-        genre.setDeleted(true);
+        genre.setIsDeleted(true);
         genreRepository.save(genre);
     }
 
@@ -81,7 +91,7 @@ public class GenreService {
 
     private Genre findGenre(Long genreID) {
         return genreRepository.findBygenreID(genreID)
-                .filter(genre -> !genre.isDeleted())
+                .filter(genre -> !genre.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre " + genreID + " could not be found"));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {

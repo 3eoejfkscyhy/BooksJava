@@ -34,7 +34,7 @@ public interface BookMapper {
     @Named("activeBooks")
     default Set<BookDTO> toActiveDtos(Set<Book> books) {
         return books.stream()
-                .filter(book -> !book.isDeleted())
+                .filter(book -> !book.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

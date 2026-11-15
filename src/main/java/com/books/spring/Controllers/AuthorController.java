@@ -18,12 +18,12 @@ public class AuthorController {
     @GetMapping
     public List<AuthorDTO> getAll() {
         return authorService.getAll();
-    }
+    } 
 
     @GetMapping("/{authorID}")
     public AuthorDTO getByAuthorID(@PathVariable Long authorID) {
         return authorService.getByID(authorID);
-    }
+    } 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,6 +1,7 @@
 package com.books.spring.Models;
 
 import lombok.*;
+import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,18 +14,20 @@ import jakarta.persistence.*;
 @Builder
 public class UserBooks{
  @Id
+ @OnDelete(action = OnDeleteAction.CASCADE)
  @ManyToOne
  @JoinColumn (name = "user_id",referencedColumnName = "user_id")
  private User user;
 
  @Id
+ @OnDelete(action = OnDeleteAction.CASCADE)
  @ManyToOne
  @JoinColumn (name = "book_isbn",referencedColumnName = "book_isbn")
  private Book book;
 
      public enum Status {
          Wanted, Owned, Read
-    } //Temp values
+    }
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status readingStatus;

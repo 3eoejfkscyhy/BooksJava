@@ -2,6 +2,7 @@ package com.books.spring.Models;
 
 import lombok.*;
 import java.util.*;
+import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 
 @Entity 
@@ -21,10 +22,11 @@ public class Genre {
  private String genreName; 
 
    @Builder.Default
+   @OnDelete(action = OnDeleteAction.CASCADE)
    @ManyToMany(mappedBy = "bookGenres")
    private Set<Book> books = new HashSet<>();
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.*;
+import org.hibernate.annotations.*;
 
 
 @Entity
@@ -32,10 +33,12 @@ public class Author {
     private int booksWritten;  
  
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany(mappedBy = "bookAuthors")
     private Set<Book> books = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

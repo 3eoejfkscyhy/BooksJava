@@ -76,12 +76,12 @@ public class RentalService {
 
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
-                .filter(user -> !user.isDeleted())
+                .filter(user -> !user.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + userID + " could not be found"));
     }
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
-                .filter(book -> !book.isDeleted())
+                .filter(book -> !book.getIsDeleted())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found"));
     }
     private Rental findRental(Long rentalID) {

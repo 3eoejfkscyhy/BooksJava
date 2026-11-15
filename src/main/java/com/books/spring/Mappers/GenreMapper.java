@@ -25,7 +25,7 @@ public interface GenreMapper {
     @Named("activeGenres")
     default Set<GenreDTO> toActiveDtos(Set<Genre> genres) {
         return genres.stream()
-                .filter(genre -> !genre.isDeleted())
+                .filter(genre -> !genre.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

@@ -2,6 +2,7 @@ package com.books.spring.Models;
 
 import lombok.*;
 import java.util.*;
+import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 
 @Entity 
@@ -21,10 +22,12 @@ public class Collection {
     private String collectionName; 
    
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany 
     @JoinTable(
         name = "collection_books",
@@ -35,5 +38,5 @@ public class Collection {
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

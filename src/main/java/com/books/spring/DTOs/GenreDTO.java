@@ -18,5 +18,5 @@ public class GenreDTO {
 
     private Set<String> isbns;
 
-    private boolean isDeleted;
+    private Boolean isDeleted;
 }

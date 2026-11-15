@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import  java.util.*;
+import org.hibernate.annotations.*;
 import  java.math.BigDecimal;
 
 @Entity
@@ -47,10 +48,12 @@ public class Book {
     }
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "book", orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany
     @JoinTable(
             name = "book_authors",
@@ -60,6 +63,7 @@ public class Book {
     private Set<Author> bookAuthors = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany
     @JoinTable(
             name = "book_genres",
@@ -69,16 +73,18 @@ public class Book {
     private Set<Genre> bookGenres = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany(mappedBy = "books")
     private Set<Collection> collections = new HashSet<>();
 
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "book")
     private Set<UserBooks> BookSide = new HashSet<>();
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "book_type", nullable = false)
