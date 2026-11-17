@@ -2,6 +2,8 @@ package com.books.spring.Models;
 
 import lombok.*;
 import org.hibernate.annotations.*;
+import com.books.spring.Misc.UserBookId;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -26,7 +28,7 @@ public class UserBooks{
  private Book book;
 
      public enum Status {
-         Wanted, Owned, Read
+         Wishlisted, Owned, Read
     }
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -2,8 +2,7 @@ package com.books.spring.Mappers;
 
 import com.books.spring.DTOs.UserBookDTO;
 import com.books.spring.Models.UserBooks;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserBookMapper {

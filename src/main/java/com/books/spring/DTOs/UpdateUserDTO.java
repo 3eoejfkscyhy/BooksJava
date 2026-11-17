@@ -1,29 +1,22 @@
 package com.books.spring.DTOs;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class UpdateUserDTO {
+public record UpdateUserDTO( 
+
     @NotBlank(message = "Username is required")
     @Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters")
-    private String username;
+     String username,
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
-    private String email;
+     String email,
 
     @Size(max = 100, message = "Status must not exceed 100 characters")
-    private String status;
+     String status,
 
     @PositiveOrZero
-    private BigDecimal balance;
-}
+     BigDecimal balance
+)
+{}

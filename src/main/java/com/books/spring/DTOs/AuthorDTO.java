@@ -1,35 +1,26 @@
 package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.util.Set;
 
-@AllArgsConstructor 
-@NoArgsConstructor 
-@Getter
-@Setter
-public class AuthorDTO {
-    private Long authorID;
+public record AuthorDTO(
+  Long authorID,
+  @NotBlank(message = "First name is required")
+  @Size(min = 2, max = 20, message = "First name must be between 2 and 20 characters")
+  String firstName,
+  @Size(min = 2, max = 20, message = "Last name must be between 2 and 20 characters")
+  String lastName,
+  @NotNull(message = "Author DOB is required")
+  @Past(message = "The date of birth must be in the past")
+  LocalDate DOB,
+  @PositiveOrZero(message = "Number of written books is required")
+   int booksWritten,
+   Set<String> isbns,
+   Boolean isDeleted
+){}
+   
 
-    @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 20, message = "First name must be between 2 and 20 characters")
-    private String firstName;
 
-    // Last name is nullable so the author can input a pen name rather than their
-    // legal name if they prefer
-    @Size(min = 2, max = 20, message = "Last name must be between 2 and 20 characters")
-    private String lastName;
 
-    @NotNull(message = "Author age is required")
-    @Past(message = "The date of birth must be in the past")
-    private LocalDate age;
 
-    @PositiveOrZero(message = "Number of written books is required")
-    private int booksWritten;
-
-    private Set<String> isbns;
-
-    private Boolean isDeleted;
-}

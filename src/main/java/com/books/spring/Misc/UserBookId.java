@@ -1,5 +1,5 @@
 
-package com.books.spring.Models;
+package com.books.spring.Misc;
 
 import java.io.Serializable;
 import lombok.*;

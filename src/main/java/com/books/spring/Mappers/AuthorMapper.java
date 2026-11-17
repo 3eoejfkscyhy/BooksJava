@@ -4,9 +4,7 @@ import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;

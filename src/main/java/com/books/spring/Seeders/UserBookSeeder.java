@@ -42,7 +42,7 @@ public class UserBookSeeder implements CommandLineRunner{
    UserBooks Link2 = UserBooks.builder()
   .user(findUser(3L))
   .book(findBook("9788178530857"))
-  .readingStatus(Status.Wanted)
+  .readingStatus(Status.Wishlisted)
   .build();
 
    UserBooks Link3 = UserBooks.builder()
@@ -60,7 +60,7 @@ public class UserBookSeeder implements CommandLineRunner{
    UserBooks Link5 = UserBooks.builder()
   .user(findUser(4L))
   .book(findBook("9789545280320"))
-  .readingStatus(Status.Wanted)
+  .readingStatus(Status.Wishlisted)
   .build();
 
     userBookRepo.saveAll(List.of(Link1,Link2,Link3,Link4,Link5));

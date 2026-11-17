@@ -41,26 +41,26 @@ public class UserService {
     }
 
     public UserDTO create(RegisterUserDTO dto) {
-        if(userRepository.existsByEmail(dto.getEmail())) {
+        if(userRepository.existsByEmail(dto.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use.");
         }
-        if(userRepository.existsByUsername(dto.getUsername())) {
+        if(userRepository.existsByUsername(dto.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already in use.");
         }
 
         User user = new User();
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setUsername(dto.username());
+        user.setEmail(dto.email());
+        user.setPassword(dto.password());
         return userMapper.toDto(userRepository.save(user));
     }
 
     public UserDTO update(Long userID, UpdateUserDTO dto) {
         User user = findUser(userID);
 
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setStatus(dto.getStatus());
+        user.setUsername(dto.username());
+        user.setEmail(dto.email());
+        user.setStatus(dto.status());
         return userMapper.toDto(userRepository.save(user));
     }
 

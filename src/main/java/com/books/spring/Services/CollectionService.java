@@ -39,15 +39,15 @@ public class CollectionService {
         Collection collection = collectionMapper.toEntity(dto);
         collection.setCollectionID(null);
         collection.setUser(
-                userRepository.findById(dto.getUserID())
+                userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getUserID() + " could not be found"
+                                "User " + dto.userID() + " could not be found"
                         ))
         );
 
-        Set<Book> books = dto.getIsbns().stream()
+        Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + "could not be found")))
@@ -59,18 +59,18 @@ public class CollectionService {
     public CollectionDTO update(Long collectionID, CollectionDTO dto) {
         Collection collection = findCollection(collectionID);
 
-        collection.setCollectionName(dto.getCollectionName());
+        collection.setCollectionName(dto.collectionName());
         collection.setUser(
-                userRepository.findById(dto.getUserID())
+                userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getUserID() + " could not be found"
+                                "User " + dto.userID() + " could not be found"
                         ))
         );
 
 
-        Set<Book> newBooks = dto.getIsbns().stream()
+        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(

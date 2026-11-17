@@ -38,19 +38,19 @@ public class ReviewService {
         Review review = reviewMapper.toEntity(dto);
         review.setReviewID(null);
         review.setWrittenBy(
-                userRepository.findById(dto.getUserID())
+                userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getUserID() + " could not be found"
+                                "User " + dto.userID() + " could not be found"
                         ))
         );
         review.setBook(
-                bookRepository.findById(dto.getIsbn())
+                bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "Book " + dto.getIsbn() + " could not be found"
+                                "Book " + dto.isbn() + " could not be found"
                         ))
         );
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -59,24 +59,24 @@ public class ReviewService {
     public ReviewDTO update(Long reviewID, ReviewDTO dto) {
         Review review = findReview(reviewID);
         review.setWrittenBy(
-                userRepository.findById(dto.getUserID())
+                userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User " + dto.getUserID() + " could not be found"
+                                "User " + dto.userID() + " could not be found"
                         ))
         );
         review.setBook(
-                bookRepository.findById(dto.getIsbn())
+                bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "Review " + dto.getIsbn() + " could not be found"
+                                "Review " + dto.isbn() + " could not be found"
                         ))
         );
-        review.setHeadline(dto.getHeadline());
-        review.setBody(dto.getBody());
-        review.setStars(dto.getStars());
+        review.setHeadline(dto.headline());
+        review.setBody(dto.body());
+        review.setStars(dto.stars());
 
         return reviewMapper.toDto(reviewRepository.save(review));
     }

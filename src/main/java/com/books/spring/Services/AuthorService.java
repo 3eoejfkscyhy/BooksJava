@@ -38,7 +38,7 @@ public class AuthorService {
     public AuthorDTO create(AuthorDTO dto) {
         Author author = authorMapper.toEntity(dto);
         author.setAuthorID(null);
-       Set<Book> newBooks = dto.getIsbns().stream()
+       Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
@@ -52,12 +52,12 @@ public class AuthorService {
     public AuthorDTO update(Long authorID, AuthorDTO dto) {
         Author author = findAuthor(authorID);
 
-        author.setFirstName(dto.getFirstName());
-        author.setLastName(dto.getLastName());
-        author.setAge(dto.getAge());
-        author.setBooksWritten(dto.getBooksWritten());
+        author.setFirstName(dto.firstName());
+        author.setLastName(dto.lastName());
+        author.setDOB(dto.DOB());
+        author.setBooksWritten(dto.booksWritten());
 
-        Set<Book> newBooks = dto.getIsbns().stream()
+        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))

@@ -2,9 +2,9 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.UserBookDTO;
 import com.books.spring.Mappers.UserBookMapper;
+import com.books.spring.Misc.UserBookId;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.User;
-import com.books.spring.Models.UserBookId;
 import com.books.spring.Models.UserBooks;
 import com.books.spring.Repositories.BookRepository;
 import com.books.spring.Repositories.UserBookRepository;
@@ -43,7 +43,7 @@ public class UserBookService {
 
         UserBookId id = new UserBookId(userID, isbn);
         UserBooks userBooks = userBookRepository.findById(id).orElse(null);
-        if(userBooks != null && userBooks.getReadingStatus() != UserBooks.Status.Wanted) {
+        if(userBooks != null && userBooks.getReadingStatus() != UserBooks.Status.Wishlisted) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This user already owns this book");
         }
         if(user.getBalance().compareTo(book.getPrice()) < 0) {
@@ -68,8 +68,8 @@ public class UserBookService {
     }
 
     public UserBookDTO create(UserBookDTO dto) {
-        User user = findUser(dto.getUserID());
-        Book book = findBook(dto.getIsbn());
+        User user = findUser(dto.userID());
+        Book book = findBook(dto.isbn());
 
         UserBookId id = new UserBookId(user.getUserID(), book.getIsbn());
         if(userBookRepository.existsById(id)) {
@@ -79,7 +79,7 @@ public class UserBookService {
         UserBooks userBook = UserBooks.builder()
                 .user(user)
                 .book(book)
-                .readingStatus(dto.getReadingStatus())
+                .readingStatus(dto.readingStatus())
                 .build();
 
         return userBookMapper.toDto(userBookRepository.save(userBook));

@@ -1,19 +1,12 @@
 package com.books.spring.DTOs;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.*;
+import jakarta.validation.constraints.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class RentalRequestDTO {
+public record RentalRequestDTO(
     @NotNull(message = "Associated user is required")
     @Positive(message = "Associated user ID must be valid")
-    private Long userID;
+     Long userID,
 
     @NotBlank(message = "Associated isbn is required")
-    private String isbn;
-}
+     String isbn
+){}

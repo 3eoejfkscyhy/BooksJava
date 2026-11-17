@@ -3,9 +3,7 @@ package com.books.spring.Mappers;
 import com.books.spring.DTOs.GenreDTO;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;

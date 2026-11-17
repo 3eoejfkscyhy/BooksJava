@@ -34,7 +34,7 @@ public class GenreService {
     public GenreDTO getById(Long genreID) { return genreMapper.toDto(findGenre(genreID)); }
 
     public GenreDTO create(GenreDTO dto) {
-        String normalisedName = normaliseGenreName(dto.getGenreName());
+        String normalisedName = normaliseGenreName(dto.genreName());
         if(genreRepository.existsByGenreNameIgnoreCase(normalisedName)) {
             throw new RuntimeException(("Genre already exists"));
         }
@@ -42,7 +42,7 @@ public class GenreService {
         Genre genre = genreMapper.toEntity(dto);
         genre.setGenreID(null);
         genre.setGenreName(normalisedName);
-        Set<Book> books = dto.getIsbns().stream()
+        Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(
@@ -59,12 +59,12 @@ public class GenreService {
     public GenreDTO update(Long genreID, GenreDTO dto) {
         Genre genre = findGenre(genreID);
 
-        if(!dto.getGenreName().equals(genre.getGenreName()) && genreRepository.existsByGenreName(dto.getGenreName())) {
+        if(!dto.genreName().equals(genre.getGenreName()) && genreRepository.existsByGenreName(dto.genreName())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Genre already exists.");
         }
 
-        genre.setGenreName(dto.getGenreName());
-        Set<Book> books = dto.getIsbns().stream()
+        genre.setGenreName(dto.genreName());
+        Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new ResponseStatusException(

@@ -45,18 +45,18 @@ public class BookService {
 
         Book book = bookMapper.toEntity(dto);
 
-        Set<Author> authors = authorService.findAuthors(dto.getAuthorIDs());
+        Set<Author> authors = authorService.findAuthors(dto.authorIDs());
         book.setBookAuthors(authors);
         authors.forEach(author -> author.getBooks().add(book));
 
-        Set<Review> reviews = reviewService.findReviews(dto.getReviewIDs());
+        Set<Review> reviews = reviewService.findReviews(dto.reviewIDs());
         book.setReviews(reviews);
 
-        Set<Genre> genres = genreService.findGenres(dto.getGenreIDs());
+        Set<Genre> genres = genreService.findGenres(dto.genreIDs());
         book.setBookGenres(genres);
         genres.forEach((genre -> genre.getBooks().add(book)));
 
-        Set<Collection> collections = collectionService.findCollections(dto.getCollectionIDs());
+        Set<Collection> collections = collectionService.findCollections(dto.collectionIDs());
         book.setCollections(collections);
        
 
@@ -68,24 +68,24 @@ public class BookService {
 
         Book book = findBook(isbn);
 
-        book.setTitle(dto.getTitle());
-        book.setLanguage(dto.getLanguage());
-        book.setBookLength(dto.getBookLength());
-        book.setPrice(dto.getPrice());
-        book.setBookType(dto.getBookType());
-        book.setRentalPrice(dto.getRentalPrice());
+        book.setTitle(dto.title());
+        book.setLanguage(dto.language());
+        book.setBookLength(dto.bookLength());
+        book.setPrice(dto.price());
+        book.setBookType(dto.bookType());
+        book.setRentalPrice(dto.rentalPrice());
 
-        Set<Author> newAuthors = authorService.findAuthors(dto.getAuthorIDs());
+        Set<Author> newAuthors = authorService.findAuthors(dto.authorIDs());
         book.getBookAuthors().forEach(author -> author.getBooks().remove(book));
         book.setBookAuthors(newAuthors);
         newAuthors.forEach(author -> author.getBooks().add(book));
 
-        Set<Genre> newGenres = genreService.findGenres(dto.getGenreIDs());
+        Set<Genre> newGenres = genreService.findGenres(dto.genreIDs());
         book.getBookGenres().forEach(genre -> genre.getBooks().remove(book));
         book.setBookGenres(newGenres);
         newGenres.forEach(genre -> genre.getBooks().add(book));
 
-        Set<Collection> newCollections = collectionService.findCollections(dto.getCollectionIDs());
+        Set<Collection> newCollections = collectionService.findCollections(dto.collectionIDs());
         book.getCollections().forEach(collection -> collection.getBooks().remove(book));
         book.setCollections(newCollections);
         newCollections.forEach(collection -> collection.getBooks().add(book));
@@ -96,12 +96,12 @@ public class BookService {
     public BookDTO setFreePeriod(String isbn, FreePeriodDTO dto) {
         Book book = findBook(isbn);
 
-        if(!dto.getFreeFrom().isBefore(dto.getFreeUntil())) {
+        if(!dto.freeFrom().isBefore(dto.freeUntil())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The free period must begin before it ends");
         }
 
-        book.setFreeFrom(dto.getFreeFrom());
-        book.setFreeUntil(dto.getFreeUntil());
+        book.setFreeFrom(dto.freeFrom());
+        book.setFreeUntil(dto.freeUntil());
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -124,13 +124,13 @@ public class BookService {
     }
 
     private void validateBookTypeAndRentalPrice(BookDTO dto) {
-        if(dto.getBookType() == null) {
+        if(dto.bookType() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type is required");
         }
-        if(dto.getBookType() == Book.BookType.EBook && dto.getRentalPrice() == null) {
+        if(dto.bookType() == Book.BookType.EBook && dto.rentalPrice() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-books must have a rental price");
         }
-        if(dto.getBookType() == Book.BookType.PhysicalBook && dto.getRentalPrice() != null) {
+        if(dto.bookType() == Book.BookType.PhysicalBook && dto.rentalPrice() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Physical books cannot be rentable");
         }
     }

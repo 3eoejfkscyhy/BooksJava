@@ -26,8 +26,8 @@ public class Author {
     @Column(name = "last_name", length = 20)
     private String lastName;  
 
-    @Column(name = "age", nullable = false)
-    private LocalDate age;  
+    @Column(name = "DOB", nullable = false)
+    private LocalDate DOB;  
 
     @Column(name = "booksWritten", nullable = false)
     private int booksWritten;  

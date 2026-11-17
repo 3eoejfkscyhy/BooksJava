@@ -1,22 +1,16 @@
 package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
-
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class GenreDTO {
-    private Long genreID;
+public record GenreDTO (
+     Long genreID,
 
     @NotBlank(message = "Genre name is mandatory")
     @Size(min = 2, max = 50, message = "Genre name must be between 2 and 50 characters")
-    private String genreName;
+     String genreName,
 
-    private Set<String> isbns;
+     Set<String> isbns,
 
-    private Boolean isDeleted;
-}
+     Boolean isDeleted
+) {}

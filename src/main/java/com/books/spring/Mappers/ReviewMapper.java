@@ -2,9 +2,7 @@ package com.books.spring.Mappers;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Models.Review;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;

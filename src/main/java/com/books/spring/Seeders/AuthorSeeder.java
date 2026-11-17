@@ -29,28 +29,28 @@ public class AuthorSeeder implements CommandLineRunner{
   Author Philippe = Author.builder()
   .firstName("Philippe")
   .lastName("Auclair")
-  .age(LocalDate.of(1959,6,24))
+  .DOB(LocalDate.of(1959,6,24))
   .booksWritten(32)
   .build();
 
   Author Jamie = Author.builder()
   .firstName("Jamie")
   .lastName("Oliver")
-  .age(LocalDate.of(1975,5,27))
+  .DOB(LocalDate.of(1975,5,27))
   .booksWritten(284)
   .build();
 
     Author Steve = Author.builder()
   .firstName("Steve")
   .lastName("McConnell")
-  .age(LocalDate.of(1962,9,3))
+  .DOB(LocalDate.of(1962,9,3))
   .booksWritten(24)
   .build();
 
     Author Stoichkov = Author.builder()
   .firstName("Hristo")
   .lastName("Stoichkov")
-  .age(LocalDate.of(1966,2,8))
+  .DOB(LocalDate.of(1966,2,8))
   .booksWritten(4)
   .build();
 

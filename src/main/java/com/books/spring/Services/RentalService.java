@@ -39,8 +39,8 @@ public class RentalService {
 
     public RentalDTO create(RentalRequestDTO dto) {
         Rental rental = new Rental();
-        User user = findUser(dto.getUserID());
-        Book book = findBook(dto.getIsbn());
+        User user = findUser(dto.userID());
+        Book book = findBook(dto.isbn());
         if(book.getBookType() != Book.BookType.EBook) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Ebooks can be rented through the application");
         }

@@ -2,9 +2,7 @@ package com.books.spring.Mappers;
 
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.Models.*;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +22,8 @@ public interface BookMapper {
     @Mapping(target = "collections", ignore = true)
     @Mapping(target = "BookSide", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "freeFrom", ignore = true)
+    @Mapping(target = "freeUntil", ignore = true)
     Book toEntity(BookDTO dto);
 
     default Long reviewToID(Review review) { return review.getReviewID(); }
