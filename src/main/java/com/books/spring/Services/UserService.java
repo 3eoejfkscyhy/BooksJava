@@ -1,8 +1,6 @@
 package com.books.spring.Services;
 
-import com.books.spring.DTOs.RegisterUserDTO;
-import com.books.spring.DTOs.UpdateUserDTO;
-import com.books.spring.DTOs.UserDTO;
+import com.books.spring.DTOs.*;
 import com.books.spring.Mappers.UserMapper;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;

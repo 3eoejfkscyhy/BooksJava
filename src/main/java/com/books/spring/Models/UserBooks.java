@@ -1,6 +1,9 @@
 package com.books.spring.Models;
 
 import lombok.*;
+
+import java.math.BigDecimal;
+
 import org.hibernate.annotations.*;
 import com.books.spring.Misc.UserBookId;
 
@@ -33,6 +36,10 @@ public class UserBooks{
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status readingStatus;
+
+    public Long lastReadTo;
+
+    public BigDecimal readingPercentage;
 }
 
 

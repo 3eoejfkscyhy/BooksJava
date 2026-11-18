@@ -13,4 +13,4 @@ public interface UserBookMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "book", ignore = true)
     UserBooks toEntity(UserBookDTO dto);
-}
+} 

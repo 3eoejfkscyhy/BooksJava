@@ -30,11 +30,11 @@ public class UserBookController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserBookDTO create(@Valid @RequestBody UserBookDTO dto) {
         return userBookService.create(dto);
-    }
+    } 
 
     @PutMapping("/user/{userID}/book/{isbn}/status")
-    public UserBookDTO update(@PathVariable Long userID, @PathVariable String isbn, @RequestParam UserBooks.Status status) {
-        return userBookService.update(userID, isbn, status);
+    public UserBookDTO update(@PathVariable Long userID, @PathVariable String isbn,@RequestParam Long lastReadTo, @RequestParam UserBooks.Status status) {
+        return userBookService.update(userID, isbn, lastReadTo, status);
     }
 
     @DeleteMapping("/user/{userID}/book/{isbn}")
