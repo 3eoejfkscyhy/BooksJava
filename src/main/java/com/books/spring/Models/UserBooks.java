@@ -31,7 +31,7 @@ public class UserBooks{
  private Book book;
 
      public enum Status {
-         Wishlisted, Owned, Read
+         Wishlisted,PreviouslyOwned, Rented, Owned, Read
     }
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

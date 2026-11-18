@@ -1,6 +1,7 @@
 package com.books.spring.Services;
 
 import com.books.spring.DTOs.AuthorDTO;
+import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Mappers.AuthorMapper;
 import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
@@ -8,9 +9,8 @@ import com.books.spring.Repositories.AuthorRepository;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class AuthorService {
        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
@@ -60,7 +60,7 @@ public class AuthorService {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
@@ -83,7 +83,7 @@ public class AuthorService {
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
                 .filter(author -> !author.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author " + authorID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException("Author " + authorID + " could not be found"));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {
         return authorIDs.stream()

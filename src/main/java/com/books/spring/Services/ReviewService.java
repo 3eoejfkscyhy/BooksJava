@@ -6,9 +6,8 @@ import com.books.spring.Models.Review;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.util.List;
 import java.util.Set;
@@ -38,16 +37,14 @@ public class ReviewService {
         review.setWrittenBy(
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "User " + dto.userID() + " could not be found"
                         ))
         );
         review.setBook(
                 bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "Book " + dto.isbn() + " could not be found"
                         ))
         );
@@ -59,16 +56,14 @@ public class ReviewService {
         review.setWrittenBy(
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "User " + dto.userID() + " could not be found"
                         ))
         );
         review.setBook(
                 bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "Review " + dto.isbn() + " could not be found"
                         ))
         );
@@ -99,6 +94,6 @@ public class ReviewService {
     private Review findReview(Long reviewID){
         return reviewRepository.findById(reviewID)
                 .filter(review -> !review.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review " + reviewID + " was not found"));
+                .orElseThrow(() -> new NotFoundException( "Review " + reviewID + " was not found"));
     }
 }

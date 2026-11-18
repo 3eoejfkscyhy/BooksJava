@@ -7,9 +7,8 @@ import com.books.spring.Models.*;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -36,16 +35,16 @@ public class UserBookService {
         Book book = findBook(isbn);
 
         if(book.getBookType() != Book.BookType.EBook) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Ebooks can be purchased through the application");
+            throw new BadRequestException( "Only Ebooks can be purchased through the application");
         }
 
         UserBookId id = new UserBookId(userID, isbn);
         UserBooks userBooks = userBookRepository.findById(id).orElse(null);
         if(userBooks != null && userBooks.getReadingStatus() != UserBooks.Status.Wishlisted) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This user already owns this book");
+            throw new ConflictException("This user already owns this book");
         }
         if(user.getBalance().compareTo(book.getPrice()) < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
+            throw new BadRequestException( "Insufficient balance");
         }
 
         user.setBalance(user.getBalance().subtract(book.getPrice()));
@@ -71,10 +70,10 @@ public class UserBookService {
 
         UserBookId id = new UserBookId(user.getUserID(), book.getIsbn());
         if(userBookRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This user already has this book in their reading list");
+            throw new ConflictException("This user already has this book in their reading list");
         }
          if(dto.lastReadTo()>book.getBookLength()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "The given page that was last read was bigger than the ammount of pages there are");
+            throw new ConflictException("The given page that was last read was bigger than the ammount of pages there are");
         }
         UserBooks userBook = UserBooks.builder()
                 .user(user)
@@ -91,10 +90,10 @@ public class UserBookService {
         UserBookId userBookID = new UserBookId(userID, isbn);
         Long bookPages = findBook(isbn).getBookLength();
         UserBooks userBook = userBookRepository.findById(userBookID)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User-book relationship not found"));
+                .orElseThrow(() -> new NotFoundException( "User-book relationship not found"));
         userBook.setReadingStatus(status);
                  if(lastReadTo>bookPages) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "The given page that was last read was bigger than the ammount of pages there are");
+            throw new ConflictException("The given page that was last read was bigger than the ammount of pages there are");
         }
         userBook.setLastReadTo(lastReadTo);
         userBook.setReadingPercentage(percentageRead(lastReadTo,bookPages));
@@ -109,13 +108,13 @@ public class UserBookService {
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
                 .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User could not be found"));
+                .orElseThrow(() -> new NotFoundException( "User could not be found"));
     }
 
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
                 .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book could not be found"));
+                .orElseThrow(() -> new NotFoundException( "Book could not be found"));
     }
 
      public BigDecimal percentageRead(long lastReadTo,long bookLenght){

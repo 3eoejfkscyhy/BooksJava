@@ -26,7 +26,12 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("mde"))
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+                 UserDetails admin = org.springframework.security.core.userdetails.User
+                .withUsername("admin")
+                .password(passwordEncoder.encode("sadc"))
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user,admin);
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -35,4 +40,5 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth->auth.requestMatchers("/**").permitAll())
         .build();
     }
+    
 }

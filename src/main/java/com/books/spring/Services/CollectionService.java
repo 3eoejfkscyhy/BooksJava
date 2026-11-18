@@ -7,9 +7,8 @@ import com.books.spring.Models.Collection;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.util.List;
 import java.util.Set;
@@ -39,8 +38,7 @@ public class CollectionService {
         collection.setUser(
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "User " + dto.userID() + " could not be found"
                         ))
         );
@@ -48,7 +46,7 @@ public class CollectionService {
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + "could not be found")))
+                        .orElseThrow(() -> new NotFoundException( "Book " + isbn + "could not be found")))
                 .collect(Collectors.toSet());
         collection.setBooks(books);
         return collectionMapper.toDto(collectionRepository.save(collection));
@@ -61,8 +59,7 @@ public class CollectionService {
         collection.setUser(
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "User " + dto.userID() + " could not be found"
                         ))
         );
@@ -71,8 +68,7 @@ public class CollectionService {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "Book " + isbn + " could not be found"
                         )))
                 .collect(Collectors.toSet());
@@ -96,7 +92,7 @@ public class CollectionService {
     private Collection findCollection(Long collectionID) {
         return collectionRepository.findById(collectionID)
                 .filter(collection -> !collection.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Collection " + collectionID + " was not found"));
+                .orElseThrow(() -> new NotFoundException( "Collection " + collectionID + " was not found"));
     }
 
     public Set<Collection> findCollections(Set<Long> collectionIDs) {

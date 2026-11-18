@@ -7,9 +7,8 @@ import com.books.spring.Models.*;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,13 +37,13 @@ public class RentalService {
         User user = findUser(dto.userID());
         Book book = findBook(dto.isbn());
         if(book.getBookType() != Book.BookType.EBook) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Ebooks can be rented through the application");
+            throw new BadRequestException( "Only Ebooks can be rented through the application");
         }
         if(user.getBalance().compareTo(book.getRentalPrice()) < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance to rent this book");
+            throw new BadRequestException( "Insufficient balance to rent this book");
         }
         if(rentalRepository.existsActiveRental(user.getUserID(), book.getIsbn(), Rental.RentalStatus.Active)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This user has an active rental for this book already");
+            throw new ConflictException("This user has an active rental for this book already");
         }
 
         rental.setUser(user);
@@ -62,7 +61,7 @@ public class RentalService {
         Rental rental = findRental(rentalID);
 
         if(rental.getStatus() == Rental.RentalStatus.Returned) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This rental has already been returned by this user");
+            throw new ConflictException("This rental has already been returned by this user");
         }
 
         rental.setReturnedAt(LocalDateTime.now());
@@ -73,15 +72,15 @@ public class RentalService {
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
                 .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + userID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException( "User " + userID + " could not be found"));
     }
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
                 .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " could not be found"));
+                .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found"));
     }
     private Rental findRental(Long rentalID) {
         return rentalRepository.findById(rentalID)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental " + rentalID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException( "Rental " + rentalID + " could not be found"));
     }
 }

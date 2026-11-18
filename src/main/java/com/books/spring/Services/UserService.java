@@ -6,9 +6,8 @@ import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,7 +30,7 @@ public class UserService {
 
     public UserDTO addBalance(Long userID, BigDecimal amount) {
         if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deposit amount must be greater than zero");
+            throw new BadRequestException( "Deposit amount must be greater than zero");
         }
         User user = findUser(userID);
         user.setBalance(user.getBalance().add(amount));
@@ -40,10 +39,10 @@ public class UserService {
 
     public UserDTO create(RegisterUserDTO dto) {
         if(userRepository.existsByEmail(dto.email())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use.");
+            throw new ConflictException("Email is already in use.");
         }
         if(userRepository.existsByUsername(dto.username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is already in use.");
+            throw new ConflictException("Username is already in use.");
         }
 
         User user = new User();
@@ -76,7 +75,7 @@ public class UserService {
     private User findUser(Long userID) {
         return userRepository.findByUserID(userID)
                 .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + userID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException( "User " + userID + " could not be found"));
     }
 
 }

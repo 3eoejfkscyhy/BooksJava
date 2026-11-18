@@ -7,9 +7,8 @@ import com.books.spring.Models.*;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.util.List;
 import java.util.Set;
@@ -93,7 +92,7 @@ public class BookService {
         Book book = findBook(isbn);
 
         if(!dto.freeFrom().isBefore(dto.freeUntil())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The free period must begin before it ends");
+            throw new BadRequestException("The free period must begin before it ends");
         }
 
         book.setFreeFrom(dto.freeFrom());
@@ -121,19 +120,19 @@ public class BookService {
 
     private void validateBookTypeAndRentalPrice(BookDTO dto) {
         if(dto.bookType() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type is required");
+            throw new BadRequestException("Book type is required");
         }
         if(dto.bookType() == Book.BookType.EBook && dto.rentalPrice() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-books must have a rental price");
+            throw new BadRequestException("E-books must have a rental price");
         }
         if(dto.bookType() == Book.BookType.PhysicalBook && dto.rentalPrice() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Physical books cannot be rentable");
+            throw new BadRequestException("Physical books cannot be rentable");
         }
     }
 
     private Book findBook(String isbn) {
         return bookRepository.findById(isbn)
                 .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book " + isbn + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Book " + isbn + " was not found"));
     }
 }

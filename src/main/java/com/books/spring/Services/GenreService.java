@@ -8,9 +8,8 @@ import com.books.spring.Repositories.BookRepository;
 import com.books.spring.Repositories.GenreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.books.spring.Exception.*;
 
 import java.util.List;
 import java.util.Set;
@@ -45,8 +44,7 @@ public class GenreService {
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "Book " + isbn + " could not be found"
                         )))
                 .collect(Collectors.toSet());
@@ -60,15 +58,14 @@ public class GenreService {
         Genre genre = findGenre(genreID);
 
         if(!dto.genreName().equals(genre.getGenreName()) && genreRepository.existsByGenreName(dto.genreName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Genre already exists.");
+            throw new ConflictException("Genre already exists.");
         }
 
         genre.setGenreName(dto.genreName());
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        .orElseThrow(() -> new NotFoundException(
                                 "Book " + isbn + " could not be found"
                         )))
                 .collect(Collectors.toSet());
@@ -92,7 +89,7 @@ public class GenreService {
     private Genre findGenre(Long genreID) {
         return genreRepository.findBygenreID(genreID)
                 .filter(genre -> !genre.getIsDeleted())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre " + genreID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException( "Genre " + genreID + " could not be found"));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {
         return genreIDs.stream()
