@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.GenreDTO;
 import com.books.spring.Mappers.GenreMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.BookRepository;
@@ -35,7 +36,7 @@ public class GenreService {
     public GenreDTO create(GenreDTO dto) {
         String normalisedName = normaliseGenreName(dto.genreName());
         if(genreRepository.existsByGenreNameIgnoreCase(normalisedName)) {
-            throw new RuntimeException(("Genre already exists"));
+            throw new RuntimeException((ExceptionMessages.GENRE_EXIST));
         }
 
         Genre genre = genreMapper.toEntity(dto);
@@ -45,7 +46,7 @@ public class GenreService {
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Book " + isbn + " could not be found"
+                                ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
                 .collect(Collectors.toSet());
         genre.getBooks().forEach(book -> book.getBookGenres().remove(genre));
@@ -58,7 +59,7 @@ public class GenreService {
         Genre genre = findGenre(genreID);
 
         if(!dto.genreName().equals(genre.getGenreName()) && genreRepository.existsByGenreName(dto.genreName())) {
-            throw new ConflictException("Genre already exists.");
+            throw new ConflictException(ExceptionMessages.GENRE_EXIST);
         }
 
         genre.setGenreName(dto.genreName());
@@ -66,7 +67,7 @@ public class GenreService {
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Book " + isbn + " could not be found"
+                                ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
                 .collect(Collectors.toSet());
         genre.getBooks().forEach(book -> book.getBookGenres().remove(genre));
@@ -89,7 +90,7 @@ public class GenreService {
     private Genre findGenre(Long genreID) {
         return genreRepository.findBygenreID(genreID)
                 .filter(genre -> !genre.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Genre " + genreID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(genreID)));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {
         return genreIDs.stream()

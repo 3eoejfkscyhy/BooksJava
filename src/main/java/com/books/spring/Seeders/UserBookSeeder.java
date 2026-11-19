@@ -1,19 +1,16 @@
 package com.books.spring.Seeders;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import  java.util.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import com.books.spring.Models.User;
-import com.books.spring.Models.Book;
+import com.books.spring.Misc.BooksJavaFunctions;
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
+import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
 import com.books.spring.Models.UserBooks;
 import com.books.spring.Models.UserBooks.Status;
-import com.books.spring.Repositories.UserRepository;
-import com.books.spring.Repositories.BookRepository;
-import com.books.spring.Repositories.UserBookRepository;
-import  lombok.RequiredArgsConstructor;
+import com.books.spring.Repositories.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -21,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j 
 @Component 
 @RequiredArgsConstructor
-@Order(7)
+@Order(SeederOrder.USER_BOOK)
 public class UserBookSeeder implements CommandLineRunner{
     private final BookRepository bookRepo;
     private final UserRepository userRepo;
@@ -31,67 +28,54 @@ public class UserBookSeeder implements CommandLineRunner{
     {
         if(userBookRepo.count()>0)
         {
-             log.info("User Books already exists. Skipping seeding user_books.");
+             log.info(LogMessages.USER_BOOK_ALREADY_EXISTS);
             return;
         }
  
    UserBooks Link1 = UserBooks.builder()
-  .user(findUser(1L))
-  .book(findBook("9788178530857"))
+  .user(BooksJavaFunctions.findUserSeeder(userRepo,1L))
+  .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9788178530857"))
   .readingStatus(Status.Owned)
   .lastReadTo(30L)
-  .readingPercentage(percentageRead(30L,findBook("9788178530857").getBookLength()))
+  .readingPercentage(BooksJavaFunctions.percentageRead(30L,BooksJavaFunctions.findBookSeeder(bookRepo,"9788178530857").getBookLength()))
   .build();
 
    UserBooks Link2 = UserBooks.builder()
-  .user(findUser(3L))
-  .book(findBook("9788178530857"))
+  .user(BooksJavaFunctions.findUserSeeder(userRepo,3L))
+  .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9788178530857"))
   .readingStatus(Status.Wishlisted)
   .lastReadTo(0L)
- .readingPercentage(percentageRead(0L,findBook("9788178530857").getBookLength()))
+ .readingPercentage(BooksJavaFunctions.percentageRead(0L,BooksJavaFunctions.findBookSeeder(bookRepo,"9788178530857").getBookLength()))
   .build();
 
    UserBooks Link3 = UserBooks.builder()
-  .user(findUser(3L))
-  .book(findBook("9789545280320")) 
-  .readingStatus(Status.Owned)
+  .user(BooksJavaFunctions.findUserSeeder(userRepo,3L))
+  .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320")) 
+  .readingStatus(Status.PreviouslyOwned)
   .lastReadTo(68L)
-  .readingPercentage(percentageRead(68L,findBook("9789545280320").getBookLength()))
+  .readingPercentage(BooksJavaFunctions.percentageRead(68L,BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320").getBookLength()))
   .build();
 
    UserBooks Link4 = UserBooks.builder()
-  .user(findUser(2L))
-  .book(findBook("9789545280320"))
+  .user(BooksJavaFunctions.findUserSeeder(userRepo,2L))
+  .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320"))
   .readingStatus(Status.Read)
   .lastReadTo(208L)
-    .readingPercentage(percentageRead(208L,findBook("9789545280320").getBookLength()))
+    .readingPercentage(BooksJavaFunctions.percentageRead(208L,BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320").getBookLength()))
 
   .build();
 
    UserBooks Link5 = UserBooks.builder()
-  .user(findUser(4L))
-  .book(findBook("9789545280320"))
+  .user(BooksJavaFunctions.findUserSeeder(userRepo,4L))
+  .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320"))
   .readingStatus(Status.Wishlisted)
   .lastReadTo(102L)
-  .readingPercentage(percentageRead(102L,findBook("9789545280320").getBookLength()))
+  .readingPercentage(BooksJavaFunctions.percentageRead(102L,BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320").getBookLength()))
   .build();
 
     userBookRepo.saveAll(List.of(Link1,Link2,Link3,Link4,Link5));
 
-     log.info("User Books succesfully seeded!");
+     log.info(LogMessages.USER_BOOK_SEEDED);
     }
-      private User findUser(Long user_id)
-   {
-      return userRepo.findByUserID(user_id).orElseThrow(()-> new IllegalStateException("Cannot seed User Books: User '"+ user_id +"' doesn't exist"));
-   }
-      private Book findBook(String ISBN)
-   {
-      return bookRepo.findById(ISBN).orElseThrow(()-> new IllegalStateException("Cannot seed User Books: Book with the ISBN:'"+ ISBN +"' doesn't exist"));
-   }
-     public BigDecimal percentageRead(long lastReadTo,long bookLenght){
-      float fraction =  (float) lastReadTo/bookLenght;
-      float uncleanPer = fraction*100;
-      return new BigDecimal((long)uncleanPer).setScale(2,RoundingMode.HALF_UP);
-  } 
 } 
  

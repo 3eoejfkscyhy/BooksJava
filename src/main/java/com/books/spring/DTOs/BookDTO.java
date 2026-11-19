@@ -1,5 +1,7 @@
 package com.books.spring.DTOs;
 
+import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
+import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
 import com.books.spring.Models.Book;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
@@ -7,24 +9,24 @@ import java.util.Set;
 
 public record BookDTO(
     @Pattern(
-            regexp = "97[89]\\d{10}",
-            message = "ISBN must contain 13 digits and start with 978 or 979"
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
     )
     String isbn,
-    @NotBlank(message = "Book title is required")
+    @NotBlank(message = ValidationMessages.BOOK_TITLE_REQUIRED)
      String title,
     @NotNull
-    @Positive(message = "Book length has to be valid")
+    @Positive(message = ValidationMessages.BOOK_LENGHT_VALID)
      Long bookLength,
-    @Pattern(regexp = "[A-Za-z]+",message = "The language must be written with latin letters")
+    @Pattern(regexp = ValidationRules.LANGUAGE_PATTERN, message = ValidationMessages.LANGUAGE_MUST_BE_LATIN_LETTERS)
      String language,
     @NotNull
      Book.BookType bookType,
     @NotNull
-    @PositiveOrZero(message = "Price is mandatory")
+    @PositiveOrZero(message = ValidationMessages.PRICE_REQUIRED)
      BigDecimal price,
 
-    @PositiveOrZero(message = "Rental price cannot be negative")
+    @PositiveOrZero(message = ValidationMessages.RENTAL_PRICE_POSITIVE)
      BigDecimal rentalPrice,
 
      Set<Long> authorIDs,

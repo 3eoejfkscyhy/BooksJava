@@ -1,17 +1,21 @@
 package com.books.spring.DTOs;
 
 import java.util.Set;
+
+import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
+import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+
 import jakarta.validation.constraints.*;
 
 public record CollectionDTO( 
      Long collectionID,
 
-    @NotBlank(message = "Collection name is required")
-    @Size(max = 200, message = "Collection name must not exceed 200 characters")
+    @NotBlank(message = ValidationMessages.COLLECTION_NAME_REQUIRED)
+    @Size(max = ValidationRules.COLLECTION_NAME_MAX_LENGHT, message = ValidationMessages.COLLECTION_NAME_SIZE_VALID)
      String collectionName,
 
-    @NotNull(message = "User ID is required")
-    @Positive(message = "User ID must be valid")
+    @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
+    @Positive(message = ValidationMessages.USER_ID_VALID)
      Long userID,
 
      Set<String> isbns,

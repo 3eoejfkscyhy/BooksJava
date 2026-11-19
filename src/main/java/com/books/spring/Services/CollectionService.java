@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.CollectionDTO;
 import com.books.spring.Mappers.CollectionMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Book;
 import com.books.spring.Models.Collection;
 import com.books.spring.Repositories.*;
@@ -39,14 +40,14 @@ public class CollectionService {
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
+                                 ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
 
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new NotFoundException( "Book " + isbn + "could not be found")))
+                        .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         collection.setBooks(books);
         return collectionMapper.toDto(collectionRepository.save(collection));
@@ -60,7 +61,7 @@ public class CollectionService {
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
+                                 ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
 
@@ -69,7 +70,7 @@ public class CollectionService {
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Book " + isbn + " could not be found"
+                                ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
                 .collect(Collectors.toSet());
         collection.getBooks().forEach(book -> book.getCollections().remove(collection));
@@ -92,7 +93,7 @@ public class CollectionService {
     private Collection findCollection(Long collectionID) {
         return collectionRepository.findById(collectionID)
                 .filter(collection -> !collection.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Collection " + collectionID + " was not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(collectionID)));
     }
 
     public Set<Collection> findCollections(Set<Long> collectionIDs) {

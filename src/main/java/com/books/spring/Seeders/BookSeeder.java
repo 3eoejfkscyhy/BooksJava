@@ -5,12 +5,11 @@ import  java.util.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import com.books.spring.Models.Author;
-import com.books.spring.Models.Book;
-import com.books.spring.Models.Genre;
-import com.books.spring.Repositories.AuthorRepository;
-import com.books.spring.Repositories.BookRepository;
-import com.books.spring.Repositories.GenreRepository;
+
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
+import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
+import com.books.spring.Models.*;
+import com.books.spring.Repositories.*;
 import  lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j 
 @Component 
 @RequiredArgsConstructor
-@Order(4)
+@Order(SeederOrder.BOOK)
 public class BookSeeder implements CommandLineRunner{
     private final BookRepository bookRepo;
     private final GenreRepository genreRepo;
@@ -29,7 +28,7 @@ public class BookSeeder implements CommandLineRunner{
     {
         if(bookRepo.count()>0)
         {
-             log.info("Books already exists. Skipping seeding books.");
+             log.info(LogMessages.BOOK_ALREADY_EXISTS);
             return;
         }
   Book THLatT = Book.builder()
@@ -86,7 +85,7 @@ public class BookSeeder implements CommandLineRunner{
 
     bookRepo.saveAll(List.of(THLatT,CwJ,SnSS,CC));
 
-     log.info("Books successfully seeded!");
+     log.info(LogMessages.BOOK_SEEDED);
     }
    private Set<Genre> addGenres(String[] genreList)
    {

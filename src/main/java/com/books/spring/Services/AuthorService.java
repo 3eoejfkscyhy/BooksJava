@@ -3,6 +3,7 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Mappers.AuthorMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Repositories.AuthorRepository;
@@ -41,7 +42,7 @@ public class AuthorService {
        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
@@ -60,7 +61,7 @@ public class AuthorService {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
@@ -83,7 +84,7 @@ public class AuthorService {
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
                 .filter(author -> !author.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException("Author " + authorID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(authorID)));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {
         return authorIDs.stream()

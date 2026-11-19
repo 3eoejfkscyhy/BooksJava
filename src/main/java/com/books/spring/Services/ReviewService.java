@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Mappers.ReviewMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Review;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
@@ -38,14 +39,14 @@ public class ReviewService {
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
+                                ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
         review.setBook(
                 bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Book " + dto.isbn() + " could not be found"
+                                ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(dto.isbn())
                         ))
         );
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -57,14 +58,14 @@ public class ReviewService {
                 userRepository.findById(dto.userID())
                         .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
+                                 ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
         review.setBook(
                 bookRepository.findById(dto.isbn())
                         .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Review " + dto.isbn() + " could not be found"
+                                ExceptionMessages.GIVEN_REVIEW_NOT_FOUND.formatted(dto.isbn())
                         ))
         );
         review.setHeadline(dto.headline());
@@ -94,6 +95,6 @@ public class ReviewService {
     private Review findReview(Long reviewID){
         return reviewRepository.findById(reviewID)
                 .filter(review -> !review.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Review " + reviewID + " was not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_REVIEW_NOT_FOUND.formatted(reviewID)));
     }
 }

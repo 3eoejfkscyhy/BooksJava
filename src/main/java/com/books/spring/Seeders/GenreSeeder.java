@@ -4,6 +4,9 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
+import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
 import com.books.spring.Models.Genre;
 import com.books.spring.Repositories.GenreRepository;
 import  lombok.RequiredArgsConstructor;
@@ -13,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j 
 @Component 
 @RequiredArgsConstructor
-@Order(2)
+@Order(SeederOrder.GENRE)
 public class GenreSeeder implements CommandLineRunner{
     private final GenreRepository genreRepo;
     @Override 
@@ -21,7 +24,7 @@ public class GenreSeeder implements CommandLineRunner{
     {
         if(genreRepo.count()>0)
         {
-             log.info("Genres already exists. Skipping seeding genres.");
+             log.info(LogMessages.GENRE_ALREADY_EXISTS);
             return;
         }
     
@@ -43,7 +46,7 @@ public class GenreSeeder implements CommandLineRunner{
 
     genreRepo.saveAll(List.of(TnT,C,B,SM));
 
-     log.info("Genres succesfully seeded!");
+     log.info(LogMessages.GENRE_SEEDED);
     }
    
 }

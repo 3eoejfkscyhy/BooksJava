@@ -2,6 +2,8 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.*;
 import com.books.spring.Mappers.UserMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
+import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -26,23 +28,23 @@ public class UserService {
                 .toList();
     }
 
-    public UserDTO getByUserID(Long userID) { return userMapper.toDto(findUser(userID)); }
+    public UserDTO getByUserID(Long userID) { return userMapper.toDto(BooksJavaFunctions.findUser(userRepository,userID)); }
 
     public UserDTO addBalance(Long userID, BigDecimal amount) {
         if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException( "Deposit amount must be greater than zero");
+            throw new BadRequestException(ExceptionMessages.DEPOSIT_MUST_BE_BIGGER_THAN_ZERO);
         }
-        User user = findUser(userID);
+        User user = BooksJavaFunctions.findUser(userRepository,userID);
         user.setBalance(user.getBalance().add(amount));
         return userMapper.toDto(userRepository.save(user));
     }
 
     public UserDTO create(RegisterUserDTO dto) {
         if(userRepository.existsByEmail(dto.email())) {
-            throw new ConflictException("Email is already in use.");
+            throw new ConflictException(ExceptionMessages.EMAIL_IS_IN_USE);
         }
         if(userRepository.existsByUsername(dto.username())) {
-            throw new ConflictException("Username is already in use.");
+            throw new ConflictException(ExceptionMessages.USERNAME_IS_IN_USE);
         }
 
         User user = new User();
@@ -53,7 +55,7 @@ public class UserService {
     }
 
     public UserDTO update(Long userID, UpdateUserDTO dto) {
-        User user = findUser(userID);
+        User user = BooksJavaFunctions.findUser(userRepository,userID);
 
         user.setUsername(dto.username());
         user.setEmail(dto.email());
@@ -62,20 +64,14 @@ public class UserService {
     }
 
     public void delete(Long userID) {
-        User user = findUser(userID);
+        User user = BooksJavaFunctions.findUser(userRepository,userID);
         user.setIsDeleted(true);
         userRepository.save(user);
     }
 
     @Deprecated
     public void hardDelete(Long userID) {
-        userRepository.delete(findUser(userID));
-    }
-
-    private User findUser(Long userID) {
-        return userRepository.findByUserID(userID)
-                .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "User " + userID + " could not be found"));
+        userRepository.delete(BooksJavaFunctions.findUser(userRepository,userID));
     }
 
 }

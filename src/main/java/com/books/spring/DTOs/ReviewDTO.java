@@ -3,25 +3,28 @@ package com.books.spring.DTOs;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
+import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
+import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+
 public record ReviewDTO (
      Long reviewID,
 
-    @NotBlank(message = "Headline is mandatory")
-    @Size(min = 2, max = 40, message = "Headline must be between 2 and 40 characters")
+    @NotBlank(message = ValidationMessages.HEADLINE_REQUIRED)
+    @Size(min = ValidationRules.HEADLINE_MIN_LENGTH, max = ValidationRules.HEADLINE_MAX_LENGTH, message = ValidationMessages.HEADLINE_LENGHT_SIZE)
      String headline,
 
-    @Size(max = 500, message = "Review must be under 500 characters")
+    @Size(max = ValidationRules.BODY_MAX_LENGHT, message = ValidationMessages.BODY_SIZE_VALID)
      String body,
 
-    @DecimalMin("0.0")
-    @DecimalMax("5.0")
+    @DecimalMin(ValidationRules.STARS_MIN)
+    @DecimalMax(ValidationRules.STARS_MIN)
     @NotNull
      BigDecimal stars,
 
-    @NotBlank(message = "Book ISBN is required")
+    @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
      String isbn,
 
-    @NotNull(message = "User is required")
+    @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
      Long userID,
 
      Boolean isDeleted

@@ -2,7 +2,9 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.UserBookDTO;
 import com.books.spring.Mappers.UserBookMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Misc.UserBookId;
+import  com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.*;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
@@ -10,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -31,20 +31,20 @@ public class UserBookService {
     }
 
     public UserBookDTO purchase(long userID, String isbn) {
-        User user = findUser(userID);
-        Book book = findBook(isbn);
+        User user = BooksJavaFunctions.findUser(userRepository,userID);
+        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
 
         if(book.getBookType() != Book.BookType.EBook) {
-            throw new BadRequestException( "Only Ebooks can be purchased through the application");
+            throw new BadRequestException(ExceptionMessages.ONLY_EBOOK_CAN_BE_PURCHASED);
         }
 
         UserBookId id = new UserBookId(userID, isbn);
         UserBooks userBooks = userBookRepository.findById(id).orElse(null);
-        if(userBooks != null && userBooks.getReadingStatus() != UserBooks.Status.Wishlisted) {
-            throw new ConflictException("This user already owns this book");
+        if(userBooks != null && (userBooks.getReadingStatus() != UserBooks.Status.Wishlisted||userBooks.getReadingStatus() != UserBooks.Status.PreviouslyOwned)) {
+            throw new ConflictException(ExceptionMessages.BOOK_IS_ALREADY_OWNED_BY_USER);
         }
         if(user.getBalance().compareTo(book.getPrice()) < 0) {
-            throw new BadRequestException( "Insufficient balance");
+            throw new BadRequestException(ExceptionMessages.INSUFFICIENT_BALANCE);
         }
 
         user.setBalance(user.getBalance().subtract(book.getPrice()));
@@ -65,22 +65,22 @@ public class UserBookService {
     }
 
     public UserBookDTO create(UserBookDTO dto) {
-        User user = findUser(dto.userID());
-        Book book = findBook(dto.isbn());
+        User user = BooksJavaFunctions.findUser(userRepository,dto.userID());
+        Book book = BooksJavaFunctions.findBook(bookRepository,dto.isbn());
 
         UserBookId id = new UserBookId(user.getUserID(), book.getIsbn());
         if(userBookRepository.existsById(id)) {
-            throw new ConflictException("This user already has this book in their reading list");
+            throw new ConflictException(ExceptionMessages.USER_HAS_BOOK_IN_READING_LIST);
         }
          if(dto.lastReadTo()>book.getBookLength()) {
-            throw new ConflictException("The given page that was last read was bigger than the ammount of pages there are");
+            throw new ConflictException(ExceptionMessages.GIVEN_READ_PAGE_MORE_THAN_AVAILABLE);
         }
         UserBooks userBook = UserBooks.builder()
                 .user(user)
                 .book(book)
                 .readingStatus(dto.readingStatus())
                 .lastReadTo(dto.lastReadTo())
-                .readingPercentage(percentageRead(dto.lastReadTo(),book.getBookLength()))
+                .readingPercentage(BooksJavaFunctions.percentageRead(dto.lastReadTo(),book.getBookLength()))
                 .build();
 
         return userBookMapper.toDto(userBookRepository.save(userBook));
@@ -88,38 +88,75 @@ public class UserBookService {
 
     public UserBookDTO update(Long userID, String isbn, Long lastReadTo, UserBooks.Status status) {
         UserBookId userBookID = new UserBookId(userID, isbn);
-        Long bookPages = findBook(isbn).getBookLength();
+        Long bookPages = BooksJavaFunctions.findBook(bookRepository,isbn).getBookLength();
         UserBooks userBook = userBookRepository.findById(userBookID)
-                .orElseThrow(() -> new NotFoundException( "User-book relationship not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.USER_BOOK_RELATIONSHIP_NOT_FOUND));
         userBook.setReadingStatus(status);
+        if(lastReadTo != null)
+        {
                  if(lastReadTo>bookPages) {
-            throw new ConflictException("The given page that was last read was bigger than the ammount of pages there are");
+            throw new ConflictException(ExceptionMessages.GIVEN_READ_PAGE_MORE_THAN_AVAILABLE);
         }
-        userBook.setLastReadTo(lastReadTo);
-        userBook.setReadingPercentage(percentageRead(lastReadTo,bookPages));
+        if(userBook.getReadingStatus()!=UserBooks.Status.PreviouslyOwned&&userBook.getReadingStatus()!=UserBooks.Status.Wishlisted) {
+            
+             userBook.setLastReadTo(lastReadTo);
+        }
+        else throw new ConflictException(ExceptionMessages.CANT_UPDATE_WISHLISTED_PREVIOUSLY_OWNED_LAST_READ_PAGE);
+        userBook.setReadingPercentage(BooksJavaFunctions.percentageRead(lastReadTo,bookPages));
+    }
         return userBookMapper.toDto(userBookRepository.save(userBook));
+    }
+
+        public UserBooks.Status markRented(Long userID, String isbn) {
+        User user = BooksJavaFunctions.findUser(userRepository,userID);
+        Book book =  BooksJavaFunctions.findBook(bookRepository,isbn);
+
+        UserBookId id = new UserBookId(userID, isbn);
+
+        UserBooks userBook = userBookRepository.findById(id).orElse(null);
+        UserBooks.Status previousStatus = null;
+
+        if(userBook == null) {
+            userBook = UserBooks.builder()
+                    .user(user)
+                    .book(book)
+                    .readingStatus(UserBooks.Status.Rented)
+                    .build();
+        }
+        else {
+            previousStatus = userBook.getReadingStatus();
+            userBook.setReadingStatus(UserBooks.Status.Rented);
+        }
+
+        userBookRepository.save(userBook);
+        return previousStatus;
+    }
+
+    public void restoreStatus(Long userID, String isbn, UserBooks.Status previousStatus) {
+        UserBookId id = new UserBookId(userID, isbn);
+        UserBooks userBook = userBookRepository.findById(id).orElse(null);
+
+        if(previousStatus == null) {
+            if(userBook != null) {
+                userBookRepository.delete(userBook);
+            }
+            return;
+        }
+        if(userBook == null) {
+            User user = BooksJavaFunctions.findUser(userRepository,userID);
+            Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
+            userBook = UserBooks.builder()
+                    .user(user)
+                    .book(book)
+                    .build();
+        }
+        if(previousStatus == UserBooks.Status.Wishlisted) userBook.setReadingStatus(UserBooks.Status.Wishlisted);
+        else userBook.setReadingStatus(UserBooks.Status.PreviouslyOwned);
+        userBookRepository.save(userBook);
     }
 
     public void delete(Long userID, String isbn) {
         UserBookId id = new UserBookId(userID, isbn);
         userBookRepository.deleteById(id);
     }
-
-    private User findUser(Long userID) {
-        return userRepository.findByUserID(userID)
-                .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "User could not be found"));
-    }
-
-    private Book findBook(String isbn) {
-        return bookRepository.findById(isbn)
-                .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Book could not be found"));
-    }
-
-     public BigDecimal percentageRead(long lastReadTo,long bookLenght){
-      float fraction =  (float) lastReadTo/bookLenght;
-      float uncleanPer = fraction*100;
-      return new BigDecimal((long)uncleanPer).setScale(2,RoundingMode.HALF_UP);
-  } 
 }

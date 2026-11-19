@@ -3,6 +3,8 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.DTOs.FreePeriodDTO;
 import com.books.spring.Mappers.BookMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
+import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.*;
 import com.books.spring.Repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -32,7 +34,7 @@ public class BookService {
     }
 
     public BookDTO getByIsbn(String isbn) {
-        return bookMapper.toDto(findBook(isbn));
+        return bookMapper.toDto(BooksJavaFunctions.findBook(bookRepository,isbn));
     }
 
     public BookDTO create(BookDTO dto) {
@@ -61,7 +63,7 @@ public class BookService {
     public BookDTO update(String isbn, BookDTO dto) {
         validateBookTypeAndRentalPrice(dto);
 
-        Book book = findBook(isbn);
+        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
 
         book.setTitle(dto.title());
         book.setLanguage(dto.language());
@@ -89,10 +91,10 @@ public class BookService {
     }
 
     public BookDTO setFreePeriod(String isbn, FreePeriodDTO dto) {
-        Book book = findBook(isbn);
+        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
 
         if(!dto.freeFrom().isBefore(dto.freeUntil())) {
-            throw new BadRequestException("The free period must begin before it ends");
+            throw new BadRequestException(ExceptionMessages.FREE_PERIOD_MUST_BEGIN_BEFORE_END);
         }
 
         book.setFreeFrom(dto.freeFrom());
@@ -101,38 +103,32 @@ public class BookService {
     }
 
     public BookDTO removeFreePeriod(String isbn) {
-        Book book = findBook(isbn);
+        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
         book.setFreeFrom(null);
         book.setFreeUntil(null);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     public void delete(String isbn) {
-        Book book = findBook(isbn);
+        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
         book.setIsDeleted(true);
         bookRepository.save(book);
     }
 
     @Deprecated
     public void hardDelete(String isbn) {
-        bookRepository.delete(findBook(isbn));
+        bookRepository.delete(BooksJavaFunctions.findBook(bookRepository,isbn));
     }
 
     private void validateBookTypeAndRentalPrice(BookDTO dto) {
         if(dto.bookType() == null) {
-            throw new BadRequestException("Book type is required");
+            throw new BadRequestException(ExceptionMessages.BOOK_TYPE_REQUIRED);
         }
         if(dto.bookType() == Book.BookType.EBook && dto.rentalPrice() == null) {
-            throw new BadRequestException("E-books must have a rental price");
+            throw new BadRequestException(ExceptionMessages.BOOK_HAS_RENTAL_PRICE);
         }
         if(dto.bookType() == Book.BookType.PhysicalBook && dto.rentalPrice() != null) {
-            throw new BadRequestException("Physical books cannot be rentable");
+            throw new BadRequestException(ExceptionMessages.PHYSICAL_BOOKS_CANT_BE_RENTED);
         }
-    }
-
-    private Book findBook(String isbn) {
-        return bookRepository.findById(isbn)
-                .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException("Book " + isbn + " was not found"));
     }
 }

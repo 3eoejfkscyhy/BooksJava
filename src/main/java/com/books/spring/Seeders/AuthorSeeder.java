@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
+import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
 import com.books.spring.Models.Author;
 import com.books.spring.Repositories.AuthorRepository;
 import  lombok.RequiredArgsConstructor;
@@ -14,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j 
 @Component 
 @RequiredArgsConstructor
-@Order(3)
+@Order(SeederOrder.AUTHOR)
 public class AuthorSeeder implements CommandLineRunner{
     private final AuthorRepository authorRepo;
     @Override 
@@ -22,7 +25,7 @@ public class AuthorSeeder implements CommandLineRunner{
     {
         if(authorRepo.count()>0)
         {
-            log.info("Authors already exists. Skipping seeding authors.");
+            log.info(LogMessages.AUTHOR_ALREADY_EXISTS);
             return;
         }
     
@@ -56,6 +59,6 @@ public class AuthorSeeder implements CommandLineRunner{
 
     authorRepo.saveAll(List.of(Philippe,Jamie,Steve,Stoichkov));
 
-    log.info("Authors succesfully seeded!");
+    log.info(LogMessages.AUTHOR_SEEDED);
     }
 }

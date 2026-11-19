@@ -34,6 +34,10 @@ public class Rental {
     @Column(name = "status", nullable = false)
     private RentalStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "previous_status")
+    private UserBooks.Status previousStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)

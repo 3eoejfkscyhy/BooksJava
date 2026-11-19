@@ -27,7 +27,7 @@ public class UserBooks{
  @Id
  @OnDelete(action = OnDeleteAction.CASCADE)
  @ManyToOne
- @JoinColumn (name = "book_isbn",referencedColumnName = "book_isbn")
+ @JoinColumn (name = "book_isbn", referencedColumnName = "book_isbn")
  private Book book;
 
      public enum Status {
