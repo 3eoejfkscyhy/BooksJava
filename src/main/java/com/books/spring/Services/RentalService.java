@@ -21,6 +21,7 @@ public class RentalService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final RentalMapper rentalMapper;
+    private final UserBookService userBookService;
 
     public List<RentalDTO> getAll() {
         return rentalRepository.findAll().stream()
@@ -52,6 +53,8 @@ public class RentalService {
         rental.setRentedAt(rentedAt);
         rental.setDueAt(rentedAt.plusDays(20));
         rental.setStatus(Rental.RentalStatus.Active);
+        UserBooks.Status previousStatus = userBookService.markRented(user.getUserID(), book.getIsbn());
+        rental.setPreviousStatus(previousStatus);
         user.setBalance(user.getBalance().subtract(book.getRentalPrice()));
         userRepository.save(user);
         return rentalMapper.toDto(rentalRepository.save(rental));
@@ -66,6 +69,7 @@ public class RentalService {
 
         rental.setReturnedAt(LocalDateTime.now());
         rental.setStatus(Rental.RentalStatus.Returned);
+        userBookService.restoreStatus(rental.getUser().getUserID(), rental.getBook().getIsbn(), rental.getPreviousStatus());
         return rentalMapper.toDto(rentalRepository.save(rental));
     }
 

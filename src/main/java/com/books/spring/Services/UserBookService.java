@@ -100,6 +100,54 @@ public class UserBookService {
         return userBookMapper.toDto(userBookRepository.save(userBook));
     }
 
+    public UserBooks.Status markRented(Long userID, String isbn) {
+        User user = findUser(userID);
+        Book book = findBook(isbn);
+
+        UserBookId id = new UserBookId(userID, isbn);
+
+        UserBooks userBook = userBookRepository.findById(id).orElse(null);
+        UserBooks.Status previousStatus = null;
+
+        if(userBook == null) {
+            userBook = UserBooks.builder()
+                    .user(user)
+                    .book(book)
+                    .readingStatus(UserBooks.Status.Rented)
+                    .build();
+        }
+        else {
+            previousStatus = userBook.getReadingStatus();
+            userBook.setReadingStatus(UserBooks.Status.Rented);
+        }
+
+        userBookRepository.save(userBook);
+        return previousStatus;
+    }
+
+    public void restoreStatus(Long userID, String isbn, UserBooks.Status previousStatus) {
+        UserBookId id = new UserBookId(userID, isbn);
+        UserBooks userBook = userBookRepository.findById(id).orElse(null);
+
+        if(previousStatus == null) {
+            if(userBook != null) {
+                userBookRepository.delete(userBook);
+            }
+            return;
+        }
+        if(userBook == null) {
+            User user = findUser(userID);
+            Book book = findBook(isbn);
+            userBook = UserBooks.builder()
+                    .user(user)
+                    .book(book)
+                    .build();
+        }
+
+        userBook.setReadingStatus(previousStatus);
+        userBookRepository.save(userBook);
+    }
+
     public void delete(Long userID, String isbn) {
         UserBookId id = new UserBookId(userID, isbn);
         userBookRepository.deleteById(id);
