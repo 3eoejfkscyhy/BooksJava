@@ -27,7 +27,6 @@ public class AuthorService {
 
     public List<AuthorDTO> getAll(){
         return authorRepository.findAll().stream()
-                .filter(author -> !author.getIsDeleted())
                 .map(authorMapper::toDto)
                 .toList();
     }
@@ -41,7 +40,6 @@ public class AuthorService {
         author.setAuthorID(null);
        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                     .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
@@ -60,7 +58,6 @@ public class AuthorService {
 
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                     .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
@@ -71,19 +68,11 @@ public class AuthorService {
     }
 
     public void delete(Long authorID) {
-        Author author = findAuthor(authorID);
-        author.setIsDeleted(true);
-        authorRepository.save(author);
-    }
-
-    @Deprecated
-    public void hardDelete(Long authorID) {
         authorRepository.delete(findAuthor(authorID));
     }
 
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
-                .filter(author -> !author.getIsDeleted())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(authorID)));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {

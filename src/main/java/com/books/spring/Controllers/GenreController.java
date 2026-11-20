@@ -41,11 +41,4 @@ public class GenreController {
     public void delete(@PathVariable Long genreID) {
         genreService.delete(genreID);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{genreID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long genreID) {
-        genreService.hardDelete(genreID);
-    }
 }

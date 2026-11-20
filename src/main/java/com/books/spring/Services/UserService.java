@@ -23,7 +23,6 @@ public class UserService {
 
     public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
-                .filter(user -> !user.getIsDeleted())
                 .map(userMapper::toDto)
                 .toList();
     }
@@ -64,13 +63,6 @@ public class UserService {
     }
 
     public void delete(Long userID) {
-        User user = BooksJavaFunctions.findUser(userRepository,userID);
-        user.setIsDeleted(true);
-        userRepository.save(user);
-    }
-
-    @Deprecated
-    public void hardDelete(Long userID) {
         userRepository.delete(BooksJavaFunctions.findUser(userRepository,userID));
     }
 

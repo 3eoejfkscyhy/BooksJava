@@ -41,11 +41,4 @@ public class ReviewController {
     public void delete(@PathVariable Long reviewID) {
         reviewService.delete(reviewID);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{reviewID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long reviewID) {
-        reviewService.hardDelete(reviewID);
-    }
 }

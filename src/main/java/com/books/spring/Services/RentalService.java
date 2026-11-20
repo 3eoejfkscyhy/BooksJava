@@ -23,7 +23,7 @@ public class RentalService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final RentalMapper rentalMapper;
-      private final UserBookService userBookService;
+    private final UserBookService userBookService;
 
     public List<RentalDTO> getAll() {
         return rentalRepository.findAll().stream()

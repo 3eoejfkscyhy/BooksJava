@@ -16,13 +16,11 @@ public interface ReviewMapper {
     @Mapping(target = "reviewID", ignore = true)
     @Mapping(target = "writtenBy", ignore = true)
     @Mapping(target = "book", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     Review toEntity(ReviewDTO dto);
 
     @Named("activeReviews")
     default Set<ReviewDTO> toActiveDtos(Set<Review> reviews) {
         return reviews.stream()
-                .filter(review -> !review.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

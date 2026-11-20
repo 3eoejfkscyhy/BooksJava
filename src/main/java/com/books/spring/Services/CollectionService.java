@@ -26,7 +26,6 @@ public class CollectionService {
 
     public List<CollectionDTO> getAll() {
         return collectionRepository.findAll().stream()
-                .filter(collection -> !collection.getIsDeleted())
                 .map(collectionMapper::toDto)
                 .toList();
     }
@@ -38,7 +37,6 @@ public class CollectionService {
         collection.setCollectionID(null);
         collection.setUser(
                 userRepository.findById(dto.userID())
-                        .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
                                  ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
@@ -46,7 +44,6 @@ public class CollectionService {
 
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         collection.setBooks(books);
@@ -59,7 +56,6 @@ public class CollectionService {
         collection.setCollectionName(dto.collectionName());
         collection.setUser(
                 userRepository.findById(dto.userID())
-                        .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
                                  ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
@@ -68,7 +64,6 @@ public class CollectionService {
 
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
                                 ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
@@ -80,19 +75,11 @@ public class CollectionService {
     }
 
     public void delete(Long collectionID) {
-        Collection collection = findCollection(collectionID);
-        collection.setIsDeleted(true);
-        collectionRepository.save(collection);
-    }
-
-    @Deprecated
-    public void hardDelete(Long collectionID) {
         collectionRepository.delete(findCollection(collectionID));
     }
 
     private Collection findCollection(Long collectionID) {
         return collectionRepository.findById(collectionID)
-                .filter(collection -> !collection.getIsDeleted())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(collectionID)));
     }
 

@@ -25,7 +25,6 @@ public class UserBookService {
 
     public List<UserBookDTO> getByUserID(Long userID) {
         return userBookRepository.findByUser_UserID(userID).stream()
-                .filter(userBook -> !userBook.getBook().getIsDeleted())
                 .map(userBookMapper::toDto)
                 .toList();
     }

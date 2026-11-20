@@ -21,7 +21,5 @@ public record UserDTO (
      BigDecimal balance,
 
      Set<Long> reviewIDs,
-     Set<Long> collectionIDs,
-
-     Boolean isDeleted
+     Set<Long> collectionIDs
 ){}

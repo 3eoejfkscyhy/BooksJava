@@ -28,7 +28,6 @@ public class BookService {
 
     public List<BookDTO> getAll() {
         return bookRepository.findAll().stream()
-                .filter(book -> !book.getIsDeleted())
                 .map(bookMapper::toDto)
                 .toList();
     }
@@ -110,13 +109,6 @@ public class BookService {
     }
 
     public void delete(String isbn) {
-        Book book = BooksJavaFunctions.findBook(bookRepository,isbn);
-        book.setIsDeleted(true);
-        bookRepository.save(book);
-    }
-
-    @Deprecated
-    public void hardDelete(String isbn) {
         bookRepository.delete(BooksJavaFunctions.findBook(bookRepository,isbn));
     }
 

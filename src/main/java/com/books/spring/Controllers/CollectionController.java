@@ -41,11 +41,4 @@ public class CollectionController {
     public void delete(@PathVariable Long collectionID) {
         collectionService.delete(collectionID);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{collectionID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long collectionID) {
-        collectionService.hardDelete(collectionID);
-    }
 }

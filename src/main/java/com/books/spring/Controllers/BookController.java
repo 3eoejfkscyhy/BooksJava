@@ -54,11 +54,4 @@ public class BookController {
     public void delete(@PathVariable String isbn) {
         bookService.delete(isbn);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{isbn}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable String isbn) {
-        bookService.hardDelete(isbn);
-    }
 }

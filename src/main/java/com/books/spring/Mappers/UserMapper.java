@@ -18,7 +18,6 @@ public interface UserMapper {
     @Mapping(target = "UserSide", ignore = true)
     @Mapping(target = "collections", ignore = true)
     @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     User toEntity(UserDTO dto);
 
     default Long reviewToID(Review review) { return review.getReviewID(); }
@@ -27,7 +26,6 @@ public interface UserMapper {
     @Named("activeUsers")
     default Set<UserDTO> toActiveDtos(Set<User> users) {
         return users.stream()
-                .filter(user-> !user.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

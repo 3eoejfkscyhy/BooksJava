@@ -50,7 +50,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserBooks> UserSide = new HashSet<>();
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

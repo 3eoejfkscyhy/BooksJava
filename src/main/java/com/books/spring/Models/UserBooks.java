@@ -1,12 +1,8 @@
 package com.books.spring.Models;
 
 import lombok.*;
-
-import java.math.BigDecimal;
-
 import org.hibernate.annotations.*;
 import com.books.spring.Misc.UserBookId;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -39,7 +35,7 @@ public class UserBooks{
 
     public Long lastReadTo;
 
-    public BigDecimal readingPercentage;
+    public String readingPercentage;
 }
 
 

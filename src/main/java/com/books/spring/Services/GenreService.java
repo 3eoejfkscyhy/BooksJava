@@ -26,7 +26,6 @@ public class GenreService {
 
     public List<GenreDTO> getAll() {
         return genreRepository.findAll().stream()
-                .filter(genre -> !genre.getIsDeleted())
                 .map(genreMapper::toDto)
                 .toList();
     }
@@ -44,7 +43,6 @@ public class GenreService {
         genre.setGenreName(normalisedName);
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
                                 ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
@@ -65,7 +63,6 @@ public class GenreService {
         genre.setGenreName(dto.genreName());
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
                                 ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn)
                         )))
@@ -77,19 +74,11 @@ public class GenreService {
     }
 
     public void delete(Long genreID) {
-        Genre genre = findGenre(genreID);
-        genre.setIsDeleted(true);
-        genreRepository.save(genre);
-    }
-
-    @Deprecated
-    public void hardDelete(Long genreID) {
         genreRepository.delete(findGenre(genreID));
     }
 
     private Genre findGenre(Long genreID) {
         return genreRepository.findBygenreID(genreID)
-                .filter(genre -> !genre.getIsDeleted())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(genreID)));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {

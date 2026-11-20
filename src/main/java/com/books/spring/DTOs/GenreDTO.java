@@ -13,7 +13,5 @@ public record GenreDTO (
     @Size(min = ValidationRules.GENRE_NAME_MIN_LENGTH, max = ValidationRules.GENRE_NAME_MAX_LENGTH, message = ValidationMessages.GENRE_NAME_SIZE_VALID)
      String genreName,
 
-     Set<String> isbns,
-
-     Boolean isDeleted
+     Set<String> isbns
 ) {}

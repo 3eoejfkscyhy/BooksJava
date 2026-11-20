@@ -41,11 +41,4 @@ public class AuthorController {
     public void delete(@PathVariable Long authorID) {
         authorService.delete(authorID);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{authorID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long authorID) {
-        authorService.hardDelete(authorID);
-    }
 }

@@ -19,8 +19,7 @@ public record AuthorDTO(
   LocalDate DOB,
   @PositiveOrZero(message =  ValidationMessages.BOOKS_WRITTEN_AMOUNT)
    int booksWritten,
-   Set<String> isbns,
-   Boolean isDeleted
+   Set<String> isbns
 ){}
    
 

@@ -4,7 +4,6 @@ import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
 import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
 import com.books.spring.Models.UserBooks;
 import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
 
 public record UserBookDTO (
     @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
@@ -21,5 +20,5 @@ public record UserBookDTO (
     @Positive(message =  ValidationMessages.BOOK_LENGHT_VALID)
      Long lastReadTo,
 
-     BigDecimal readingPercentage
+     String readingPercentage
 ){ }

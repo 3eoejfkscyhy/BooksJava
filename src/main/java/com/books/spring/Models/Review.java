@@ -38,7 +38,4 @@ public class Review {
     @JoinColumn(name = "book_isbn", nullable = false)
     private Book book;
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

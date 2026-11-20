@@ -49,11 +49,4 @@ public class UserController {
     public void delete(@PathVariable Long userID) {
         userService.delete(userID);
     }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{userID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long userID) {
-        userService.hardDelete(userID);
     }
-}

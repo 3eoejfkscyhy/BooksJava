@@ -25,7 +25,5 @@ public record ReviewDTO (
      String isbn,
 
     @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
-     Long userID,
-
-     Boolean isDeleted
+     Long userID
 ){}

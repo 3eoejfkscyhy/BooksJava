@@ -36,9 +36,4 @@ public class Author {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany(mappedBy = "bookAuthors")
     private Set<Book> books = new HashSet<>();
-
-    @Builder.Default
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

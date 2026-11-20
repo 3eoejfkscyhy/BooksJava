@@ -32,7 +32,5 @@ public record BookDTO(
      Set<Long> authorIDs,
      Set<Long> reviewIDs,
      Set<Long> genreIDs,
-     Set<Long> collectionIDs,
-
-     Boolean isDeleted
+     Set<Long> collectionIDs
 ){}

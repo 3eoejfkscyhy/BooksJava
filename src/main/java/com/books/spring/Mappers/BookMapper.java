@@ -21,7 +21,6 @@ public interface BookMapper {
     @Mapping(target = "bookGenres", ignore = true)
     @Mapping(target = "collections", ignore = true)
     @Mapping(target = "BookSide", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "freeFrom", ignore = true)
     @Mapping(target = "freeUntil", ignore = true)
     Book toEntity(BookDTO dto);
@@ -34,7 +33,6 @@ public interface BookMapper {
     @Named("activeBooks")
     default Set<BookDTO> toActiveDtos(Set<Book> books) {
         return books.stream()
-                .filter(book -> !book.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }
