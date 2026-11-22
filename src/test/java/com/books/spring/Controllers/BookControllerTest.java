@@ -8,11 +8,8 @@ import org.springframework.test.context.bean.override.mockito.*;
 
 
 
-import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -109,7 +106,7 @@ class BookControllerTest {
     .andExpect(jsonPath("$.errors.isbn").value(ValidationMessages.ISBN_REQUIRED))
     .andExpect(jsonPath("$.errors.title").value(ValidationMessages.BOOK_TITLE_REQUIRED))
     .andExpect(jsonPath("$.errors.bookType").value(ValidationMessages.BOOK_TYPE_REQUIRED))
-    .andExpect(jsonPath("$.errors.price").value(containsString(ValidationMessages.PRICE_REQUIRED)));
+    .andExpect(jsonPath("$.errors.price").value(ValidationMessages.PRICE_REQUIRED));
     
 
      verifyNoInteractions(bookService);
@@ -203,10 +200,10 @@ class BookControllerTest {
   "freeUntil": "2026-11-30T14:04:01"
 }
         """))
-       .andExpect(status().isCreated());
+       .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/books/9780345287793"))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                .andExpect(jsonPath("$.freeFrom").value("2026-11-22T14:04:01"))
                .andExpect(jsonPath("$.freeUntil").value("2026-11-30T14:04:01"));
      }

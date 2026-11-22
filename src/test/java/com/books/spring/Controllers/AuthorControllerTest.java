@@ -8,11 +8,8 @@ import org.springframework.test.context.bean.override.mockito.*;
 
 
 
-import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -78,7 +75,7 @@ class AuthorControllerTest {
      {}
         """))
     .andExpect(status().isBadRequest())
-    .andExpect(jsonPath("$.errors.firstName").value(containsString(ValidationMessages.FIRST_NAME_REQUIRED)))
+    .andExpect(jsonPath("$.errors.firstName").value(ValidationMessages.FIRST_NAME_REQUIRED))
     .andExpect(jsonPath("$.errors.DOB").value(ValidationMessages.AUTHOR_DOB_REQUIRED));
 
     verifyNoInteractions(authorService);
