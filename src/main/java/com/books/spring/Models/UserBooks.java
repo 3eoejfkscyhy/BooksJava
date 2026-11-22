@@ -36,6 +36,10 @@ public class UserBooks{
     public Long lastReadTo;
 
     public String readingPercentage;
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 }
 
 

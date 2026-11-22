@@ -14,6 +14,8 @@ public record UserDTO (
 
      String email,
 
+     String password,
+
     @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
      String status,
 

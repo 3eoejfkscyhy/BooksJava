@@ -24,6 +24,7 @@ public final class BooksJavaConstants {
         public static final String INSUFFICIENT_BALANCE_TO_RENT =  "Insufficient balance to rent this book";
         public static final String USER_HAS_BOOK_RENTED_ALREADY =  "This user has an active rental for this book already";
         public static final String USER_ALREADY_HAS_RETURNED_BOOK =  "This rental has already been returned by this user";
+        public static final String CANNOT_DELETE_ACTIVE_RENTAL =  "Cannot delete an active rental";
         public static final String GIVEN_USER_NOT_FOUND = "User with the ID %d could not be found";
         public static final String GIVEN_BOOK_NOT_FOUND = "Book %s could not be found";
         public static final String GIVEN_REVIEW_FOR_BOOK_NOT_FOUND =  "Review for book %s could not be found";
@@ -35,7 +36,9 @@ public final class BooksJavaConstants {
 
         private ExceptionMessages() {}
     }
-        public static final class ValidationMessages
+
+
+    public static final class ValidationMessages
     {
 
         public static final String FIRST_NAME_REQUIRED =  "First name is required";
@@ -60,48 +63,48 @@ public final class BooksJavaConstants {
 
         public static final String USERNAME_LENGHT_SIZE =  "Username must be between 2 and 20 characters";
         public static final String USERNAME_REQUIRED =  "Username is required";
-         public static final String EMAIL_REQUIRED =  "Email is required";
-          public static final String EMAIL_VALID =  "Email must be valid";
+        public static final String EMAIL_REQUIRED =  "Email is required";
+        public static final String EMAIL_VALID =  "Email must be valid";
 
-           public static final String PASSWORD_REQUIRED =  "Password is required";
-           public static final String PASSWORD_SIZE_VALID =  "Password must be atleast 8 characters long";
-           public static final String PASSWORD_VALID_FORMAT =  "The password must only include letters and/or numbers";
+        public static final String PASSWORD_REQUIRED =  "Password is required";
+        public static final String PASSWORD_SIZE_VALID =  "Password must be atleast 8 characters long";
+        public static final String PASSWORD_VALID_FORMAT =  "The password must only include letters and/or numbers";
 
-           public static final String ISBN_REQUIRED =  "Book ISBN is required";
-           public static final String HEADLINE_REQUIRED =  "Headline is mandatory";
-           public static final String BODY_SIZE_VALID =  "Review must be under 500 characters";
-           public static final String HEADLINE_LENGHT_SIZE =  "Headline must be between 2 and 40 characters";
+        public static final String ISBN_REQUIRED =  "Book ISBN is required";
+        public static final String HEADLINE_REQUIRED =  "Headline is mandatory";
+        public static final String BODY_SIZE_VALID =  "Review must be under 500 characters";
+        public static final String HEADLINE_LENGHT_SIZE =  "Headline must be between 2 and 40 characters";
 
-           public static final String COLLECTION_NAME_REQUIRED =  "Collection name is required";
-           public static final String COLLECTION_NAME_SIZE_VALID =  "Review must be under 500 characters";
+        public static final String COLLECTION_NAME_REQUIRED =  "Collection name is required";
+        public static final String COLLECTION_NAME_SIZE_VALID =  "Review must be under 500 characters";
 
-           public static final String FREE_FROM_REQUIRED =  "Free period has to have a start date and time";
-           public static final String FREE_UNTIL_REQUIRED =  "Free period should have an end date and time";
+        public static final String FREE_FROM_REQUIRED =  "Free period has to have a start date and time";
+        public static final String FREE_UNTIL_REQUIRED =  "Free period should have an end date and time";
 
-            public static final String GENRE_NAME_REQUIRED =  "Genre name is mandatory";
-           public static final String GENRE_NAME_SIZE_VALID =  "Genre name must be between 2 and 50 characters";
-          private ValidationMessages() {}
+        public static final String GENRE_NAME_REQUIRED =  "Genre name is mandatory";
+        public static final String GENRE_NAME_SIZE_VALID =  "Genre name must be between 2 and 50 characters";
+
+        private ValidationMessages() {}
     }
 
 
-            public static final class LogMessages
+    public static final class LogMessages
     {
-           public static final String AUTHOR_ALREADY_EXISTS =  "Authors already exists. Skipping seeding authors.";
-           public static final String AUTHOR_SEEDED =  "Authors succesfully seeded!"; 
-           public static final String BOOK_ALREADY_EXISTS =  "Books already exists. Skipping seeding books.";
-           public static final String BOOK_SEEDED =  "Books successfully seeded!"; 
-           public static final String COLLECTION_ALREADY_EXISTS =  "Collections already exists. Skipping seeding collections.";
-           public static final String COLLECTION_SEEDED =  "Collections succesfully seeded!"; 
-           public static final String GENRE_ALREADY_EXISTS =  "Genres already exists. Skipping seeding genres.";
-           public static final String GENRE_SEEDED =  "Genres succesfully seeded!"; 
-           public static final String REVIEW_ALREADY_EXISTS =  "Reviews already exists. Skipping seeding reviews.";
-           public static final String REVIEW_SEEDED =  "Reviews succesfully seeded!";
-           public static final String USER_BOOK_ALREADY_EXISTS =  "User Books already exists. Skipping seeding user_books.";
-           public static final String USER_BOOK_SEEDED =  "User Books succesfully seeded!";
-           public static final String USER_ALREADY_EXISTS =  "Users already exists. Skipping seeding users.";
-           public static final String USER_SEEDED =  "Users successfully seeded!";
-           
-       
+        public static final String AUTHOR_ALREADY_EXISTS =  "Authors already exists. Skipping seeding authors.";
+        public static final String AUTHOR_SEEDED =  "Authors succesfully seeded!"; 
+        public static final String BOOK_ALREADY_EXISTS =  "Books already exists. Skipping seeding books.";
+        public static final String BOOK_SEEDED =  "Books successfully seeded!"; 
+        public static final String COLLECTION_ALREADY_EXISTS =  "Collections already exists. Skipping seeding collections.";
+        public static final String COLLECTION_SEEDED =  "Collections succesfully seeded!"; 
+        public static final String GENRE_ALREADY_EXISTS =  "Genres already exists. Skipping seeding genres.";
+        public static final String GENRE_SEEDED =  "Genres succesfully seeded!"; 
+        public static final String REVIEW_ALREADY_EXISTS =  "Reviews already exists. Skipping seeding reviews.";
+        public static final String REVIEW_SEEDED =  "Reviews succesfully seeded!";
+        public static final String USER_BOOK_ALREADY_EXISTS =  "User Books already exists. Skipping seeding user_books.";
+        public static final String USER_BOOK_SEEDED =  "User Books succesfully seeded!";
+        public static final String USER_ALREADY_EXISTS =  "Users already exists. Skipping seeding users.";
+        public static final String USER_SEEDED =  "Users successfully seeded!";
+        public static final String DECRYPTED_PASSWORD = "The decrypted password for user with the ID %d is %s";
           private LogMessages() {}
     }
 
@@ -120,12 +123,14 @@ public final class BooksJavaConstants {
         public static final int COLLECTION_NAME_MAX_LENGHT = 200;
         public static final int GENRE_NAME_MIN_LENGTH = 2;
         public static final int GENRE_NAME_MAX_LENGTH = 50;
-         public static final String STARS_MIN = "0.0";
-         public static final String STARS_MAX = "5.0";
+        public static final String STARS_MIN = "0.0";
+        public static final String STARS_MAX = "5.0";
 
-        public static final String ISBN_PATTERN = "97[89]\\d{10}";
+        public static final String ISBN_PATTERN = "9[78][89]\\d{10}";
         public static final String LANGUAGE_PATTERN = "[A-Za-z]+";
         public static final String PASSWORD_PATTERN = "[a-zA-Z0-9]+";
+
+        public static final int RENTAL_LENGHT = 20;
         private ValidationRules() {}
     }
      public static final class SeederOrder

@@ -9,7 +9,7 @@ import com.books.spring.Misc.BooksJavaConstants.LogMessages;
 import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
-import  lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 

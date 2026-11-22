@@ -3,16 +3,20 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.*;
 import com.books.spring.Mappers.UserMapper;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
 import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -65,5 +69,10 @@ public class UserService {
     public void delete(Long userID) {
         userRepository.delete(BooksJavaFunctions.findUser(userRepository,userID));
     }
+
+    public String decryptPass(Long userID) { 
+         String decryptedPass = new String(Base64.getDecoder().decode(BooksJavaFunctions.findUser(userRepository,userID).getPassword())); 
+         return LogMessages.DECRYPTED_PASSWORD.formatted(userID,decryptedPass);
+        }
 
 }

@@ -25,6 +25,7 @@ public class UserBookService {
 
     public List<UserBookDTO> getByUserID(Long userID) {
         return userBookRepository.findByUser_UserID(userID).stream()
+        .filter(userBook->!userBook.getIsDeleted())
                 .map(userBookMapper::toDto)
                 .toList();
     }
@@ -38,7 +39,7 @@ public class UserBookService {
         }
 
         UserBookId id = new UserBookId(userID, isbn);
-        UserBooks userBooks = userBookRepository.findById(id).orElse(null);
+        UserBooks userBooks = userBookRepository.findById(id).filter(userBook->!userBook.getIsDeleted()).orElse(null);
         if(userBooks != null && (userBooks.getReadingStatus() != UserBooks.Status.Wishlisted||userBooks.getReadingStatus() != UserBooks.Status.PreviouslyOwned)) {
             throw new ConflictException(ExceptionMessages.BOOK_IS_ALREADY_OWNED_BY_USER);
         }
@@ -155,7 +156,10 @@ public class UserBookService {
     }
 
     public void delete(Long userID, String isbn) {
-        UserBookId id = new UserBookId(userID, isbn);
-        userBookRepository.deleteById(id);
+        UserBookId userBookID = new UserBookId(userID, isbn);
+        UserBooks userBook = userBookRepository.findById(userBookID)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.USER_BOOK_RELATIONSHIP_NOT_FOUND));
+        userBook.setIsDeleted(true);
+        userBookRepository.save(userBook);
     }
 }

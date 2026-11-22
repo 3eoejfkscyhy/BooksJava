@@ -20,5 +20,6 @@ public record UserBookDTO (
     @Positive(message =  ValidationMessages.BOOK_LENGHT_VALID)
      Long lastReadTo,
 
-     String readingPercentage
+     String readingPercentage,
+     Boolean isDeleted
 ){ }

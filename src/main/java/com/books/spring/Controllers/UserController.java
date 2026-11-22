@@ -28,6 +28,11 @@ public class UserController {
         return userService.getByUserID(userID);
     }
 
+    @GetMapping("/{userID}/decrypt-password")
+    public String decryptPass(@PathVariable Long userID) {
+        return userService.decryptPass(userID);
+    }
+
     @PostMapping("/{userID}/balance")
     public UserDTO addBalance(@PathVariable Long userID, @RequestParam BigDecimal amount) {
         return userService.addBalance(userID, amount);

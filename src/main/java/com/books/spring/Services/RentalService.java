@@ -4,8 +4,10 @@ import com.books.spring.DTOs.RentalDTO;
 import com.books.spring.DTOs.RentalRequestDTO;
 import com.books.spring.Mappers.RentalMapper;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
+import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
 import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.*;
+import com.books.spring.Models.Rental.RentalStatus;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class RentalService {
 
     public List<RentalDTO> getAll() {
         return rentalRepository.findAll().stream()
+        .filter(rental->!rental.getIsDeleted())
                 .map(rentalMapper::toDto)
                 .toList();
     }
@@ -53,7 +56,7 @@ public class RentalService {
         rental.setBook(book);
         LocalDateTime rentedAt = LocalDateTime.now();
         rental.setRentedAt(rentedAt);
-        rental.setDueAt(rentedAt.plusDays(20));
+        rental.setDueAt(rentedAt.plusDays(ValidationRules.RENTAL_LENGHT));
         rental.setStatus(Rental.RentalStatus.Active);
         UserBooks.Status previousStatus = userBookService.markRented(user.getUserID(), book.getIsbn());
         rental.setPreviousStatus(previousStatus);
@@ -73,6 +76,16 @@ public class RentalService {
         rental.setStatus(Rental.RentalStatus.Returned);
         userBookService.restoreStatus(rental.getUser().getUserID(), rental.getBook().getIsbn(), rental.getPreviousStatus());
         return rentalMapper.toDto(rentalRepository.save(rental));
+    }
+
+     public void delete(Long rentalID) {
+        Rental rental = findRental(rentalID);
+        if(rental.getStatus()==RentalStatus.Active)
+        {
+            throw new ConflictException(ExceptionMessages.CANNOT_DELETE_ACTIVE_RENTAL);
+        }
+        else rental.setIsDeleted(true);
+        rentalRepository.save(rental);
     }
 
     private Rental findRental(Long rentalID) {

@@ -12,5 +12,6 @@ public record RentalDTO (
      LocalDateTime rentedAt,
      LocalDateTime dueAt,
      LocalDateTime returnedAt,
-     Rental.RentalStatus status
+     Rental.RentalStatus status,
+     Boolean isDeleted
 ){}

@@ -24,4 +24,10 @@ public class RentalController {
     public RentalDTO returnBook(@PathVariable Long rentalID) {
         return rentalService.returnBook(rentalID);
     }
+
+    @DeleteMapping("/{rentalID}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long rentalID) {
+        rentalService.delete(rentalID);
+    }
 }
