@@ -33,7 +33,8 @@ public class BookService {
     }
 
     public BookDTO getByIsbn(String isbn) {
-        return bookMapper.toDto(BooksJavaFunctions.findBook(bookRepository,isbn));
+
+          return bookMapper.toDto(BooksJavaFunctions.findBook(bookRepository,isbn));
     }
 
     public BookDTO create(BookDTO dto) {
@@ -123,4 +124,6 @@ public class BookService {
             throw new BadRequestException(ExceptionMessages.PHYSICAL_BOOKS_CANT_BE_RENTED);
         }
     }
+
+    
 }

@@ -18,9 +18,10 @@ public record AuthorDTO(
   @Past(message = ValidationMessages.AUTHOR_DOB_IN_PAST)
   LocalDate DOB,
   @PositiveOrZero(message =  ValidationMessages.BOOKS_WRITTEN_AMOUNT)
-   int booksWritten,
+   Integer booksWritten,
    Set<String> isbns
 ){}
+
    
 
 

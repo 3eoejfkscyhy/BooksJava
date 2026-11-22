@@ -30,7 +30,7 @@ public class Author {
     private LocalDate DOB;  
 
     @Column(name = "booksWritten", nullable = false)
-    private int booksWritten;  
+    private Integer booksWritten;  
  
     @Builder.Default
     @OnDelete(action = OnDeleteAction.CASCADE)

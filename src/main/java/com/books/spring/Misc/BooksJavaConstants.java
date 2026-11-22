@@ -33,6 +33,7 @@ public final class BooksJavaConstants {
         public static final String GIVEN_COLLECTION_NOT_FOUND =  "Collection with the ID %d could not be found";
         public static final String GIVEN_AUTHOR_NOT_FOUND =  "Author with the ID %d could not be found";
         public static final String GIVEN_RENTAL_NOT_FOUND =  "Rental with the ID %d could not be found";
+        public static final String ISBN_INVALID =  "Given input isn't a valid ISBN";
 
         private ExceptionMessages() {}
     }
@@ -53,6 +54,8 @@ public final class BooksJavaConstants {
         public static final String BOOK_LENGHT_VALID =  "Book length has to be valid";
         public static final String LANGUAGE_MUST_BE_LATIN_LETTERS =  "The language must be written with latin letters";
         public static final String PRICE_REQUIRED =  "Price is mandatory";
+        public static final String BOOK_TYPE_REQUIRED =  "Book type is required";
+        public static final String PRICE_POSITIVE =  "Price cannot be negative";
         public static final String RENTAL_PRICE_POSITIVE =  "Rental price cannot be negative";
 
         public static final String USER_ID_REQUIRED =  "User ID is required";
@@ -123,6 +126,7 @@ public final class BooksJavaConstants {
         public static final int COLLECTION_NAME_MAX_LENGHT = 200;
         public static final int GENRE_NAME_MIN_LENGTH = 2;
         public static final int GENRE_NAME_MAX_LENGTH = 50;
+        public static final int ISBN_LENGTH = 13;
         public static final String STARS_MIN = "0.0";
         public static final String STARS_MAX = "5.0";
 
