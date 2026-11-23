@@ -3,8 +3,7 @@ package com.books.spring.Controllers;
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.DTOs.FreePeriodDTO;
 import com.books.spring.Exception.ConflictException;
-import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
-import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Services.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class BookController {
         return bookService.getByIsbn(isbn);
          }
           else
-            throw new ConflictException(ExceptionMessages.ISBN_INVALID);
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
     @PostMapping
@@ -47,7 +46,7 @@ public class BookController {
         return bookService.update(isbn, dto);
          }
         else
-            throw new ConflictException(ExceptionMessages.ISBN_INVALID);
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
     @PutMapping("/{isbn}/free-period")
@@ -58,7 +57,7 @@ public class BookController {
         return bookService.setFreePeriod(isbn, dto);
          }
         else
-            throw new ConflictException(ExceptionMessages.ISBN_INVALID);
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
     @DeleteMapping("/{isbn}/free-period")
@@ -69,7 +68,7 @@ public class BookController {
         return bookService.removeFreePeriod(isbn);
          }
         else
-            throw new ConflictException(ExceptionMessages.ISBN_INVALID);
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
     @DeleteMapping("/{isbn}")
@@ -80,7 +79,7 @@ public class BookController {
         bookService.delete(isbn);
         }
           else
-       throw new ConflictException(ExceptionMessages.ISBN_INVALID);
+       throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
      public static boolean isNumeric(String strNum) {

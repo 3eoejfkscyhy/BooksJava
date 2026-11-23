@@ -83,7 +83,6 @@ class CollectionControllerTest {
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
      {
-    "collectionID": 1,
     "collectionName": "Biggs Calderhead. Leading tennis hustler. Eastern seaboard. Once won $12,000 playing with one foot tied to a concrete block. Started tennis at age three. Plays tennis like Spassky plays chess. Says: “A smart tennis player can beat a strong tennis player five games out of seven.” This game shows what he means.",
     "userID": -14,
     "isbns": [
@@ -108,7 +107,7 @@ class CollectionControllerTest {
      }
 
      @Test
-    void getByIdReturns404ForAMissingAuthor() throws Exception {
+    void getByIdReturns404ForAMissingCollection() throws Exception {
         when(collectionService.getById(30L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(30)));
 
         mockMvc.perform(get("/api/collections/30"))

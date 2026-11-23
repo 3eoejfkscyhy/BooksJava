@@ -126,16 +126,15 @@ class BookControllerTest {
   "price": -23.03,
   "rentalPrice": -49.05,
   "authorIDs": [
-    0
   ],
   "reviewIDs": [
-    0
+
   ],
   "genreIDs": [
-    0
+
   ],
   "collectionIDs": [
-    0
+
   ]
     }
         """))
@@ -155,7 +154,7 @@ class BookControllerTest {
     mockMvc.perform(get("/api/books/mao"))
     .andExpect(status().isConflict())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-    .andExpect(jsonPath("$.detail").value(ExceptionMessages.ISBN_INVALID));
+    .andExpect(jsonPath("$.detail").value(ValidationMessages.ISBN_VALID_FORMAT));
 
     verifyNoInteractions(bookService);
      }
@@ -179,7 +178,7 @@ class BookControllerTest {
         verify(bookService).delete("9781616086282");
     }
 
-
+ //Try in services to do these ones
     @Test 
      void putFreePeriodSetsAFreePeriod() throws Exception{
          when(bookService.getByIsbn("9780345287793")).thenReturn(book("9780345287793",

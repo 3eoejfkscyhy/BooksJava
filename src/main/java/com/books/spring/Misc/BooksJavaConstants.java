@@ -1,6 +1,5 @@
 package com.books.spring.Misc;
 
-
 public final class BooksJavaConstants {
     private BooksJavaConstants() {}
     public static final class ExceptionMessages
@@ -33,7 +32,6 @@ public final class BooksJavaConstants {
         public static final String GIVEN_COLLECTION_NOT_FOUND =  "Collection with the ID %d could not be found";
         public static final String GIVEN_AUTHOR_NOT_FOUND =  "Author with the ID %d could not be found";
         public static final String GIVEN_RENTAL_NOT_FOUND =  "Rental with the ID %d could not be found";
-        public static final String ISBN_INVALID =  "Given input isn't a valid ISBN";
 
         private ExceptionMessages() {}
     }
@@ -76,10 +74,11 @@ public final class BooksJavaConstants {
         public static final String ISBN_REQUIRED =  "Book ISBN is required";
         public static final String HEADLINE_REQUIRED =  "Headline is mandatory";
         public static final String BODY_SIZE_VALID =  "Review must be under 500 characters";
-        public static final String HEADLINE_LENGHT_SIZE =  "Headline must be between 2 and 40 characters";
+        public static final String HEADLINE_LENGHT_SIZE =  "Headline must be under 60 characters";
+        public static final String STARS_REQUIRED =  "Review must have a given star rating";
 
         public static final String COLLECTION_NAME_REQUIRED =  "Collection name is required";
-        public static final String COLLECTION_NAME_SIZE_VALID =  "Review must be under 500 characters";
+        public static final String COLLECTION_NAME_SIZE_VALID =  "Collection name must be under 200 characters";
 
         public static final String FREE_FROM_REQUIRED =  "Free period has to have a start date and time";
         public static final String FREE_UNTIL_REQUIRED =  "Free period should have an end date and time";
@@ -121,8 +120,7 @@ public final class BooksJavaConstants {
         public static final int PASSWORD_MIN_LENGTH = 8;
         public static final int STATUS_MAX_LENGTH = 100;
         public static final int BODY_MAX_LENGHT = 500;
-        public static final int HEADLINE_MIN_LENGTH = 2;
-        public static final int HEADLINE_MAX_LENGTH = 40;
+        public static final int HEADLINE_MAX_LENGTH = 60;
         public static final int COLLECTION_NAME_MAX_LENGHT = 200;
         public static final int GENRE_NAME_MIN_LENGTH = 2;
         public static final int GENRE_NAME_MAX_LENGTH = 50;

@@ -81,7 +81,6 @@ class GenreControllerTest {
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
   {
-  "genreID": 5,
   "genreName": "A copypasta is a block of text copied and pasted to the Internet and social media. Copypasta containing controversial ideas or lengthy rants are often posted for humorous purposes, to provoke reactions from those unaware that the posted text is an Internet meme",
   "isbns": []
 }
@@ -104,14 +103,14 @@ class GenreControllerTest {
      }
 
      @Test
-    void getByIdReturns404ForAMissingAuthor() throws Exception {
-        when(genreService.getById(33L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(33)));
+    void getByIdReturns404ForAMissingGenre() throws Exception {
+        when(genreService.getById(33L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(33)));
 
         mockMvc.perform(get("/api/genres/33"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.title").value("Not Found"))
-                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(33L)));
+                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(33L)));
     }
      @Test
     void deleteReturns204AndPassesTheIdToTheService() throws Exception {

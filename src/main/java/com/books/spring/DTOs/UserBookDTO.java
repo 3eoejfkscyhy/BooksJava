@@ -10,9 +10,12 @@ public record UserBookDTO (
     @Positive(message =  ValidationMessages.USER_ID_VALID)
      Long userID,
 
-    @NotBlank
-    @Pattern(regexp = ValidationRules.ISBN_PATTERN)
-     String isbn,
+    @Pattern(
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
+    )
+    @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
+    String isbn,
 
      UserBooks.Status readingStatus,
 

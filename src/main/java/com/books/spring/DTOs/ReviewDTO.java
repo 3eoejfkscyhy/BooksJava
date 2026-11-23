@@ -10,20 +10,26 @@ public record ReviewDTO (
      Long reviewID,
 
     @NotBlank(message = ValidationMessages.HEADLINE_REQUIRED)
-    @Size(min = ValidationRules.HEADLINE_MIN_LENGTH, max = ValidationRules.HEADLINE_MAX_LENGTH, message = ValidationMessages.HEADLINE_LENGHT_SIZE)
+    @Size(max = ValidationRules.HEADLINE_MAX_LENGTH, message = ValidationMessages.HEADLINE_LENGHT_SIZE)
      String headline,
 
     @Size(max = ValidationRules.BODY_MAX_LENGHT, message = ValidationMessages.BODY_SIZE_VALID)
      String body,
 
+     //maybe add message?
     @DecimalMin(ValidationRules.STARS_MIN)
-    @DecimalMax(ValidationRules.STARS_MIN)
-    @NotNull
+    @DecimalMax(ValidationRules.STARS_MAX)
+    @NotNull(message = ValidationMessages.STARS_REQUIRED)
      BigDecimal stars,
 
+        @Pattern(
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
+    )
     @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
-     String isbn,
+    String isbn,
 
     @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
+    @Positive(message = ValidationMessages.USER_ID_VALID)
      Long userID
 ){}

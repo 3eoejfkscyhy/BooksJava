@@ -18,5 +18,6 @@ public record CollectionDTO(
     @Positive(message = ValidationMessages.USER_ID_VALID)
      Long userID,
 
+     
      Set<String> isbns
 ){}
