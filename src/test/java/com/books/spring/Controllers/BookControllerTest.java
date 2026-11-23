@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.*;
 
 
-
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static  org.assertj.core.api.Assertions.assertThat;
+import jakarta.validation.Validator;
+
 import org.springframework.test.web.servlet.MockMvc;
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.Exception.NotFoundException;
@@ -24,8 +27,12 @@ import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.Book;
 import com.books.spring.Services.BookService;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+
 @WebMvcTest(BookController.class)
 class BookControllerTest {
+
 
      @Autowired 
      private MockMvc mockMvc;
@@ -52,7 +59,7 @@ class BookControllerTest {
                                                             new BigDecimal("8.95"),
                                                         new Long[]{8L},new Long[]{3L,30L},new Long[]{3L,40L},new Long[]{8L},null,null)));
 
-        mockMvc.perform(get("/api/books"))
+        mockMvc.perform(get(Paths.BOOK_PATH))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].isbn").value("9780345287793"))
@@ -65,7 +72,7 @@ class BookControllerTest {
         BookDTO savedBook = new BookDTO("9780345287793", "Garfield at Large: His First Book",96L, null,  Book.BookType.EBook,new BigDecimal("25.99"), new BigDecimal("8.95"), null, null, null, null,null,null);
         when(bookService.create(any())).thenReturn(savedBook);
 
-        mockMvc.perform(post("/api/books")
+        mockMvc.perform(post(Paths.BOOK_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
     {
@@ -97,11 +104,9 @@ class BookControllerTest {
 
      @Test 
      void createReportsEveryEmptyField() throws Exception{
-         mockMvc.perform(post("/api/books")
+         mockMvc.perform(post(Paths.BOOK_PATH)
     .contentType(MediaType.APPLICATION_JSON)
-    .content("""
-    {}
-        """))
+    .content(Misc.EMPTY_JSON))
     .andExpect(status().isBadRequest())
     .andExpect(jsonPath("$.errors.isbn").value(ValidationMessages.ISBN_REQUIRED))
     .andExpect(jsonPath("$.errors.title").value(ValidationMessages.BOOK_TITLE_REQUIRED))
@@ -114,7 +119,7 @@ class BookControllerTest {
 
       @Test 
      void createReportsEveryInvalidFieldAtOnce() throws Exception{
-         mockMvc.perform(post("/api/books")
+         mockMvc.perform(post(Paths.BOOK_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
      {
@@ -123,8 +128,8 @@ class BookControllerTest {
   "bookLength": -67,
   "language": "κινέζικα",
   "bookType": "EBook",
-  "price": -23.03,
-  "rentalPrice": -49.05,
+  "price": -23.035,
+  "rentalPrice": -49.057,
   "authorIDs": [
   ],
   "reviewIDs": [
@@ -143,15 +148,18 @@ class BookControllerTest {
     .andExpect(jsonPath("$.errors.title").value(ValidationMessages.BOOK_TITLE_REQUIRED))
     .andExpect(jsonPath("$.errors.bookLength").value(ValidationMessages.BOOK_LENGHT_VALID))
     .andExpect(jsonPath("$.errors.language").value(ValidationMessages.LANGUAGE_MUST_BE_LATIN_LETTERS))
-    .andExpect(jsonPath("$.errors.price").value(ValidationMessages.PRICE_POSITIVE))
-    .andExpect(jsonPath("$.errors.rentalPrice").value(ValidationMessages.RENTAL_PRICE_POSITIVE));
+    .andExpect(jsonPath("$.errors.price").value(containsString(ValidationMessages.PRICE_POSITIVE)))
+    .andExpect(jsonPath("$.errors.price").value(containsString(ValidationMessages.DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE)))
+    .andExpect(jsonPath("$.errors.rentalPrice").value(containsString(ValidationMessages.RENTAL_PRICE_POSITIVE)))
+    .andExpect(jsonPath("$.errors.price").value(containsString((ValidationMessages.DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE))));
+    
 
     verifyNoInteractions(bookService);
      }
 
     @Test 
      void getByIdReturns409WhenTheIsbnIsNotANumber() throws Exception{
-    mockMvc.perform(get("/api/books/mao"))
+     mockMvc.perform(get(Paths.COMBINE_PATH(Paths.BOOK_PATH, Paths.NOT_A_NUMBER)))
     .andExpect(status().isConflict())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
     .andExpect(jsonPath("$.detail").value(ValidationMessages.ISBN_VALID_FORMAT));
@@ -161,21 +169,21 @@ class BookControllerTest {
 
         @Test
     void getByIsbnReturns404ForAMissingBook() throws Exception {
-        when(bookService.getByIsbn("9781616086282")).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted("9781616086282")));
+        when(bookService.getByIsbn(Misc.ISBN_STRING)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(Misc.ISBN_STRING)));
 
-        mockMvc.perform(get("/api/books/9781616086282"))
+        mockMvc.perform(get(Paths.COMBINE_PATH(Paths.BOOK_PATH, Paths.ISBN)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value("Not Found"))
-                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted("9781616086282")));
+                .andExpect(jsonPath("$.title").value(Misc.NOT_FOUND))
+                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(Misc.ISBN_STRING)));
     }
 
      @Test
     void deleteReturns204AndPassesTheIsbnToTheService() throws Exception {
-        mockMvc.perform(delete("/api/books/9781616086282"))
+        mockMvc.perform(delete("/api/books/9780345287793"))
                 .andExpect(status().isNoContent());
 
-        verify(bookService).delete("9781616086282");
+        verify(bookService).delete("9780345287793");
     }
 
  //Try in services to do these ones
@@ -226,6 +234,22 @@ class BookControllerTest {
                .andExpect(jsonPath("$.freeFrom").isEmpty())
                .andExpect(jsonPath("$.freeUntil").isEmpty());
      }
+
+       @Test
+    void givenInvalidPricesShouldGiveConstraintViolation() throws Exception {
+       Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        BookDTO book = book("9780345287793",
+                                                            "Garfield at Large: His First Book",
+                                                            96L,
+                                                            "English",
+                                                            Book.BookType.EBook,
+                                                            new BigDecimal("110292.9933"),
+                                                            new BigDecimal("43994.9119"),
+                                                        new Long[]{4L},new Long[]{1L,17L},new Long[]{3L,8L},new Long[]{8L,29L},null,null);
+     Set<ConstraintViolation<BookDTO>> violations = validator.validate(book);
+     assertThat(violations).hasSize(2);
+     assertThat(violations).extracting("message").contains("numeric value out of bounds (<3 digits>.<2 digits> expected)");
+    }
 
     
 

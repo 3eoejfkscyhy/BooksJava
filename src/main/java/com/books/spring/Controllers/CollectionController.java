@@ -6,11 +6,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/collections")
+@RequestMapping(Paths.COLLECTION_PATH)
 @RequiredArgsConstructor
 public class CollectionController {
     private final CollectionService collectionService;
@@ -20,7 +21,7 @@ public class CollectionController {
         return collectionService.getAll();
     }
 
-    @GetMapping("/{collectionID}")
+    @GetMapping(Paths.COLLECTION_ID)
     public CollectionDTO getById(@PathVariable Long collectionID) {
         return collectionService.getById(collectionID);
     }
@@ -31,12 +32,12 @@ public class CollectionController {
         return collectionService.create(dto);
     }
 
-    @PutMapping("/{collectionID}")
+    @PutMapping(Paths.COLLECTION_ID)
     public CollectionDTO update(@PathVariable Long collectionID, @Valid @RequestBody CollectionDTO dto) {
         return collectionService.update(collectionID, dto);
     }
 
-    @DeleteMapping("/{collectionID}")
+    @DeleteMapping(Paths.COLLECTION_ID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long collectionID) {
         collectionService.delete(collectionID);

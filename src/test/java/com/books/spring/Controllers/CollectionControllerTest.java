@@ -33,7 +33,7 @@ class CollectionControllerTest {
         when(collectionService.getAll()).thenReturn(List.of(collection(1L, "My K00L b00KS!" ,7L , new String[]{"9780345287793","9780545287793"}),
                                                    collection(2L, "Harry Potter books" ,20L , new String[]{"9780545287693"})));
 
-        mockMvc.perform(get("/api/collections"))
+        mockMvc.perform(get(Paths.COLLECTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].collectionName").value("My K00L b00KS!"))
@@ -45,7 +45,7 @@ class CollectionControllerTest {
         CollectionDTO savedCollection = new CollectionDTO(1L, "My K00L b00KS!" ,7L ,null);
         when(collectionService.create(any())).thenReturn(savedCollection);
 
-        mockMvc.perform(post("/api/collections")
+        mockMvc.perform(post(Paths.COLLECTION_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
     {
@@ -64,11 +64,9 @@ class CollectionControllerTest {
 
      @Test 
      void createReportsEveryEmptyField() throws Exception{
-         mockMvc.perform(post("/api/collections")
+         mockMvc.perform(post(Paths.COLLECTION_PATH)
     .contentType(MediaType.APPLICATION_JSON)
-    .content("""
-     {}
-        """))
+    .content(Misc.EMPTY_JSON))
     .andExpect(status().isBadRequest())
     .andExpect(jsonPath("$.errors.collectionName").value(ValidationMessages.COLLECTION_NAME_REQUIRED))
     .andExpect(jsonPath("$.errors.userID").value(ValidationMessages.USER_ID_REQUIRED));
@@ -79,7 +77,7 @@ class CollectionControllerTest {
 
       @Test 
      void createReportsEveryInvalidFieldAtOnce() throws Exception{
-         mockMvc.perform(post("/api/collections")
+         mockMvc.perform(post(Paths.COLLECTION_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
      {
@@ -98,23 +96,23 @@ class CollectionControllerTest {
 
         @Test 
      void getByIdReturns400WhenTheIdIsNotANumber() throws Exception{
-         mockMvc.perform(get("/api/collections/FL"))
+     mockMvc.perform(get(Paths.COMBINE_PATH(Paths.COLLECTION_PATH, Paths.NOT_A_NUMBER)))
     .andExpect(status().isBadRequest())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-    .andExpect(jsonPath("$.detail").value("Failed to convert 'collectionID' with value: 'FL'"));
+    .andExpect(jsonPath("$.detail").value("Failed to convert 'collectionID' with value: 'G'"));
 
     verifyNoInteractions(collectionService);
      }
 
      @Test
     void getByIdReturns404ForAMissingCollection() throws Exception {
-        when(collectionService.getById(30L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(30)));
+        when(collectionService.getById(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
 
-        mockMvc.perform(get("/api/collections/30"))
+        mockMvc.perform(get(Paths.COMBINE_PATH(Paths.COLLECTION_PATH, Paths.INVALID_NUMBER_STRING)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value("Not Found"))
-                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(30L)));
+                .andExpect(jsonPath("$.title").value(Misc.NOT_FOUND))
+                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
     }
      @Test
     void deleteReturns204AndPassesTheIdToTheService() throws Exception {

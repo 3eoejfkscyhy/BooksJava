@@ -20,6 +20,7 @@ public record UpdateUserDTO(
      String status,
 
     @PositiveOrZero
+    @Digits(integer = ValidationRules.BALANCE_WHOLE, fraction = ValidationRules.FRACTION)
      BigDecimal balance
 )
 {}

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping(Paths.BOOK_PATH)
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
@@ -23,7 +23,7 @@ public class BookController {
         return bookService.getAll();
     }
 
-    @GetMapping("/{isbn}")
+    @GetMapping(Paths.BOOK_ISBN)
     public BookDTO getByIsbn(@PathVariable String isbn) {
         if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
          {
@@ -39,7 +39,7 @@ public class BookController {
         return bookService.create(dto);
     }
 
-    @PutMapping("/{isbn}")
+    @PutMapping(Paths.BOOK_ISBN)
     public BookDTO update(@PathVariable String isbn, @Valid @RequestBody BookDTO dto) {
   if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
          {
@@ -49,7 +49,7 @@ public class BookController {
             throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @PutMapping("/{isbn}/free-period")
+    @PutMapping(Paths.BOOK_ISBN_FREE_PERIOD)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO setFreePeriod(@PathVariable String isbn, @Valid @RequestBody FreePeriodDTO dto) {
           if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
@@ -60,7 +60,7 @@ public class BookController {
             throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @DeleteMapping("/{isbn}/free-period")
+    @DeleteMapping(Paths.BOOK_ISBN_FREE_PERIOD)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO removeFreePeriod(@PathVariable String isbn) {
           if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
@@ -71,7 +71,7 @@ public class BookController {
             throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @DeleteMapping("/{isbn}")
+    @DeleteMapping(Paths.BOOK_ISBN)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String isbn) {
         if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)

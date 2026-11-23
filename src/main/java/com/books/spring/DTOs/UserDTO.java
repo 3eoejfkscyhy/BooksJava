@@ -19,7 +19,8 @@ public record UserDTO (
     @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
      String status,
 
-    @PositiveOrZero(message = ValidationMessages.BALANCE_POSITIVE)
+     @Digits(integer = ValidationRules.BALANCE_WHOLE, fraction = ValidationRules.FRACTION)
+     @PositiveOrZero(message = ValidationMessages.BALANCE_POSITIVE)
      BigDecimal balance,
 
      Set<Long> reviewIDs,

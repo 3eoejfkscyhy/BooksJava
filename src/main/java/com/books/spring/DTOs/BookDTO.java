@@ -26,9 +26,11 @@ public record BookDTO(
      Book.BookType bookType,
     @NotNull(message = ValidationMessages.PRICE_REQUIRED)
     @PositiveOrZero(message = ValidationMessages.PRICE_POSITIVE)
+   @Digits(integer = ValidationRules.PRICE_WHOLE, fraction = ValidationRules.FRACTION)
      BigDecimal price,
 
     @PositiveOrZero(message = ValidationMessages.RENTAL_PRICE_POSITIVE)
+    @Digits(integer = ValidationRules.PRICE_WHOLE, fraction = ValidationRules.FRACTION)
      BigDecimal rentalPrice,
 
      Set<Long> authorIDs,

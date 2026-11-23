@@ -86,6 +86,8 @@ public final class BooksJavaConstants {
         public static final String GENRE_NAME_REQUIRED =  "Genre name is mandatory";
         public static final String GENRE_NAME_SIZE_VALID =  "Genre name must be between 2 and 50 characters";
 
+        public static final String DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE =  "2 digits";
+
         private ValidationMessages() {}
     }
 
@@ -133,6 +135,12 @@ public final class BooksJavaConstants {
         public static final String PASSWORD_PATTERN = "[a-zA-Z0-9]+";
 
         public static final int RENTAL_LENGHT = 20;
+
+        public static final int BALANCE_WHOLE = 6;
+        public static final int STARS_WHOLE = 1;
+        public static final int PRICE_WHOLE = 3;
+        public static final int FRACTION = 2;
+
         private ValidationRules() {}
     }
      public static final class SeederOrder
@@ -147,6 +155,44 @@ public final class BooksJavaConstants {
         public static final int USER_BOOK = 7;
         private SeederOrder() {}
     }
+
+    public static final class Paths
+    {
+        public static final String AUTHOR_PATH =  "/api/authors"; 
+        public static final String AUTHOR_ID =  "/{authorID}";
+        public static final String BOOK_PATH =  "/api/books"; 
+        public static final String BOOK_ISBN =  "/{isbn}";
+        public static final String BOOK_ISBN_FREE_PERIOD =  "/{isbn}/free-period";
+        public static final String COLLECTION_PATH =  "/api/collections"; 
+        public static final String COLLECTION_ID =  "/{collectionID}";
+        public static final String GENRE_PATH =  "/api/genres"; 
+        public static final String GENRE_ID =  "/{genreID}";
+        public static final String REVIEW_PATH =  "/api/reviews"; 
+        public static final String REVIEW_ID =  "/{reviewID}";
+        public static final String NOT_A_NUMBER =  "/G";
+        public static final String INVALID_NUMBER_STRING =  "/985";
+        public static final String ISBN =  "/9781616086282";
+
+        public static final String COMBINE_PATH(String PATH,String EXTRA) {return  PATH + EXTRA;}
+          private Paths() {}
+    }
+
     
-    
+    public static final class Misc
+    {
+        public static final String EMPTY_JSON = """
+                                                {}
+                                                 """;
+        public static final String AUTHOR_ID_STRING =  "authorID";
+        public static final String COLLECTION_ID_STRING =  "COLLECTIONID";
+        public static final String GENRE_ID_STRING =  "GENREID";
+        public static final String REVIEW_ID_STRING =  "REVIEWID";
+        public static final String NOT_A_NUMBER_STRING =  "G";
+        public static final String INVALID_NUMBER_STRING =  "985"; 
+        public static final String ISBN_STRING =  "9781616086282"; 
+        public static final String NOT_FOUND = "Not Found";
+        public static final Long INVALID_NUMBER =  985L; 
+
+        private Misc() {}
+    }
 }

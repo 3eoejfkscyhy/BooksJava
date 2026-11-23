@@ -23,6 +23,7 @@ public record RegisterUserDTO(
     @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
     String status,
 
+    @Digits(integer = ValidationRules.BALANCE_WHOLE, fraction = ValidationRules.FRACTION)
     BigDecimal balance
 )
 {}

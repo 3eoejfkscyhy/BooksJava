@@ -33,7 +33,7 @@ class GenreControllerTest {
         when(genreService.getAll()).thenReturn(List.of(genre(1L, "Horror", new String[]{"9780345288893","9780545287243"}),
                                                    genre(2L, "Jokebook" , new String[]{"9780545437643"})));
 
-        mockMvc.perform(get("/api/genres"))
+        mockMvc.perform(get(Paths.GENRE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].genreName").value("Horror"))
@@ -46,7 +46,7 @@ class GenreControllerTest {
         GenreDTO savedGenre = new GenreDTO(1L, "Horror" ,null);
         when(genreService.create(any())).thenReturn(savedGenre);
 
-        mockMvc.perform(post("/api/genres")
+        mockMvc.perform(post(Paths.GENRE_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
   {
@@ -64,11 +64,9 @@ class GenreControllerTest {
 
            @Test 
      void createReportsEveryEmptyField() throws Exception{
-         mockMvc.perform(post("/api/genres")
+         mockMvc.perform(post(Paths.GENRE_PATH)
     .contentType(MediaType.APPLICATION_JSON)
-    .content("""
-     {}
-        """))
+    .content(Misc.EMPTY_JSON))
     .andExpect(status().isBadRequest())
     .andExpect(jsonPath("$.errors.genreName").value(ValidationMessages.GENRE_NAME_REQUIRED));
 
@@ -77,7 +75,7 @@ class GenreControllerTest {
 
           @Test 
      void createReportsEveryInvalidFieldAtOnce() throws Exception{
-         mockMvc.perform(post("/api/genres")
+         mockMvc.perform(post(Paths.GENRE_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
   {
@@ -94,23 +92,23 @@ class GenreControllerTest {
 
         @Test 
      void getByIdReturns400WhenTheIdIsNotANumber() throws Exception{
-         mockMvc.perform(get("/api/genres/O"))
+         mockMvc.perform(get(Paths.COMBINE_PATH(Paths.GENRE_PATH, Paths.NOT_A_NUMBER)))
     .andExpect(status().isBadRequest())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-    .andExpect(jsonPath("$.detail").value("Failed to convert 'genreID' with value: 'O'"));
+    .andExpect(jsonPath("$.detail").value("Failed to convert 'genreID' with value: 'G'"));
 
     verifyNoInteractions(genreService);
      }
 
      @Test
     void getByIdReturns404ForAMissingGenre() throws Exception {
-        when(genreService.getById(33L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(33)));
+        when(genreService.getById(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
 
-        mockMvc.perform(get("/api/genres/33"))
+        mockMvc.perform(get(Paths.COMBINE_PATH(Paths.GENRE_PATH, Paths.INVALID_NUMBER_STRING)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value("Not Found"))
-                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(33L)));
+                .andExpect(jsonPath("$.title").value(Misc.NOT_FOUND))
+                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
     }
      @Test
     void deleteReturns204AndPassesTheIdToTheService() throws Exception {

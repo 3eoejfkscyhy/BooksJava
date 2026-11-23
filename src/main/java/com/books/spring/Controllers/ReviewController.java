@@ -6,11 +6,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping(Paths.REVIEW_PATH)
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
@@ -20,7 +21,7 @@ public class ReviewController {
         return reviewService.getAll();
     }
 
-    @GetMapping("/{reviewID}")
+    @GetMapping(Paths.REVIEW_ID)
     public ReviewDTO getByIsbn(@PathVariable Long reviewID) {
         return reviewService.getById(reviewID);
     }
@@ -31,12 +32,12 @@ public class ReviewController {
         return reviewService.create(dto);
     }
 
-    @PutMapping("/{reviewID}")
+    @PutMapping(Paths.REVIEW_ID)
     public ReviewDTO update(@PathVariable Long reviewID, @Valid @RequestBody ReviewDTO dto) {
         return reviewService.update(reviewID, dto);
     }
 
-    @DeleteMapping("/{reviewID}")
+    @DeleteMapping(Paths.REVIEW_ID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long reviewID) {
         reviewService.delete(reviewID);

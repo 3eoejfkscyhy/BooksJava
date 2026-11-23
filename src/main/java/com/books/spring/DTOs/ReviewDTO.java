@@ -16,7 +16,7 @@ public record ReviewDTO (
     @Size(max = ValidationRules.BODY_MAX_LENGHT, message = ValidationMessages.BODY_SIZE_VALID)
      String body,
 
-     //maybe add message?
+    @Digits(integer = ValidationRules.STARS_WHOLE, fraction = ValidationRules.FRACTION)
     @DecimalMin(ValidationRules.STARS_MIN)
     @DecimalMax(ValidationRules.STARS_MAX)
     @NotNull(message = ValidationMessages.STARS_REQUIRED)

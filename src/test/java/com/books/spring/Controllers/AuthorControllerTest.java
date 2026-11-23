@@ -36,7 +36,7 @@ class AuthorControllerTest {
         when(authorService.getAll()).thenReturn(List.of(author(1L, "Jim","Davis",LocalDate.of(1945,7,28),65, new String[]{"9780345287793"}),
                                                    author(2L, "John","Cena",LocalDate.of(1977,4,23),10,new String[]{})));
 
-        mockMvc.perform(get("/api/authors"))
+        mockMvc.perform(get(Paths.AUTHOR_PATH))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].firstName").value("Jim"))
@@ -48,7 +48,7 @@ class AuthorControllerTest {
         AuthorDTO savedAuthor = new AuthorDTO(1L, "Jim", null, null, 0, null);
         when(authorService.create(any())).thenReturn(savedAuthor);
 
-        mockMvc.perform(post("/api/authors")
+        mockMvc.perform(post(Paths.AUTHOR_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
      {
@@ -69,11 +69,9 @@ class AuthorControllerTest {
 
  @Test 
      void createReportsEveryEmptyField() throws Exception{
-         mockMvc.perform(post("/api/authors")
+         mockMvc.perform(post(Paths.AUTHOR_PATH)
     .contentType(MediaType.APPLICATION_JSON)
-    .content("""
-     {}
-        """))
+    .content(Misc.EMPTY_JSON))
     .andExpect(status().isBadRequest())
     .andExpect(jsonPath("$.errors.firstName").value(ValidationMessages.FIRST_NAME_REQUIRED))
     .andExpect(jsonPath("$.errors.DOB").value(ValidationMessages.AUTHOR_DOB_REQUIRED));
@@ -86,7 +84,7 @@ class AuthorControllerTest {
      
      @Test 
      void createReportsEveryInvalidFieldAtOnce() throws Exception{
-         mockMvc.perform(post("/api/authors")
+         mockMvc.perform(post(Paths.AUTHOR_PATH)
     .contentType(MediaType.APPLICATION_JSON)
     .content("""
      {
@@ -111,7 +109,7 @@ class AuthorControllerTest {
 
      @Test 
      void getByIdReturns400WhenTheIdIsNotANumber() throws Exception{
-         mockMvc.perform(get("/api/authors/G"))
+         mockMvc.perform(get(Paths.COMBINE_PATH(Paths.AUTHOR_PATH, Paths.NOT_A_NUMBER)))
     .andExpect(status().isBadRequest())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
     .andExpect(jsonPath("$.detail").value("Failed to convert 'authorID' with value: 'G'"));
@@ -121,13 +119,13 @@ class AuthorControllerTest {
 
        @Test
     void getByIdReturns404ForAMissingAuthor() throws Exception {
-        when(authorService.getByID(21L)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(21L)));
+        when(authorService.getByID(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
 
-        mockMvc.perform(get("/api/authors/21"))
+        mockMvc.perform(get(Paths.COMBINE_PATH(Paths.AUTHOR_PATH, Paths.INVALID_NUMBER_STRING)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value("Not Found"))
-                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(21L)));
+                .andExpect(jsonPath("$.title").value(Misc.NOT_FOUND))
+                .andExpect(jsonPath("$.detail").value(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
     }
      @Test
     void deleteReturns204AndPassesTheIdToTheService() throws Exception {
