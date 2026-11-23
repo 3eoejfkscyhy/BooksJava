@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-  @Mapping(target = "reviewIDs", source = "reviews")
+    @Mapping(target = "reviewIDs", source = "reviews")
     @Mapping(target = "collectionIDs", source = "collections")
     UserDTO toDto(User user);
 
     @Mapping(target = "userID", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "UserSide", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "collections", ignore = true)
     @Mapping(target = "reviews", ignore = true)
     User toEntity(UserDTO dto);

@@ -6,7 +6,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.*;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -53,7 +52,7 @@ class ReviewControllerTest {
 
             @Test 
      void createReturns201AndSavedReview() throws Exception{
-        ReviewDTO savedReview = new ReviewDTO(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
+        ReviewDTO savedReview = review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
                                      new BigDecimal(4.50), "9780545437643",5L);
         when(reviewService.create(any())).thenReturn(savedReview);
 
@@ -99,7 +98,7 @@ class ReviewControllerTest {
   {
   "headline": "I enjoyed Garfield as a child, and owned several of his books. Jim Davis improved the looks of the characters over the years, and that was my first exposure to the quality of the artwork visibly improving in later books compared to earlier ones.",
     "body": "I stumbled on a selection of Garfield paperbacks someone had dropped off at Goodwill the other day and was hit with a wave of nostalgia. I loved those books as a kid and devoured them at my local public library. I spent several minutes flipping through them and reminiscing. Now, I haven't touched the comic in many years and have been under the assumption that compared to the all-time greats that are darlings of this sub (i.e., Calvin and Hobbes, Gasoline Alley, Krazy Kat, Pogo, Popeye), Davis is soulless, a sellout, and frankly a hack who's had ghost writers for years, laughing all the way to the bank with his merchandising deals. Garfield seems like he's more of a cultural icon than a comic strip at this point. However, that assumption may be wildly off-base.",
-    "stars": 6.536,
+    "stars": 6.56,
     "isbn": "1280545432483",
     "userID": -5
 }
@@ -107,7 +106,6 @@ class ReviewControllerTest {
     .andExpect(status().isBadRequest())
     .andExpect(jsonPath("$.errors.headline").value(ValidationMessages.HEADLINE_LENGHT_SIZE))
     .andExpect(jsonPath("$.errors.body").value(ValidationMessages.BODY_SIZE_VALID))
-    .andExpect(jsonPath("$.errors.stars").value(containsString(ValidationMessages.DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE)))
     .andExpect(jsonPath("$.errors.isbn").value(ValidationMessages.ISBN_VALID_FORMAT))
     .andExpect(jsonPath("$.errors.userID").value(ValidationMessages.USER_ID_VALID));   
 

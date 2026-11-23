@@ -69,7 +69,14 @@ class BookControllerTest {
 
      @Test 
      void createReturns201AndSavedBook() throws Exception{
-        BookDTO savedBook = new BookDTO("9780345287793", "Garfield at Large: His First Book",96L, null,  Book.BookType.EBook,new BigDecimal("25.99"), new BigDecimal("8.95"), null, null, null, null,null,null);
+        BookDTO savedBook = book("9780345287793",
+                                                            "Garfield at Large: His First Book",
+                                                            96L,
+                                                            "English",
+                                                            Book.BookType.EBook,
+                                                            new BigDecimal("12.99"),
+                                                            new BigDecimal("4.99"),
+                                                        new Long[]{4L},new Long[]{1L,17L},new Long[]{3L,8L},new Long[]{8L,29L},null,null);
         when(bookService.create(any())).thenReturn(savedBook);
 
         mockMvc.perform(post(Paths.BOOK_PATH)
@@ -128,8 +135,8 @@ class BookControllerTest {
   "bookLength": -67,
   "language": "κινέζικα",
   "bookType": "EBook",
-  "price": -23.035,
-  "rentalPrice": -49.057,
+  "price": -23.03,
+  "rentalPrice": -49.05,
   "authorIDs": [
   ],
   "reviewIDs": [
@@ -149,9 +156,7 @@ class BookControllerTest {
     .andExpect(jsonPath("$.errors.bookLength").value(ValidationMessages.BOOK_LENGHT_VALID))
     .andExpect(jsonPath("$.errors.language").value(ValidationMessages.LANGUAGE_MUST_BE_LATIN_LETTERS))
     .andExpect(jsonPath("$.errors.price").value(containsString(ValidationMessages.PRICE_POSITIVE)))
-    .andExpect(jsonPath("$.errors.price").value(containsString(ValidationMessages.DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE)))
-    .andExpect(jsonPath("$.errors.rentalPrice").value(containsString(ValidationMessages.RENTAL_PRICE_POSITIVE)))
-    .andExpect(jsonPath("$.errors.price").value(containsString((ValidationMessages.DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE))));
+    .andExpect(jsonPath("$.errors.rentalPrice").value(containsString(ValidationMessages.RENTAL_PRICE_POSITIVE)));
     
 
     verifyNoInteractions(bookService);

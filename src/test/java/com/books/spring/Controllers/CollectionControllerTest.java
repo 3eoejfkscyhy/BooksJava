@@ -42,7 +42,7 @@ class CollectionControllerTest {
 
     @Test 
      void createReturns201AndSavedCollection() throws Exception{
-        CollectionDTO savedCollection = new CollectionDTO(1L, "My K00L b00KS!" ,7L ,null);
+        CollectionDTO savedCollection = collection(1L, "My K00L b00KS!" ,7L , new String[]{"9780345287793","9780545287793"});
         when(collectionService.create(any())).thenReturn(savedCollection);
 
         mockMvc.perform(post(Paths.COLLECTION_PATH)

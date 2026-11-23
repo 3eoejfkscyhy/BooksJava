@@ -43,7 +43,7 @@ class GenreControllerTest {
 
         @Test 
      void createReturns201AndSavedGenre() throws Exception{
-        GenreDTO savedGenre = new GenreDTO(1L, "Horror" ,null);
+        GenreDTO savedGenre = genre(1L, "Horror", new String[]{"9780345288893","9780545287243"});
         when(genreService.create(any())).thenReturn(savedGenre);
 
         mockMvc.perform(post(Paths.GENRE_PATH)

@@ -45,7 +45,7 @@ class AuthorControllerTest {
 
      @Test 
      void createReturns201AndSavedAuthor() throws Exception{
-        AuthorDTO savedAuthor = new AuthorDTO(1L, "Jim", null, null, 0, null);
+        AuthorDTO savedAuthor = author(1L, "Jim","Davis",LocalDate.of(1945,7,28),65, new String[]{"9780345287793"});
         when(authorService.create(any())).thenReturn(savedAuthor);
 
         mockMvc.perform(post(Paths.AUTHOR_PATH)

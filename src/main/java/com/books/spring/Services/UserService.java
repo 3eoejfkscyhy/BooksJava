@@ -34,9 +34,6 @@ public class UserService {
     public UserDTO getByUserID(Long userID) { return userMapper.toDto(BooksJavaFunctions.findUser(userRepository,userID)); }
 
     public UserDTO addBalance(Long userID, BigDecimal amount) {
-        if(amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException(ExceptionMessages.DEPOSIT_MUST_BE_BIGGER_THAN_ZERO);
-        }
         User user = BooksJavaFunctions.findUser(userRepository,userID);
         user.setBalance(user.getBalance().add(amount));
         return userMapper.toDto(userRepository.save(user));
@@ -54,6 +51,7 @@ public class UserService {
         user.setUsername(dto.username());
         user.setEmail(dto.email());
         user.setPassword(dto.password());
+        user.setStatus(dto.status());
         return userMapper.toDto(userRepository.save(user));
     }
 

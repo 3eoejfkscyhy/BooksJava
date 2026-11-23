@@ -169,6 +169,10 @@ public final class BooksJavaConstants {
         public static final String GENRE_ID =  "/{genreID}";
         public static final String REVIEW_PATH =  "/api/reviews"; 
         public static final String REVIEW_ID =  "/{reviewID}";
+        public static final String USER_PATH =  "/api/users";
+        public static final String USER_ID = "/{userID}";
+
+
         public static final String NOT_A_NUMBER =  "/G";
         public static final String INVALID_NUMBER_STRING =  "/985";
         public static final String ISBN =  "/9781616086282";
