@@ -1,0 +1,8 @@
+To run this application you need to have a database called "postgres" and inside of that database you need to create a schema called "public".
+
+Then you need to open the file called "application.properties" and inside it you need to change:
+${DB_URL} with the URL to the database,
+${DB_USERNAME} with the username of the account you have in postgresSQL,
+${DB_PASSWORD} with the password connected to the account [Leave it empty, if there is no password connected to the account].
+
+Finally, run Application.java and it should run the program.
