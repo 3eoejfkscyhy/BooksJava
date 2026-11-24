@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
 import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import java.time.LocalDate;
 
 public record ReviewDTO (
      Long reviewID,
@@ -22,6 +23,8 @@ public record ReviewDTO (
     @NotNull(message = ValidationMessages.STARS_REQUIRED)
      BigDecimal stars,
 
+     LocalDate leftAt,
+
         @Pattern(
             regexp = ValidationRules.ISBN_PATTERN,
             message = ValidationMessages.ISBN_VALID_FORMAT
@@ -31,5 +34,7 @@ public record ReviewDTO (
 
     @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
     @Positive(message = ValidationMessages.USER_ID_VALID)
-     Long userID
+     Long userID,
+
+     Boolean isEdited
 ){}

@@ -16,6 +16,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 import org.springframework.test.web.servlet.MockMvc;
@@ -153,7 +154,7 @@ class ReviewControllerTest {
 
     
      private static ReviewDTO review(Long reviewID, String headline,String body,BigDecimal stars, String isbn,Long userID) {
-        return new ReviewDTO(reviewID, headline,body,stars, isbn,userID);
+        return new ReviewDTO(reviewID, headline,body,stars,LocalDate.now(), isbn,userID,false);
     }
 
 }

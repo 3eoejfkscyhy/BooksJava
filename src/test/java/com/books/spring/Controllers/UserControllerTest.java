@@ -85,10 +85,11 @@ class UserControllerTest {
     .andExpect(jsonPath("$.errors.username").value(ValidationMessages.USERNAME_REQUIRED))
     .andExpect(jsonPath("$.errors.email").value(ValidationMessages.EMAIL_REQUIRED))
     .andExpect(jsonPath("$.errors.password").value(ValidationMessages.PASSWORD_REQUIRED));
+    verifyNoInteractions(userService);
      }
 
 
-                   @Test 
+        @Test 
      void createReportsEveryInvalidFieldAtOnceVariantOne() throws Exception{
          mockMvc.perform(post(Paths.USER_PATH)
      .contentType(MediaType.APPLICATION_JSON)

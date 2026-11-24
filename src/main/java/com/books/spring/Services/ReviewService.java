@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ public class ReviewService {
                                 ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(dto.isbn())
                         ))
         );
+        review.setLeftAt(LocalDate.now());
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
@@ -66,7 +68,8 @@ public class ReviewService {
         review.setHeadline(dto.headline());
         review.setBody(dto.body());
         review.setStars(dto.stars());
-
+        review.setLeftAt(LocalDate.now());
+        review.setIsEdited(true);
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 

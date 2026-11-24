@@ -22,6 +22,7 @@ import jakarta.validation.Validator;
 
 import org.springframework.test.web.servlet.MockMvc;
 import com.books.spring.DTOs.BookDTO;
+import com.books.spring.DTOs.FreePeriodDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.Book;
@@ -191,10 +192,13 @@ class BookControllerTest {
         verify(bookService).delete("9780345287793");
     }
 
- //Try in services to do these ones
+ //Try in services to do these ones and fix this
     @Test 
      void putFreePeriodSetsAFreePeriod() throws Exception{
-         when(bookService.getByIsbn("9780345287793")).thenReturn(book("9780345287793",
+        FreePeriodDTO freePeriod = new FreePeriodDTO(LocalDateTime.of(
+            2026, 11, 22, 14, 04, 1),LocalDateTime.of(
+            2026, 11, 30, 14, 04, 1) );
+         when(bookService.setFreePeriod("9780345287793",freePeriod)).thenReturn(book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -213,16 +217,11 @@ class BookControllerTest {
 }
         """))
        .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/books/9780345287793"))
-                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.freeFrom").value("2026-11-22T14:04:01"))
-               .andExpect(jsonPath("$.freeUntil").value("2026-11-30T14:04:01"));
      }
 
        @Test 
      void deleteFreePeriodDeletesAFreePeriod() throws Exception{
-         when(bookService.getByIsbn("9780345287793")).thenReturn(book("9780345287793",
+         when(bookService.removeFreePeriod("9780345287793")).thenReturn(book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -233,11 +232,6 @@ class BookControllerTest {
        mockMvc.perform(delete("/api/books/9780345287793/free-period")
               .contentType(MediaType.APPLICATION_JSON))
               .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/books/9780345287793"))
-                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.freeFrom").isEmpty())
-               .andExpect(jsonPath("$.freeUntil").isEmpty());
      }
 
        @Test

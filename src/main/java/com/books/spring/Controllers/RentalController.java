@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 @RestController
-@RequestMapping("/api/rentals")
+@RequestMapping(Paths.RENTAL_PATH)
 @RequiredArgsConstructor
 public class RentalController {
     private final RentalService rentalService;

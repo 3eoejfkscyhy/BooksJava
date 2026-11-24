@@ -12,7 +12,7 @@ import com.books.spring.Misc.BooksJavaConstants.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user-books")
+@RequestMapping(Paths.USERBOOK_PATH )
 @RequiredArgsConstructor
 public class UserBookController {
     private final UserBookService userBookService;

@@ -5,13 +5,12 @@ import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
 import com.books.spring.Models.Rental;
 import jakarta.validation.constraints.*;
 
-import jakarta.validation.constraints.NotBlank;
-
 import java.time.LocalDateTime;
 
 public record RentalDTO (
      Long rentalID,
      @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
+      @Positive(message =  ValidationMessages.USER_ID_VALID)
      Long userID,
      @Pattern(
             regexp = ValidationRules.ISBN_PATTERN,

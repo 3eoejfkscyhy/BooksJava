@@ -19,7 +19,7 @@ public record UserBookDTO (
 
      UserBooks.Status readingStatus,
 
-    @NotNull
+    @NotNull(message = ValidationMessages.LAST_READ_PAGE_REQUIRED)
     @Positive(message =  ValidationMessages.BOOK_LENGHT_VALID)
      Long lastReadTo,
 

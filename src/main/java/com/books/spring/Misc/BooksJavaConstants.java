@@ -86,7 +86,7 @@ public final class BooksJavaConstants {
         public static final String GENRE_NAME_REQUIRED =  "Genre name is mandatory";
         public static final String GENRE_NAME_SIZE_VALID =  "Genre name must be between 2 and 50 characters";
 
-        public static final String DECIMAL_FRACTION_MUST_BE_LESS_THAN_THREE =  "2 digits";
+         public static final String LAST_READ_PAGE_REQUIRED =  "The last read page is required";
 
         private ValidationMessages() {}
     }
@@ -171,8 +171,8 @@ public final class BooksJavaConstants {
         public static final String REVIEW_ID =  "/{reviewID}";
         public static final String USER_PATH =  "/api/users";
         public static final String USER_ID = "/{userID}";
-
-
+        public static final String RENTAL_PATH ="/api/rentals";
+        public static final String USERBOOK_PATH ="/api/user-books";
         public static final String NOT_A_NUMBER =  "/G";
         public static final String INVALID_NUMBER_STRING =  "/985";
         public static final String ISBN =  "/9781616086282";
