@@ -16,7 +16,7 @@ import java.util.*;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.books.spring.DTOs.GenreDTO;
-import com.books.spring.Exception.NotFoundException;
+import com.books.spring.Exception.*;
 import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Services.GenreService;
 
@@ -102,7 +102,7 @@ class GenreControllerTest {
 
      @Test
     void getByIdReturns404ForAMissingGenre() throws Exception {
-        when(genreService.getById(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
+        when(genreService.getByID(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
 
         mockMvc.perform(get(Paths.COMBINE_PATH(Paths.GENRE_PATH, Paths.INVALID_NUMBER_STRING)))
                 .andExpect(status().isNotFound())
@@ -118,7 +118,42 @@ class GenreControllerTest {
         verify(genreService).delete(1L);
     }
 
+    @Test
+    void createReturns409WhenGenreNameExists() throws Exception {
+        when(genreService.create(any())).thenThrow(new ConflictException(ExceptionMessages.GENRE_EXIST));
+           mockMvc.perform(post(Paths.GENRE_PATH)
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+{
+    "genreName": "Cookbook",
+    "isbns": [
+      "9788178530857"
+    ]
+  }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.GENRE_EXIST));
+    }
 
+    @Test
+    void updateReturns409WhenGenreNameExists() throws Exception {
+        when(genreService.update(any(),any())).thenThrow(new ConflictException(ExceptionMessages.GENRE_EXIST));
+           mockMvc.perform(put("/api/genres/1")
+          .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+{
+    "genreName": "Cookbook",
+    "isbns": [
+      "9788178530857"
+    ]
+  }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.GENRE_EXIST));
+    
+    }
 
      private static GenreDTO genre(Long genreID, String genreName, String[] isbnList) {
         Set<String> isbns = new HashSet<>();

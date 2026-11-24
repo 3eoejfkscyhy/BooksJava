@@ -38,6 +38,8 @@ public class AuthorService {
     public AuthorDTO create(AuthorDTO dto) {
         Author author = authorMapper.toEntity(dto);
         author.setAuthorID(null);
+        if(dto.isbns()!=null)
+        {
        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                     .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
@@ -45,6 +47,7 @@ public class AuthorService {
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
         newBooks.forEach(book -> book.getBookAuthors().add(author));
+        }
         return authorMapper.toDto(authorRepository.save(author));
     }
 
@@ -55,7 +58,8 @@ public class AuthorService {
         author.setLastName(dto.lastName());
         author.setDOB(dto.DOB());
         author.setBooksWritten(dto.booksWritten());
-
+      if(dto.isbns()!=null)
+        {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                     .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
@@ -63,6 +67,7 @@ public class AuthorService {
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
         newBooks.forEach(book -> book.getBookAuthors().add(author));
+        }
 
         return authorMapper.toDto(authorRepository.save(author));
     }

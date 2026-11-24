@@ -23,7 +23,7 @@ public class GenreController {
 
     @GetMapping(Paths.GENRE_ID)
     public GenreDTO getByIsbn(@PathVariable Long genreID) {
-        return genreService.getById(genreID);
+        return genreService.getByID(genreID);
     }
 
     @PostMapping

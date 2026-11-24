@@ -141,7 +141,7 @@ class UserControllerTest {
         verify(userService).delete(1L);
     }
 
-               @Test
+    @Test
     void givenInvalidStarsShouldGiveConstraintViolation() throws Exception {
        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
           UserDTO user = user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",

@@ -91,7 +91,7 @@ public class BookSeeder implements CommandLineRunner{
    {
     Set <Genre> tempGenre = new HashSet<>();
     for (String givenGenre: genreList) {
-    tempGenre.add(genreRepo.findBygenreName(givenGenre).orElseThrow(()-> new IllegalStateException("Cannot seed Books: Genre '"+ givenGenre +"' doesn't exist")));
+    tempGenre.add(genreRepo.findByGenreName(givenGenre).orElseThrow(()-> new IllegalStateException("Cannot seed Books: Genre '"+ givenGenre +"' doesn't exist")));
     }
     return tempGenre;
    }

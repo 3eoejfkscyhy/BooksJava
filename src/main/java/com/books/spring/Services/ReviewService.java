@@ -35,36 +35,30 @@ public class ReviewService {
     public ReviewDTO create(ReviewDTO dto) {
         Review review = reviewMapper.toEntity(dto);
         review.setReviewID(null);
+         if(dto.isbn()!=null)
+        {
         review.setWrittenBy(
                 userRepository.findById(dto.userID())
                         .orElseThrow(() -> new NotFoundException(
                                 ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
+        }
+        if(dto.isbn()!=null)
+        {
         review.setBook(
                 bookRepository.findById(dto.isbn())
                         .orElseThrow(() -> new NotFoundException(
                                 ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(dto.isbn())
                         ))
         );
+        }
         review.setLeftAt(LocalDate.now());
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
     public ReviewDTO update(Long reviewID, ReviewDTO dto) {
         Review review = findReview(reviewID);
-        review.setWrittenBy(
-                userRepository.findById(dto.userID())
-                        .orElseThrow(() -> new NotFoundException(
-                                 ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
-                        ))
-        );
-        review.setBook(
-                bookRepository.findById(dto.isbn())
-                        .orElseThrow(() -> new NotFoundException(
-                                ExceptionMessages.GIVEN_REVIEW_NOT_FOUND.formatted(dto.isbn())
-                        ))
-        );
         review.setHeadline(dto.headline());
         review.setBody(dto.body());
         review.setStars(dto.stars());

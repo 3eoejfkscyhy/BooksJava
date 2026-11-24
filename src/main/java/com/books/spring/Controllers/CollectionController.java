@@ -22,8 +22,8 @@ public class CollectionController {
     }
 
     @GetMapping(Paths.COLLECTION_ID)
-    public CollectionDTO getById(@PathVariable Long collectionID) {
-        return collectionService.getById(collectionID);
+    public CollectionDTO getByID(@PathVariable Long collectionID) {
+        return collectionService.getByID(collectionID);
     }
 
     @PostMapping

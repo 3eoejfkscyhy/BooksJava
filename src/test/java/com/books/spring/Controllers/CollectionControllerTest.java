@@ -95,7 +95,7 @@ class CollectionControllerTest {
      }
 
         @Test 
-     void getByIdReturns400WhenTheIdIsNotANumber() throws Exception{
+     void getByIDReturns400WhenTheIdIsNotANumber() throws Exception{
      mockMvc.perform(get(Paths.COMBINE_PATH(Paths.COLLECTION_PATH, Paths.NOT_A_NUMBER)))
     .andExpect(status().isBadRequest())
     .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -105,8 +105,8 @@ class CollectionControllerTest {
      }
 
      @Test
-    void getByIdReturns404ForAMissingCollection() throws Exception {
-        when(collectionService.getById(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
+    void getByIDReturns404ForAMissingCollection() throws Exception {
+        when(collectionService.getByID(Misc.INVALID_NUMBER)).thenThrow(new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(Misc.INVALID_NUMBER)));
 
         mockMvc.perform(get(Paths.COMBINE_PATH(Paths.COLLECTION_PATH, Paths.INVALID_NUMBER_STRING)))
                 .andExpect(status().isNotFound())

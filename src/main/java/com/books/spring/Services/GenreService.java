@@ -30,17 +30,19 @@ public class GenreService {
                 .toList();
     }
 
-    public GenreDTO getById(Long genreID) { return genreMapper.toDto(findGenre(genreID)); }
+    public GenreDTO getByID(Long genreID) { return genreMapper.toDto(findGenre(genreID)); }
 
     public GenreDTO create(GenreDTO dto) {
         String normalisedName = normaliseGenreName(dto.genreName());
         if(genreRepository.existsByGenreNameIgnoreCase(normalisedName)) {
-            throw new RuntimeException((ExceptionMessages.GENRE_EXIST));
+            throw new ConflictException((ExceptionMessages.GENRE_EXIST));
         }
 
         Genre genre = genreMapper.toEntity(dto);
         genre.setGenreID(null);
         genre.setGenreName(normalisedName);
+        if(dto.isbns()!=null)
+        {
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new NotFoundException(
@@ -50,6 +52,7 @@ public class GenreService {
         genre.getBooks().forEach(book -> book.getBookGenres().remove(genre));
         genre.setBooks(books);
         books.forEach(book -> book.getBookGenres().add(genre));
+        }
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
@@ -60,6 +63,8 @@ public class GenreService {
             throw new ConflictException(ExceptionMessages.GENRE_EXIST);
         }
 
+                if(dto.isbns()!=null)
+        {
         genre.setGenreName(dto.genreName());
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
@@ -70,6 +75,7 @@ public class GenreService {
         genre.getBooks().forEach(book -> book.getBookGenres().remove(genre));
         genre.setBooks(books);
         books.forEach(book -> book.getBookGenres().add(genre));
+                    }
         return genreMapper.toDto(genreRepository.save(genre));
     }
 
@@ -78,7 +84,7 @@ public class GenreService {
     }
 
     private Genre findGenre(Long genreID) {
-        return genreRepository.findBygenreID(genreID)
+        return genreRepository.findByGenreID(genreID)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(genreID)));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {

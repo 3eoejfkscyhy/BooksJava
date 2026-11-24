@@ -30,29 +30,36 @@ public class CollectionService {
                 .toList();
     }
 
-    public CollectionDTO getById(Long collectionID) { return collectionMapper.toDto(findCollection(collectionID)); }
+    public CollectionDTO getByID(Long collectionID) { return collectionMapper.toDto(findCollection(collectionID)); }
 
     public CollectionDTO create(CollectionDTO dto) {
         Collection collection = collectionMapper.toEntity(dto);
         collection.setCollectionID(null);
+          if(dto.userID()!=null)
+        {
         collection.setUser(
                 userRepository.findById(dto.userID())
                         .orElseThrow(() -> new NotFoundException(
                                  ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
+       }
 
+         if(dto.isbns()!=null)
+        {
         Set<Book> books = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         collection.setBooks(books);
+        }
         return collectionMapper.toDto(collectionRepository.save(collection));
     }
 
     public CollectionDTO update(Long collectionID, CollectionDTO dto) {
         Collection collection = findCollection(collectionID);
-
+      if(dto.userID()!=null)
+        {
         collection.setCollectionName(dto.collectionName());
         collection.setUser(
                 userRepository.findById(dto.userID())
@@ -60,8 +67,10 @@ public class CollectionService {
                                  ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
+        }
 
-
+        if(dto.isbns()!=null)
+        {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
                         .orElseThrow(() -> new NotFoundException(
@@ -71,6 +80,7 @@ public class CollectionService {
         collection.getBooks().forEach(book -> book.getCollections().remove(collection));
         collection.setBooks(newBooks);
         newBooks.forEach(book -> book.getCollections().add(collection));
+                }
         return collectionMapper.toDto(collectionRepository.save(collection));
     }
 
@@ -79,7 +89,7 @@ public class CollectionService {
     }
 
     private Collection findCollection(Long collectionID) {
-        return collectionRepository.findById(collectionID)
+        return collectionRepository.findByCollectionID(collectionID)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_COLLECTION_NOT_FOUND.formatted(collectionID)));
     }
 

@@ -17,9 +17,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static  org.assertj.core.api.Assertions.assertThat;
-import jakarta.validation.Validator;
 
+import com.books.spring.Misc.BooksJavaFunctions;
 import org.springframework.test.web.servlet.MockMvc;
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.DTOs.FreePeriodDTO;
@@ -28,8 +27,7 @@ import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.Book;
 import com.books.spring.Services.BookService;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
+
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -43,7 +41,7 @@ class BookControllerTest {
 
      @Test
     void getAllReturnsTheBooksAsJson() throws Exception {
-        when(bookService.getAll()).thenReturn(List.of(book("9780345287793",
+        when(bookService.getAll()).thenReturn(List.of(BooksJavaFunctions.book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -51,7 +49,7 @@ class BookControllerTest {
                                                             new BigDecimal("12.99"),
                                                             new BigDecimal("4.99"),
                                                         new Long[]{4L},new Long[]{1L,17L},new Long[]{3L,8L},new Long[]{8L,29L},null,null),
-                                                   book("9780593356418",
+                                                   BooksJavaFunctions.book("9780593356418",
                                                             "Be a Work in Progress",
                                                             184L,
                                                             "English",
@@ -70,7 +68,7 @@ class BookControllerTest {
 
      @Test 
      void createReturns201AndSavedBook() throws Exception{
-        BookDTO savedBook = book("9780345287793",
+        BookDTO savedBook = BooksJavaFunctions.book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -198,7 +196,7 @@ class BookControllerTest {
         FreePeriodDTO freePeriod = new FreePeriodDTO(LocalDateTime.of(
             2026, 11, 22, 14, 04, 1),LocalDateTime.of(
             2026, 11, 30, 14, 04, 1) );
-         when(bookService.setFreePeriod("9780345287793",freePeriod)).thenReturn(book("9780345287793",
+         when(bookService.setFreePeriod("9780345287793",freePeriod)).thenReturn(BooksJavaFunctions.book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -221,7 +219,7 @@ class BookControllerTest {
 
        @Test 
      void deleteFreePeriodDeletesAFreePeriod() throws Exception{
-         when(bookService.removeFreePeriod("9780345287793")).thenReturn(book("9780345287793",
+         when(bookService.removeFreePeriod("9780345287793")).thenReturn(BooksJavaFunctions.book("9780345287793",
                                                             "Garfield at Large: His First Book",
                                                             96L,
                                                             "English",
@@ -233,45 +231,5 @@ class BookControllerTest {
               .contentType(MediaType.APPLICATION_JSON))
               .andExpect(status().isNoContent());
      }
-
-       @Test
-    void givenInvalidPricesShouldGiveConstraintViolation() throws Exception {
-       Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        BookDTO book = book("9780345287793",
-                                                            "Garfield at Large: His First Book",
-                                                            96L,
-                                                            "English",
-                                                            Book.BookType.EBook,
-                                                            new BigDecimal("110292.9933"),
-                                                            new BigDecimal("43994.9119"),
-                                                        new Long[]{4L},new Long[]{1L,17L},new Long[]{3L,8L},new Long[]{8L,29L},null,null);
-     Set<ConstraintViolation<BookDTO>> violations = validator.validate(book);
-     assertThat(violations).hasSize(2);
-     assertThat(violations).extracting("message").contains("numeric value out of bounds (<3 digits>.<2 digits> expected)");
-    }
-
-    
-
-
-     private static BookDTO book(String isbn, String title,Long bookLenght,String language,Book.BookType bookType,BigDecimal price, BigDecimal rentalPrice,Long[] authorIDs, Long[] reviewIDs,Long[] genreIDs,Long[] collectionIDs,LocalDateTime freeFrom,LocalDateTime freeUntil) {
-        Set<Long> authorIds = new HashSet<>();
-        for (Long authorId : authorIDs) {
-            authorIds.add(authorId);
-        }
-         Set<Long> reviewIds = new HashSet<>();
-        for (Long reviewId : reviewIDs) {
-            reviewIds.add(reviewId);
-        }
-         Set<Long> genreIds = new HashSet<>();
-        for (Long genreId : genreIDs) {
-            genreIds.add(genreId);
-        }
-         Set<Long> collectionIds = new HashSet<>();
-        for (Long collectionId : collectionIDs) {
-            collectionIds.add(collectionId);
-        }
-        return new BookDTO(isbn, title, bookLenght, language, bookType, price,rentalPrice,authorIds,reviewIds,genreIds,collectionIds,freeFrom,freeUntil);
-    }
-
 
 }

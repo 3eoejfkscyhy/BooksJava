@@ -23,7 +23,7 @@ public record ReviewDTO (
     @NotNull(message = ValidationMessages.STARS_REQUIRED)
      BigDecimal stars,
 
-     LocalDate leftAt,
+     
 
         @Pattern(
             regexp = ValidationRules.ISBN_PATTERN,
@@ -36,5 +36,7 @@ public record ReviewDTO (
     @Positive(message = ValidationMessages.USER_ID_VALID)
      Long userID,
 
+     LocalDate leftAt, 
+     
      Boolean isEdited
 ){}

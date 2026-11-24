@@ -12,6 +12,7 @@ import com.books.spring.Repositories.*;
 import  lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
 
@@ -37,6 +38,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .stars(new BigDecimal(4.5))
      .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,2L))
      .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9870230748392"))
+     .leftAt(LocalDate.of(2026, 12, 2))
      .build();
 
   Review Jamie = Review.builder()
@@ -45,6 +47,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .stars(new BigDecimal(0.0))
       .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,3L))
       .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9870141019703"))
+      .leftAt(LocalDate.of(2026, 12, 5))
      .build();
 
        Review Stoichkov = Review.builder()
@@ -53,6 +56,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .stars(new BigDecimal(2.0))
     .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,2L))
     .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9789545280320"))
+    .leftAt(LocalDate.of(2026, 11, 11))
      .build();
      
        Review Steve = Review.builder()
@@ -61,6 +65,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .stars(new BigDecimal(3.5))
      .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,4L))
      .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9788178530857"))
+     .leftAt(LocalDate.of(2026, 11, 28))
      .build();
 
          reviewRepo.saveAll(List.of(Henry,Jamie,Stoichkov,Steve));
