@@ -2,8 +2,7 @@ package com.books.spring.DTOs;
 
 import java.util.Set;
 
-import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
-import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaConstants.*;
 
 import jakarta.validation.constraints.*;
 

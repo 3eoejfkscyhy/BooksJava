@@ -53,7 +53,6 @@ public class ReviewService {
                         ))
         );
         }
-        review.setLeftAt(LocalDate.now());
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 

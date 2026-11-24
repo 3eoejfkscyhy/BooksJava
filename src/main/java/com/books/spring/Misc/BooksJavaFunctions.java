@@ -5,10 +5,13 @@ import com.books.spring.Repositories.BookRepository;
 import com.books.spring.Repositories.UserRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import com.books.spring.DTOs.BookDTO;
+import com.books.spring.DTOs.ReviewDTO;
+import com.books.spring.DTOs.UserDTO;
 import com.books.spring.Exception.*;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 
@@ -61,6 +64,25 @@ public class BooksJavaFunctions {
             collectionIds.add(collectionId);
         }
         return new BookDTO(isbn, title, bookLenght, language, bookType, price,rentalPrice,authorIds,reviewIds,genreIds,collectionIds,freeFrom,freeUntil);
+    }
+
+
+    public static ReviewDTO review(Long reviewID, String headline,String body,BigDecimal stars, String isbn,Long userID) {
+        return new ReviewDTO(reviewID, headline,body,stars, isbn,userID,LocalDate.now(),false);
+    }
+
+
+     public  static UserDTO user(Long userID, String username,String email, String password, String status,BigDecimal balance,Long[] reviewIDs,Long[] collectionIDs) {
+
+        Set<Long> reviewIds = new HashSet<>();
+        for (Long reviewId : reviewIDs) {
+            reviewIds.add(reviewId);
+        }
+         Set<Long> collectionIds = new HashSet<>();
+        for (Long collectionId : collectionIDs) {
+            collectionIds.add(collectionId);
+        }
+        return new UserDTO(userID, username,email,password,status,balance,reviewIds,collectionIds);
     }
   
 } 

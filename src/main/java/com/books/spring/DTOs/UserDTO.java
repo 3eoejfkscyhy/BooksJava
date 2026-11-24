@@ -4,8 +4,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
-import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaConstants.*;
 
 public record UserDTO (
      Long userID,

@@ -1,7 +1,6 @@
 package com.books.spring.DTOs;
 
-import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
-import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.Rental;
 import jakarta.validation.constraints.*;
 

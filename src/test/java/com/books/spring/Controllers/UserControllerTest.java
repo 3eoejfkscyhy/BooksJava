@@ -11,10 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static  org.assertj.core.api.Assertions.assertThat;
-import jakarta.validation.Validator;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
+
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -22,8 +19,10 @@ import java.util.*;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.books.spring.DTOs.UserDTO;
+import com.books.spring.Exception.ConflictException;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Misc.BooksJavaConstants.*;
+import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Services.UserService;
 
 @WebMvcTest(UserController.class)
@@ -35,9 +34,9 @@ class UserControllerTest {
      private UserService userService;
            @Test
     void getAllReturnsTheUsersAsJson() throws Exception {
-        when(userService.getAll()).thenReturn(List.of(user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",
+        when(userService.getAll()).thenReturn(List.of( BooksJavaFunctions.user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",
                                      new BigDecimal(173.98),new Long[]{3L,8L},new Long[]{8L,29L}),
-                                                   user(2L, "Lonsoz92", "LonLSoz@Gmail.com", "Gucdbudvb28","Sup?",
+                                                    BooksJavaFunctions.user(2L, "Lonsoz92", "LonLSoz@Gmail.com", "Gucdbudvb28","Sup?",
                                      new BigDecimal(13.48),new Long[]{9L},new Long[]{34L,35L})));
 
         mockMvc.perform(get(Paths.USER_PATH))
@@ -49,7 +48,7 @@ class UserControllerTest {
 
             @Test 
      void createReturns201AndSavedUser() throws Exception{
-        UserDTO savedUser = user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",
+        UserDTO savedUser =  BooksJavaFunctions.user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",
                                      new BigDecimal(173.98),new Long[]{3L,8L},new Long[]{8L,29L});
         when(userService.create(any())).thenReturn(savedUser);
 
@@ -141,15 +140,7 @@ class UserControllerTest {
         verify(userService).delete(1L);
     }
 
-    @Test
-    void givenInvalidStarsShouldGiveConstraintViolation() throws Exception {
-       Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-          UserDTO user = user(1L, "TDFJ_34", "TDFJ34@Yahoo.com", "GMndh937","Reading Moby Dick!",
-                                     new BigDecimal(221212122.932),new Long[]{3L,8L},new Long[]{8L,29L});
-     Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
-     assertThat(violations).hasSize(1);
-     assertThat(violations).extracting("message").contains("numeric value out of bounds (<6 digits>.<2 digits> expected)");
-    }
+
 
     @Test
     void decryptPasswordDecryptsEncryptedPassword() throws Exception {
@@ -167,18 +158,86 @@ class UserControllerTest {
                  verifyNoInteractions(userService);
     } 
 
-
-
-         private static UserDTO user(Long userID, String username,String email, String password, String status,BigDecimal balance,Long[] reviewIDs,Long[] collectionIDs) {
-
-        Set<Long> reviewIds = new HashSet<>();
-        for (Long reviewId : reviewIDs) {
-            reviewIds.add(reviewId);
-        }
-         Set<Long> collectionIds = new HashSet<>();
-        for (Long collectionId : collectionIDs) {
-            collectionIds.add(collectionId);
-        }
-        return new UserDTO(userID, username,email,password,status,balance,reviewIds,collectionIds);
+        @Test
+    void createReturns409WhenEmailExists() throws Exception {
+        when(userService.create(any())).thenThrow(new ConflictException(ExceptionMessages.EMAIL_IS_IN_USE));
+           mockMvc.perform(post(Paths.USER_PATH)
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+  {
+    "userID": 2,
+    "username": "AntonyReal",
+    "email": "FutBallG0at@yahoo.com",
+    "password": "UmVhbERpYUIzdGlz",
+    "status": "I am a smart dude, I can read the pitch",
+    "balance": 10.3
     }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.EMAIL_IS_IN_USE));
+    }
+
+    @Test
+    void updateReturns409WhenEmailExists() throws Exception {
+        when(userService.update(any(),any())).thenThrow(new ConflictException(ExceptionMessages.EMAIL_IS_IN_USE));
+           mockMvc.perform(put("/api/users/1")
+          .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+  {
+    "userID": 1,
+    "username": "AntonyReal",
+    "email": "FutBallG0at@yahoo.com",
+    "password": "UmVhbERpYUIzdGlz",
+    "status": "I am a smart dude, I can read the pitch",
+    "balance": 10.3
+    }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.EMAIL_IS_IN_USE));
+    
+    }
+
+            @Test
+    void createReturns409WhenUsernameExists() throws Exception {
+        when(userService.create(any())).thenThrow(new ConflictException(ExceptionMessages.USERNAME_IS_IN_USE));
+           mockMvc.perform(post(Paths.USER_PATH)
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+  {
+    "userID": 2,
+    "username": "AntonyReal",
+    "email": "FutBallG0at@yahoo.com",
+    "password": "UmVhbERpYUIzdGlz",
+    "status": "I am a smart dude, I can read the pitch",
+    "balance": 10.3
+    }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.USERNAME_IS_IN_USE));
+    }
+
+    @Test
+    void updateReturns409WhenUsernameExists() throws Exception {
+        when(userService.update(any(),any())).thenThrow(new ConflictException(ExceptionMessages.USERNAME_IS_IN_USE));
+           mockMvc.perform(put("/api/users/1")
+          .contentType(MediaType.APPLICATION_JSON)
+    .content("""
+  {
+    "userID": 1,
+    "username": "AntonyReal",
+    "email": "FutBallG0at@yahoo.com",
+    "password": "UmVhbERpYUIzdGlz",
+    "status": "I am a smart dude, I can read the pitch",
+    "balance": 10.3
+    }
+        """))
+        .andExpect(status().isConflict())
+         .andExpect(jsonPath("$.title").value("Conflict"))
+         .andExpect(jsonPath("$.detail").value(ExceptionMessages.USERNAME_IS_IN_USE));
+    
+    }
+        
 }

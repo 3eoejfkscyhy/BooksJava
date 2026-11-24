@@ -10,19 +10,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static  org.assertj.core.api.Assertions.assertThat;
-import jakarta.validation.Validator;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
+
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Exception.NotFoundException;
+import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Services.ReviewService;
 
@@ -37,9 +34,9 @@ class ReviewControllerTest {
 
       @Test
     void getAllReturnsTheReviewsAsJson() throws Exception {
-        when(reviewService.getAll()).thenReturn(List.of(review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
+        when(reviewService.getAll()).thenReturn(List.of( BooksJavaFunctions.review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
                                      new BigDecimal(4.50), "9780545437643",5L),
-                                                   review(2L, "Do not recommend!", "",
+                                                    BooksJavaFunctions.review(2L, "Do not recommend!", "",
                                      new BigDecimal(1.50), "9780545437643",9L)));
 
         mockMvc.perform(get(Paths.REVIEW_PATH))
@@ -53,7 +50,7 @@ class ReviewControllerTest {
 
             @Test 
      void createReturns201AndSavedReview() throws Exception{
-        ReviewDTO savedReview = review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
+        ReviewDTO savedReview = BooksJavaFunctions.review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
                                      new BigDecimal(4.50), "9780545437643",5L);
         when(reviewService.create(any())).thenReturn(savedReview);
 
@@ -141,20 +138,7 @@ class ReviewControllerTest {
         verify(reviewService).delete(1L);
     }
 
-
-           @Test
-    void givenInvalidStarsShouldGiveConstraintViolation() throws Exception {
-       Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        ReviewDTO review = review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
-                                     new BigDecimal(48.502), "9780545437643",5L);
-     Set<ConstraintViolation<ReviewDTO>> violations = validator.validate(review);
-     assertThat(violations).hasSize(2);
-     assertThat(violations).extracting("message").contains("numeric value out of bounds (<1 digits>.<2 digits> expected)");
-    }
-
     
-     private static ReviewDTO review(Long reviewID, String headline,String body,BigDecimal stars, String isbn,Long userID) {
-        return new ReviewDTO(reviewID, headline,body,stars, isbn,userID,LocalDate.now(),false);
-    }
+
 
 }

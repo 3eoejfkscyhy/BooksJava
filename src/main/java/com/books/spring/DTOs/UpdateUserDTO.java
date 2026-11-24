@@ -3,8 +3,7 @@ package com.books.spring.DTOs;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
-import com.books.spring.Misc.BooksJavaConstants.ValidationMessages;
-import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaConstants.*;
 
 public record UpdateUserDTO( 
 

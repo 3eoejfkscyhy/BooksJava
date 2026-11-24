@@ -1,8 +1,6 @@
 package com.books.spring.Controllers;
 
-import com.books.spring.DTOs.RegisterUserDTO;
-import com.books.spring.DTOs.UpdateUserDTO;
-import com.books.spring.DTOs.UserDTO;
+import com.books.spring.DTOs.*;
 import com.books.spring.Exception.BadRequestException;
 import com.books.spring.Services.UserService;
 import jakarta.validation.Valid;
