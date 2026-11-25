@@ -1,6 +1,8 @@
 package com.books.spring.Models;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +28,7 @@ public class Review {
     private String body;  
 
     @Column(name = "stars", nullable = false)
-    private BigDecimal stars;
+    private BigDecimal stars;  
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -38,7 +40,13 @@ public class Review {
     @JoinColumn(name = "book_isbn", nullable = false)
     private Book book;
 
+
+    @Builder.Default
+    @Column(name = "leftAt", nullable = false)
+    private LocalDate leftAt = LocalDate.now();
+
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isEdited = false;
+
 }

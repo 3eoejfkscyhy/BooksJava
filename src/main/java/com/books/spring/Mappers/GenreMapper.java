@@ -15,7 +15,6 @@ public interface GenreMapper {
 
     @Mapping(target = "genreID", ignore = true)
     @Mapping(target = "books", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     Genre toEntity(GenreDTO dto);
 
     default String bookToIsbn(Book book) { return book.getIsbn(); }
@@ -23,7 +22,6 @@ public interface GenreMapper {
     @Named("activeGenres")
     default Set<GenreDTO> toActiveDtos(Set<Genre> genres) {
         return genres.stream()
-                .filter(genre -> !genre.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

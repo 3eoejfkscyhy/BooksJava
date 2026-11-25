@@ -3,26 +3,39 @@ package com.books.spring.DTOs;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
+import com.books.spring.Misc.BooksJavaConstants.*;
+import java.time.LocalDate;
+
 public record ReviewDTO (
      Long reviewID,
 
-    @NotBlank(message = "Headline is mandatory")
-    @Size(min = 2, max = 40, message = "Headline must be between 2 and 40 characters")
+    @NotBlank(message = ValidationMessages.HEADLINE_REQUIRED)
+    @Size(max = ValidationRules.HEADLINE_MAX_LENGTH, message = ValidationMessages.HEADLINE_LENGHT_SIZE)
      String headline,
 
-    @Size(max = 500, message = "Review must be under 500 characters")
+    @Size(max = ValidationRules.BODY_MAX_LENGHT, message = ValidationMessages.BODY_SIZE_VALID)
      String body,
 
-    @DecimalMin("0.0")
-    @DecimalMax("5.0")
-    @NotNull
+    @Digits(integer = ValidationRules.STARS_WHOLE, fraction = ValidationRules.FRACTION)
+    @DecimalMin(ValidationRules.STARS_MIN)
+    @DecimalMax(ValidationRules.STARS_MAX)
+    @NotNull(message = ValidationMessages.STARS_REQUIRED)
      BigDecimal stars,
 
-    @NotBlank(message = "Book ISBN is required")
-     String isbn,
+     
 
-    @NotNull(message = "User is required")
+        @Pattern(
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
+    )
+    @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
+    String isbn,
+
+    @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
+    @Positive(message = ValidationMessages.USER_ID_VALID)
      Long userID,
 
-     Boolean isDeleted
+     LocalDate leftAt, 
+     
+     Boolean isEdited
 ){}

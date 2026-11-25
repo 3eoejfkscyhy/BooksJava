@@ -7,9 +7,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 @RestController
-@RequestMapping("/api/rentals")
+@RequestMapping(Paths.RENTAL_PATH)
 @RequiredArgsConstructor
 public class RentalController {
     private final RentalService rentalService;
@@ -23,5 +24,11 @@ public class RentalController {
     @PutMapping("/{rentalID}/return")
     public RentalDTO returnBook(@PathVariable Long rentalID) {
         return rentalService.returnBook(rentalID);
+    }
+
+    @DeleteMapping("/{rentalID}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long rentalID) {
+        rentalService.delete(rentalID);
     }
 }

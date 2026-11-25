@@ -4,9 +4,12 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.books.spring.Misc.BooksJavaConstants.LogMessages;
+import com.books.spring.Misc.BooksJavaConstants.SeederOrder;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
-import  lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 
@@ -14,14 +17,14 @@ import java.math.BigDecimal;
 @Slf4j
 @Component 
 @RequiredArgsConstructor
-@Order(1)
+@Order(SeederOrder.USER)
 public class UserSeeder implements CommandLineRunner {
      private final UserRepository userRepo;
      @Override
      public void run(String... args) throws Exception  {
         if(userRepo.count()>0)
         {
-            log.info("Users already exists. Skipping seeding users.");
+            log.info(LogMessages.USER_ALREADY_EXISTS);
             return;  
         }
 
@@ -60,7 +63,7 @@ public class UserSeeder implements CommandLineRunner {
 
          userRepo.saveAll(List.of(Mike,Antony,Max,Doug));
      
-     log.info("Users successfully seeded!");
+     log.info(LogMessages.USER_SEEDED);
    }
 }
 

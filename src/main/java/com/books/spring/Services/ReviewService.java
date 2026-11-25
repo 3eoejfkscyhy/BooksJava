@@ -2,6 +2,7 @@ package com.books.spring.Services;
 
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Mappers.ReviewMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Review;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +26,6 @@ public class ReviewService {
 
     public List<ReviewDTO> getAll() {
         return reviewRepository.findAll().stream()
-                .filter(review -> !review.getIsDeleted())
                 .map(reviewMapper::toDto)
                 .toList();
     }
@@ -34,54 +35,38 @@ public class ReviewService {
     public ReviewDTO create(ReviewDTO dto) {
         Review review = reviewMapper.toEntity(dto);
         review.setReviewID(null);
+         if(dto.isbn()!=null)
+        {
         review.setWrittenBy(
                 userRepository.findById(dto.userID())
-                        .filter(user -> !user.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
+                                ExceptionMessages.GIVEN_USER_NOT_FOUND.formatted(dto.userID())
                         ))
         );
+        }
+        if(dto.isbn()!=null)
+        {
         review.setBook(
                 bookRepository.findById(dto.isbn())
-                        .filter(book -> !book.getIsDeleted())
                         .orElseThrow(() -> new NotFoundException(
-                                "Book " + dto.isbn() + " could not be found"
+                                ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(dto.isbn())
                         ))
         );
+        }
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
     public ReviewDTO update(Long reviewID, ReviewDTO dto) {
         Review review = findReview(reviewID);
-        review.setWrittenBy(
-                userRepository.findById(dto.userID())
-                        .filter(user -> !user.getIsDeleted())
-                        .orElseThrow(() -> new NotFoundException(
-                                "User " + dto.userID() + " could not be found"
-                        ))
-        );
-        review.setBook(
-                bookRepository.findById(dto.isbn())
-                        .filter(book -> !book.getIsDeleted())
-                        .orElseThrow(() -> new NotFoundException(
-                                "Review " + dto.isbn() + " could not be found"
-                        ))
-        );
         review.setHeadline(dto.headline());
         review.setBody(dto.body());
         review.setStars(dto.stars());
-
+        review.setLeftAt(LocalDate.now());
+        review.setIsEdited(true);
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
     public void delete(Long reviewID) {
-        Review review = findReview(reviewID);
-        review.setIsDeleted(true);
-        reviewRepository.save(review);
-    }
-
-    @Deprecated
-    public void hardDelete(Long reviewID) {
         reviewRepository.delete(findReview(reviewID));
     }
 
@@ -93,7 +78,6 @@ public class ReviewService {
 
     private Review findReview(Long reviewID){
         return reviewRepository.findById(reviewID)
-                .filter(review -> !review.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Review " + reviewID + " was not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_REVIEW_NOT_FOUND.formatted(reviewID)));
     }
 }

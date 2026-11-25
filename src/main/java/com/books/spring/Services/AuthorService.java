@@ -3,6 +3,7 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Mappers.AuthorMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Author;
 import com.books.spring.Models.Book;
 import com.books.spring.Repositories.AuthorRepository;
@@ -26,7 +27,6 @@ public class AuthorService {
 
     public List<AuthorDTO> getAll(){
         return authorRepository.findAll().stream()
-                .filter(author -> !author.getIsDeleted())
                 .map(authorMapper::toDto)
                 .toList();
     }
@@ -38,14 +38,16 @@ public class AuthorService {
     public AuthorDTO create(AuthorDTO dto) {
         Author author = authorMapper.toEntity(dto);
         author.setAuthorID(null);
+        if(dto.isbns()!=null)
+        {
        Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
         newBooks.forEach(book -> book.getBookAuthors().add(author));
+        }
         return authorMapper.toDto(authorRepository.save(author));
     }
 
@@ -56,34 +58,27 @@ public class AuthorService {
         author.setLastName(dto.lastName());
         author.setDOB(dto.DOB());
         author.setBooksWritten(dto.booksWritten());
-
+      if(dto.isbns()!=null)
+        {
         Set<Book> newBooks = dto.isbns().stream()
                 .map(isbn -> bookRepository.findById(isbn)
-                        .filter(book -> !book.getIsDeleted())
-                    .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found")))
+                    .orElseThrow(() -> new NotFoundException( ExceptionMessages.GIVEN_BOOK_NOT_FOUND.formatted(isbn))))
                 .collect(Collectors.toSet());
         author.getBooks().forEach(book -> book.getBookAuthors().remove(author));
         author.setBooks(newBooks);
         newBooks.forEach(book -> book.getBookAuthors().add(author));
+        }
 
         return authorMapper.toDto(authorRepository.save(author));
     }
 
     public void delete(Long authorID) {
-        Author author = findAuthor(authorID);
-        author.setIsDeleted(true);
-        authorRepository.save(author);
-    }
-
-    @Deprecated
-    public void hardDelete(Long authorID) {
         authorRepository.delete(findAuthor(authorID));
     }
 
     private Author findAuthor(Long authorID) {
         return authorRepository.findByAuthorID(authorID)
-                .filter(author -> !author.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException("Author " + authorID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(authorID)));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {
         return authorIDs.stream()

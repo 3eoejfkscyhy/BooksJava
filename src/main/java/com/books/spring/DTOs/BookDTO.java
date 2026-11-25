@@ -1,36 +1,41 @@
 package com.books.spring.DTOs;
 
+import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.Book;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public record BookDTO(
     @Pattern(
-            regexp = "97[89]\\d{10}",
-            message = "ISBN must contain 13 digits and start with 978 or 979"
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
     )
+    @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
     String isbn,
-    @NotBlank(message = "Book title is required")
+    @NotBlank(message = ValidationMessages.BOOK_TITLE_REQUIRED)
      String title,
     @NotNull
-    @Positive(message = "Book length has to be valid")
+    @Positive(message = ValidationMessages.BOOK_LENGHT_VALID)
      Long bookLength,
-    @Pattern(regexp = "[A-Za-z]+",message = "The language must be written with latin letters")
+    @Pattern(regexp = ValidationRules.LANGUAGE_PATTERN, message = ValidationMessages.LANGUAGE_MUST_BE_LATIN_LETTERS)
      String language,
-    @NotNull
+    @NotNull(message = ValidationMessages.BOOK_TYPE_REQUIRED)
      Book.BookType bookType,
-    @NotNull
-    @PositiveOrZero(message = "Price is mandatory")
+    @NotNull(message = ValidationMessages.PRICE_REQUIRED)
+    @PositiveOrZero(message = ValidationMessages.PRICE_POSITIVE)
+    @Digits(integer = ValidationRules.PRICE_WHOLE, fraction = ValidationRules.FRACTION)
      BigDecimal price,
 
-    @PositiveOrZero(message = "Rental price cannot be negative")
+    @PositiveOrZero(message = ValidationMessages.RENTAL_PRICE_POSITIVE)
+    @Digits(integer = ValidationRules.PRICE_WHOLE, fraction = ValidationRules.FRACTION)
      BigDecimal rentalPrice,
 
      Set<Long> authorIDs,
      Set<Long> reviewIDs,
      Set<Long> genreIDs,
      Set<Long> collectionIDs,
-
-     Boolean isDeleted
+    LocalDateTime freeFrom,
+    LocalDateTime freeUntil
 ){}

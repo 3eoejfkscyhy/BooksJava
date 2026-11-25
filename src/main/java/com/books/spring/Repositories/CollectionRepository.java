@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository 
 public interface CollectionRepository extends JpaRepository<Collection,Long> {
     
-Optional<Collection> findBycollectionName(String collectionName);
-Optional<Collection> findBycollectionID(Long collectionID);
+Optional<Collection> findByCollectionName(String collectionName);
+Optional<Collection> findByCollectionID(Long collectionID);
+ boolean existsByCollectionID(Long collectionID);
 }

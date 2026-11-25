@@ -1,23 +1,27 @@
 package com.books.spring.DTOs;
 
+import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Models.UserBooks;
 import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
 
 public record UserBookDTO (
-    @NotNull(message = "User ID is required")
-    @Positive(message = "User ID must be valid")
+    @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
+    @Positive(message =  ValidationMessages.USER_ID_VALID)
      Long userID,
 
-    @NotBlank
-    @Pattern(regexp = "97[89]\\d{10}")
-     String isbn,
+    @Pattern(
+            regexp = ValidationRules.ISBN_PATTERN,
+            message = ValidationMessages.ISBN_VALID_FORMAT
+    )
+    @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
+    String isbn,
 
      UserBooks.Status readingStatus,
 
-    @NotNull
-    @Positive(message = "Book length has to be valid")
+    @NotNull(message = ValidationMessages.LAST_READ_PAGE_REQUIRED)
+    @Positive(message =  ValidationMessages.BOOK_LENGHT_VALID)
      Long lastReadTo,
 
-     BigDecimal readingPercentage
+     String readingPercentage,
+     Boolean isDeleted
 ){ }

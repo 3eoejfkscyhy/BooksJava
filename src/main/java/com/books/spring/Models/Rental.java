@@ -49,4 +49,8 @@ public class Rental {
     private Book book;
 
     public enum RentalStatus { Active, Returned }
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 }

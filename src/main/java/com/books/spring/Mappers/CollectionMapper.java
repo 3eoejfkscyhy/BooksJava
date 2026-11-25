@@ -17,7 +17,6 @@ public interface CollectionMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "collectionID", ignore = true)
     @Mapping(target = "books", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     Collection toEntity(CollectionDTO dto);
 
     default String bookToIsbn(Book book) { return book.getIsbn(); }
@@ -25,7 +24,6 @@ public interface CollectionMapper {
     @Named("activeCollections")
     default Set<CollectionDTO> toActiveDtos(Set<Collection> collections) {
         return collections.stream()
-                .filter(collection -> !collection.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

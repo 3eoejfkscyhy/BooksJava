@@ -1,12 +1,8 @@
 package com.books.spring.Models;
 
 import lombok.*;
-
-import java.math.BigDecimal;
-
 import org.hibernate.annotations.*;
 import com.books.spring.Misc.UserBookId;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -27,7 +23,7 @@ public class UserBooks{
  @Id
  @OnDelete(action = OnDeleteAction.CASCADE)
  @ManyToOne
- @JoinColumn (name = "book_isbn",referencedColumnName = "book_isbn")
+ @JoinColumn (name = "book_isbn", referencedColumnName = "book_isbn")
  private Book book;
 
      public enum Status {
@@ -39,7 +35,11 @@ public class UserBooks{
 
     public Long lastReadTo;
 
-    public BigDecimal readingPercentage;
+    public String readingPercentage;
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 }
 
 

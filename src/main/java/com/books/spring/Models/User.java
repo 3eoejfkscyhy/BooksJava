@@ -3,6 +3,9 @@ package com.books.spring.Models;
 import java.math.BigDecimal;
 import java.util.*;
 import org.hibernate.annotations.*;
+
+import com.books.spring.Misc.EncryptColumnConverter;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +28,9 @@ public class User {
     @Column(name = "email", nullable = false,unique = true)
     private String email; 
 
+    @Convert(converter = EncryptColumnConverter.class)
     @Column(name = "password",nullable = false)
-    private String password;  
+    private String password;   
 
     @Column(name = "status")
     private String status; 
@@ -50,7 +54,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserBooks> UserSide = new HashSet<>();
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

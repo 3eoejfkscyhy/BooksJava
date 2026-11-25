@@ -7,11 +7,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user-books")
+@RequestMapping(Paths.USERBOOK_PATH )
 @RequiredArgsConstructor
 public class UserBookController {
     private final UserBookService userBookService;
@@ -33,7 +34,7 @@ public class UserBookController {
     } 
 
     @PutMapping("/user/{userID}/book/{isbn}/status")
-    public UserBookDTO update(@PathVariable Long userID, @PathVariable String isbn,@RequestParam Long lastReadTo, @RequestParam UserBooks.Status status) {
+    public UserBookDTO update(@PathVariable Long userID, @PathVariable String isbn,@RequestParam(required = false) Long lastReadTo, @RequestParam UserBooks.Status status) {
         return userBookService.update(userID, isbn, lastReadTo, status);
     }
 

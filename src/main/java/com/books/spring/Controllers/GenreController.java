@@ -6,11 +6,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.books.spring.Misc.BooksJavaConstants.Paths;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/genres")
+@RequestMapping(Paths.GENRE_PATH)
 @RequiredArgsConstructor
 public class GenreController {
     private final GenreService genreService;
@@ -20,9 +21,9 @@ public class GenreController {
         return genreService.getAll();
     }
 
-    @GetMapping("/{genreID}")
+    @GetMapping(Paths.GENRE_ID)
     public GenreDTO getByIsbn(@PathVariable Long genreID) {
-        return genreService.getById(genreID);
+        return genreService.getByID(genreID);
     }
 
     @PostMapping
@@ -31,21 +32,14 @@ public class GenreController {
         return genreService.create(dto);
     }
 
-    @PutMapping("/{genreID}")
+    @PutMapping(Paths.GENRE_ID)
     public GenreDTO update(@PathVariable Long genreID, @Valid @RequestBody GenreDTO dto) {
         return genreService.update(genreID, dto);
     }
 
-    @DeleteMapping("/{genreID}")
+    @DeleteMapping(Paths.GENRE_ID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long genreID) {
         genreService.delete(genreID);
-    }
-
-    @Deprecated
-    @DeleteMapping("/hard-delete/{genreID}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long genreID) {
-        genreService.hardDelete(genreID);
     }
 }

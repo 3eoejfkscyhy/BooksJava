@@ -2,6 +2,8 @@ package com.books.spring.Controllers;
 
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.DTOs.FreePeriodDTO;
+import com.books.spring.Exception.ConflictException;
+import com.books.spring.Misc.BooksJavaConstants.*;
 import com.books.spring.Services.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping(Paths.BOOK_PATH)
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
@@ -21,9 +23,14 @@ public class BookController {
         return bookService.getAll();
     }
 
-    @GetMapping("/{isbn}")
+    @GetMapping(Paths.BOOK_ISBN)
     public BookDTO getByIsbn(@PathVariable String isbn) {
+        if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
+         {
         return bookService.getByIsbn(isbn);
+         }
+          else
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
     @PostMapping
@@ -32,33 +39,58 @@ public class BookController {
         return bookService.create(dto);
     }
 
-    @PutMapping("/{isbn}")
+    @PutMapping(Paths.BOOK_ISBN)
     public BookDTO update(@PathVariable String isbn, @Valid @RequestBody BookDTO dto) {
+  if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
+         {
         return bookService.update(isbn, dto);
+         }
+        else
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @PutMapping("/{isbn}/free-period")
+    @PutMapping(Paths.BOOK_ISBN_FREE_PERIOD)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO setFreePeriod(@PathVariable String isbn, @Valid @RequestBody FreePeriodDTO dto) {
+          if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
+         {
         return bookService.setFreePeriod(isbn, dto);
+         }
+        else
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @DeleteMapping("/{isbn}/free-period")
+    @DeleteMapping(Paths.BOOK_ISBN_FREE_PERIOD)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public BookDTO removeFreePeriod(@PathVariable String isbn) {
+          if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
+         {
         return bookService.removeFreePeriod(isbn);
+         }
+        else
+            throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @DeleteMapping("/{isbn}")
+    @DeleteMapping(Paths.BOOK_ISBN)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String isbn) {
+        if(isNumeric(isbn) && isbn.length()==ValidationRules.ISBN_LENGTH)
+         {
         bookService.delete(isbn);
+        }
+          else
+       throw new ConflictException(ValidationMessages.ISBN_VALID_FORMAT);
     }
 
-    @Deprecated
-    @DeleteMapping("/hard-delete/{isbn}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable String isbn) {
-        bookService.hardDelete(isbn);
+     public static boolean isNumeric(String strNum) {
+    if (strNum == null) {
+        return false;
     }
+    try {
+        Long.parseLong(strNum);
+    } catch (NumberFormatException nfe) {
+        return false;
+    }
+    return true;
+}
 }

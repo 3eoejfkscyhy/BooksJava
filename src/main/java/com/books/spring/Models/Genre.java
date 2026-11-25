@@ -26,7 +26,4 @@ public class Genre {
    @ManyToMany(mappedBy = "bookGenres")
    private Set<Book> books = new HashSet<>();
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

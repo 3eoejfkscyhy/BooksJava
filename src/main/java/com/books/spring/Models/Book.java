@@ -82,10 +82,6 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private Set<UserBooks> BookSide = new HashSet<>();
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "book_type", nullable = false)
     private BookType bookType;

@@ -30,15 +30,10 @@ public class Author {
     private LocalDate DOB;  
 
     @Column(name = "booksWritten", nullable = false)
-    private int booksWritten;  
+    private Integer booksWritten;  
  
     @Builder.Default
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany(mappedBy = "bookAuthors")
     private Set<Book> books = new HashSet<>();
-
-    @Builder.Default
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

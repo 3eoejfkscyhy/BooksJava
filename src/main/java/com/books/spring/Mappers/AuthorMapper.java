@@ -15,7 +15,6 @@ public interface AuthorMapper {
     AuthorDTO toDto(Author author);
 
     @Mapping(target = "authorID", ignore = true)
-    @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "books", ignore = true)
     Author toEntity(AuthorDTO dto);
 
@@ -24,7 +23,6 @@ public interface AuthorMapper {
     @Named("activeAuthors")
     default Set<AuthorDTO> toActiveDtos(Set<Author> authors) {
         return authors.stream()
-                .filter(author -> !author.getIsDeleted())
                 .map(this::toDto)
                 .collect(Collectors.toSet());
     }

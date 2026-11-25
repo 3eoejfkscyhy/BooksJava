@@ -3,7 +3,11 @@ package com.books.spring.Services;
 import com.books.spring.DTOs.RentalDTO;
 import com.books.spring.DTOs.RentalRequestDTO;
 import com.books.spring.Mappers.RentalMapper;
+import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
+import com.books.spring.Misc.BooksJavaConstants.ValidationRules;
+import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.*;
+import com.books.spring.Models.Rental.RentalStatus;
 import com.books.spring.Repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ public class RentalService {
 
     public List<RentalDTO> getAll() {
         return rentalRepository.findAll().stream()
+        .filter(rental->!rental.getIsDeleted())
                 .map(rentalMapper::toDto)
                 .toList();
     }
@@ -35,23 +40,23 @@ public class RentalService {
 
     public RentalDTO create(RentalRequestDTO dto) {
         Rental rental = new Rental();
-        User user = findUser(dto.userID());
-        Book book = findBook(dto.isbn());
+        User user = BooksJavaFunctions.findUser(userRepository,dto.userID());
+        Book book = BooksJavaFunctions.findBook(bookRepository,dto.isbn());
         if(book.getBookType() != Book.BookType.EBook) {
-            throw new BadRequestException( "Only Ebooks can be rented through the application");
+            throw new BadRequestException(ExceptionMessages.ONLY_EBOOKS_ARE_RENTABLE);
         }
         if(user.getBalance().compareTo(book.getRentalPrice()) < 0) {
-            throw new BadRequestException( "Insufficient balance to rent this book");
+            throw new BadRequestException( ExceptionMessages.INSUFFICIENT_BALANCE_TO_RENT);
         }
         if(rentalRepository.existsActiveRental(user.getUserID(), book.getIsbn(), Rental.RentalStatus.Active)) {
-            throw new ConflictException("This user has an active rental for this book already");
+            throw new ConflictException(ExceptionMessages.USER_HAS_BOOK_RENTED_ALREADY);
         }
 
         rental.setUser(user);
         rental.setBook(book);
         LocalDateTime rentedAt = LocalDateTime.now();
         rental.setRentedAt(rentedAt);
-        rental.setDueAt(rentedAt.plusDays(20));
+        rental.setDueAt(rentedAt.plusDays(ValidationRules.RENTAL_LENGHT));
         rental.setStatus(Rental.RentalStatus.Active);
         UserBooks.Status previousStatus = userBookService.markRented(user.getUserID(), book.getIsbn());
         rental.setPreviousStatus(previousStatus);
@@ -64,7 +69,7 @@ public class RentalService {
         Rental rental = findRental(rentalID);
 
         if(rental.getStatus() == Rental.RentalStatus.Returned) {
-            throw new ConflictException("This rental has already been returned by this user");
+            throw new ConflictException(ExceptionMessages.USER_ALREADY_HAS_RETURNED_BOOK);
         }
 
         rental.setReturnedAt(LocalDateTime.now());
@@ -73,18 +78,18 @@ public class RentalService {
         return rentalMapper.toDto(rentalRepository.save(rental));
     }
 
-    private User findUser(Long userID) {
-        return userRepository.findByUserID(userID)
-                .filter(user -> !user.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "User " + userID + " could not be found"));
+     public void delete(Long rentalID) {
+        Rental rental = findRental(rentalID);
+        if(rental.getStatus()==RentalStatus.Active)
+        {
+            throw new ConflictException(ExceptionMessages.CANNOT_DELETE_ACTIVE_RENTAL);
+        }
+        else rental.setIsDeleted(true);
+        rentalRepository.save(rental);
     }
-    private Book findBook(String isbn) {
-        return bookRepository.findById(isbn)
-                .filter(book -> !book.getIsDeleted())
-                .orElseThrow(() -> new NotFoundException( "Book " + isbn + " could not be found"));
-    }
+
     private Rental findRental(Long rentalID) {
         return rentalRepository.findById(rentalID)
-                .orElseThrow(() -> new NotFoundException( "Rental " + rentalID + " could not be found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_RENTAL_NOT_FOUND.formatted(rentalID)));
     }
 }

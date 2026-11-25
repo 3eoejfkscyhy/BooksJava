@@ -36,7 +36,4 @@ public class Collection {
     )
     private Set<Book> books = new HashSet<>();
 
-    @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }
