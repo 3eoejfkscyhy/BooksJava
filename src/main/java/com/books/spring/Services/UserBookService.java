@@ -1,7 +1,11 @@
 package com.books.spring.Services;
 
+import com.books.spring.DTOs.RentalDTO;
+import com.books.spring.DTOs.RentalRequestDTO;
 import com.books.spring.DTOs.UserBookDTO;
+import com.books.spring.Mappers.RentalMapper;
 import com.books.spring.Mappers.UserBookMapper;
+import com.books.spring.Misc.BooksJavaConstants;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Misc.UserBookId;
 import  com.books.spring.Misc.BooksJavaFunctions;
@@ -12,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,8 +44,9 @@ public class UserBookService {
         }
 
         UserBookId id = new UserBookId(userID, isbn);
-        UserBooks userBooks = userBookRepository.findById(id).filter(userBook->!userBook.getIsDeleted()).orElse(null);
-        if(userBooks != null && (userBooks.getReadingStatus() != UserBooks.Status.Wishlisted && userBooks.getReadingStatus() != UserBooks.Status.PreviouslyOwned)) {
+        UserBooks userBooks = userBookRepository.findById(id).orElse(null);
+
+        if(userBooks != null && (userBooks.getReadingStatus() != UserBooks.Status.Wishlisted && userBooks.getReadingStatus() != UserBooks.Status.PreviouslyOwned) && !userBooks.getIsDeleted()) {
             throw new ConflictException(ExceptionMessages.BOOK_IS_ALREADY_OWNED_BY_USER);
         }
         if(user.getBalance().compareTo(book.getPrice()) < 0) {
@@ -58,6 +64,7 @@ public class UserBookService {
                     .build();
         }
         else {
+            userBooks.setIsDeleted(false);
             userBooks.setReadingStatus(UserBooks.Status.Owned);
         }
 
@@ -67,42 +74,78 @@ public class UserBookService {
     public UserBookDTO create(UserBookDTO dto) {
         User user = BooksJavaFunctions.findUser(userRepository,dto.userID());
         Book book = BooksJavaFunctions.findBook(bookRepository,dto.isbn());
-
         UserBookId id = new UserBookId(user.getUserID(), book.getIsbn());
-        if(userBookRepository.existsById(id)) {
+
+        if(dto.readingStatus() == UserBooks.Status.Owned || dto.readingStatus() == UserBooks.Status.Rented) {
+            throw new BadRequestException(ExceptionMessages.INVALID_READING_STATUS);
+        }
+        if(book.getBookType() == Book.BookType.EBook && dto.readingStatus() == UserBooks.Status.Read) {
+            throw new BadRequestException(ExceptionMessages.INVALID_READING_STATUS);
+        }
+
+        UserBooks userBook = userBookRepository.findById(id).orElse(null);
+
+        if(userBook != null && !userBook.getIsDeleted()) {
             throw new ConflictException(ExceptionMessages.USER_HAS_BOOK_IN_READING_LIST);
         }
-         if(dto.lastReadTo()>book.getBookLength()) {
+         if(dto.lastReadTo() > book.getBookLength()) {
             throw new ConflictException(ExceptionMessages.GIVEN_READ_PAGE_MORE_THAN_AVAILABLE);
         }
-        UserBooks userBook = UserBooks.builder()
-                .user(user)
-                .book(book)
-                .readingStatus(dto.readingStatus())
-                .lastReadTo(dto.lastReadTo())
-                .readingPercentage(BooksJavaFunctions.percentageRead(dto.lastReadTo(),book.getBookLength()))
-                .build();
+         if(userBook == null) {
+             userBook = UserBooks.builder()
+                     .user(user)
+                     .book(book)
+                     .readingStatus(dto.readingStatus())
+                     .lastReadTo(dto.lastReadTo())
+                     .readingPercentage(BooksJavaFunctions.percentageRead(dto.lastReadTo(), book.getBookLength()))
+                     .build();
+         }
+         else {
+             userBook.setIsDeleted(false);
+             userBook.setReadingStatus(dto.readingStatus());
+             userBook.setLastReadTo(dto.lastReadTo());
+             userBook.setReadingPercentage(BooksJavaFunctions.percentageRead(dto.lastReadTo(), book.getBookLength()));
+         }
 
         return userBookMapper.toDto(userBookRepository.save(userBook));
     }
 
     public UserBookDTO update(Long userID, String isbn, Long lastReadTo, UserBooks.Status status) {
         UserBookId userBookID = new UserBookId(userID, isbn);
-        Long bookPages = BooksJavaFunctions.findBook(bookRepository,isbn).getBookLength();
+        Book book = BooksJavaFunctions.findBook(bookRepository, isbn);
+        Long bookPages = book.getBookLength();
+
         UserBooks userBook = userBookRepository.findById(userBookID)
+                .filter(relation -> !relation.getIsDeleted())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.USER_BOOK_RELATIONSHIP_NOT_FOUND));
-        userBook.setReadingStatus(status);
+        UserBooks.Status currentStatus = userBook.getReadingStatus();
+
+        if(book.getBookType() == Book.BookType.EBook) {
+            if(currentStatus != UserBooks.Status.Owned && currentStatus != UserBooks.Status.Rented) {
+                throw new ConflictException(ExceptionMessages.BOOK_IS_NOT_AVAILABLE_TO_USER);
+            }
+            if(status != currentStatus) {
+                throw new BadRequestException(ExceptionMessages.INVALID_READING_STATUS);
+            }
+        }
+        else {
+            if (status != UserBooks.Status.Wishlisted && status != UserBooks.Status.PreviouslyOwned && status != UserBooks.Status.Read) {
+                throw new BadRequestException(ExceptionMessages.INVALID_READING_STATUS);
+            }
+        }
+
         if(lastReadTo != null)
         {
                  if(lastReadTo>bookPages) {
             throw new ConflictException(ExceptionMessages.GIVEN_READ_PAGE_MORE_THAN_AVAILABLE);
         }
-        if(userBook.getReadingStatus()!=UserBooks.Status.PreviouslyOwned&&userBook.getReadingStatus()!=UserBooks.Status.Wishlisted) {
-            
-             userBook.setLastReadTo(lastReadTo);
+        if(status == UserBooks.Status.PreviouslyOwned || status == UserBooks.Status.Wishlisted) {
+             throw new ConflictException(ExceptionMessages.CANT_UPDATE_WISHLISTED_PREVIOUSLY_OWNED_LAST_READ_PAGE);
         }
-        else throw new ConflictException(ExceptionMessages.CANT_UPDATE_WISHLISTED_PREVIOUSLY_OWNED_LAST_READ_PAGE);
-        userBook.setReadingPercentage(BooksJavaFunctions.percentageRead(lastReadTo,bookPages));
+        userBook.setReadingStatus(status);
+        userBook.setLastReadTo(lastReadTo);
+        userBook.setReadingPercentage(BooksJavaFunctions.percentageRead(lastReadTo, bookPages));
+
     }
         return userBookMapper.toDto(userBookRepository.save(userBook));
     }
@@ -124,7 +167,8 @@ public class UserBookService {
                     .readingStatus(UserBooks.Status.Rented)
                     .build();
         } else {
-            previousStatus = userBook.getReadingStatus();
+            previousStatus = userBook.getIsDeleted() ? null : userBook.getReadingStatus();
+            userBook.setIsDeleted(false);
             userBook.setReadingStatus(UserBooks.Status.Rented);
         }
 
@@ -139,7 +183,8 @@ public class UserBookService {
 
         if (previousStatus == null) {
             if (userBook != null) {
-                userBookRepository.delete(userBook);
+                userBook.setIsDeleted(true);
+                userBookRepository.save(userBook);
             }
             return;
         }
@@ -164,6 +209,9 @@ public class UserBookService {
                 .orElseThrow(() -> new NotFoundException(
                         ExceptionMessages.USER_BOOK_RELATIONSHIP_NOT_FOUND));
 
+        if(userBook.getReadingStatus() == UserBooks.Status.Rented) {
+            throw new ConflictException(ExceptionMessages.CANNOT_DELETE_RENTED_BOOK);
+        }
         userBook.setIsDeleted(true);
         userBookRepository.save(userBook);
     }

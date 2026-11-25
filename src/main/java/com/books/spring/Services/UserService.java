@@ -58,6 +58,13 @@ public class UserService {
     public UserDTO update(Long userID, UpdateUserDTO dto) {
         User user = BooksJavaFunctions.findUser(userRepository,userID);
 
+        if(userRepository.existsByEmailAndUSerIDNot(dto.email(), userID)) {
+            throw new ConflictException(ExceptionMessages.EMAIL_IS_IN_USE);
+        }
+        if(userRepository.existsByUsernameAndUserIDNot(dto.username(), userID)) {
+            throw new ConflictException(ExceptionMessages.USERNAME_IS_IN_USE);
+        }
+
         user.setUsername(dto.username());
         user.setEmail(dto.email());
         user.setStatus(dto.status());

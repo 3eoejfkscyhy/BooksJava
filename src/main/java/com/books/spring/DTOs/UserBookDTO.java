@@ -16,10 +16,11 @@ public record UserBookDTO (
     @NotBlank(message = ValidationMessages.ISBN_REQUIRED)
     String isbn,
 
+     @NotNull
      UserBooks.Status readingStatus,
 
     @NotNull(message = ValidationMessages.LAST_READ_PAGE_REQUIRED)
-    @Positive(message =  ValidationMessages.BOOK_LENGHT_VALID)
+    @PositiveOrZero(message =  ValidationMessages.BOOK_LENGHT_VALID)
      Long lastReadTo,
 
      String readingPercentage,

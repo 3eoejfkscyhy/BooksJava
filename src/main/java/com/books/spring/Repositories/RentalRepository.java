@@ -14,6 +14,7 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
            WHERE r.user.userID = :userID
            AND r.book.isbn = :isbn
            AND r.status = :status
+           AND r.isDeleted = false
            """)
     boolean existsActiveRental(@Param("userID") Long userID,
                          @Param("isbn") String isbn,

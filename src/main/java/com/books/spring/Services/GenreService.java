@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,7 +60,7 @@ public class GenreService {
     public GenreDTO update(Long genreID, GenreDTO dto) {
         Genre genre = findGenre(genreID);
 
-        if(!dto.genreName().equals(genre.getGenreName()) && genreRepository.existsByGenreName(dto.genreName())) {
+        if(!dto.genreName().equals(genre.getGenreName()) && genreRepository.existsByGenreNameIgnoreCase(dto.genreName())) {
             throw new ConflictException(ExceptionMessages.GENRE_EXIST);
         }
 
@@ -88,6 +89,9 @@ public class GenreService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_GENRE_NOT_FOUND.formatted(genreID)));
     }
     public Set<Genre> findGenres(Set<Long> genreIDs) {
+        if(genreIDs == null) {
+            return new HashSet<>();
+        }
         return genreIDs.stream()
                 .map(this::findGenre)
                 .collect(Collectors.toSet());

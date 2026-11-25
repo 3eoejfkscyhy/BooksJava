@@ -46,7 +46,7 @@ public class Review {
     private LocalDate leftAt = LocalDate.now();
 
     @Builder.Default
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_edited", nullable = false)
     private Boolean isEdited = false;
 
 }

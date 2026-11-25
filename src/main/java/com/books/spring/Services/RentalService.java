@@ -90,6 +90,7 @@ public class RentalService {
 
     private Rental findRental(Long rentalID) {
         return rentalRepository.findById(rentalID)
+                .filter(rental -> !rental.getIsDeleted())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_RENTAL_NOT_FOUND.formatted(rentalID)));
     }
 }

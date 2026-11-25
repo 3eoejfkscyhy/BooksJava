@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,6 +82,9 @@ public class AuthorService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.GIVEN_AUTHOR_NOT_FOUND.formatted(authorID)));
     }
     public Set<Author> findAuthors(Set<Long> authorIDs) {
+        if(authorIDs == null) {
+            return new HashSet<>();
+        }
         return authorIDs.stream()
                 .map(this::findAuthor)
                 .collect(Collectors.toSet());

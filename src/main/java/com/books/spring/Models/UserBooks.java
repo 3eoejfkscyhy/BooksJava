@@ -1,5 +1,8 @@
 package com.books.spring.Models;
 
+import com.books.spring.Misc.BooksJavaConstants;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.annotations.*;
 import com.books.spring.Misc.UserBookId;
@@ -22,6 +25,7 @@ public class UserBooks{
 
  @Id
  @OnDelete(action = OnDeleteAction.CASCADE)
+ @NotNull
  @ManyToOne
  @JoinColumn (name = "book_isbn", referencedColumnName = "book_isbn")
  private Book book;
@@ -33,6 +37,8 @@ public class UserBooks{
     @Column(name = "status")
     private Status readingStatus;
 
+     @NotNull(message = BooksJavaConstants.ValidationMessages.LAST_READ_PAGE_REQUIRED)
+     @PositiveOrZero(message = BooksJavaConstants.ValidationMessages.BOOK_LENGHT_VALID)
     public Long lastReadTo;
 
     public String readingPercentage;

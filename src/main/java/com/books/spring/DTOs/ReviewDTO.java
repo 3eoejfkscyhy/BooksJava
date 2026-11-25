@@ -33,9 +33,5 @@ public record ReviewDTO (
 
     @NotNull(message = ValidationMessages.USER_ID_REQUIRED)
     @Positive(message = ValidationMessages.USER_ID_VALID)
-     Long userID,
-
-     LocalDate leftAt, 
-     
-     Boolean isEdited
+     Long userID
 ){}

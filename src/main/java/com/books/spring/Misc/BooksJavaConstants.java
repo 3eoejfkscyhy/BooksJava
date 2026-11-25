@@ -26,12 +26,14 @@ public final class BooksJavaConstants {
         public static final String CANNOT_DELETE_ACTIVE_RENTAL =  "Cannot delete an active rental";
         public static final String GIVEN_USER_NOT_FOUND = "User with the ID %d could not be found";
         public static final String GIVEN_BOOK_NOT_FOUND = "Book %s could not be found";
-        public static final String GIVEN_REVIEW_FOR_BOOK_NOT_FOUND =  "Review for book %s could not be found";
         public static final String GIVEN_REVIEW_NOT_FOUND =  "Review with the ID %d could not be found";
         public static final String GIVEN_GENRE_NOT_FOUND =  "Genre with the ID %d could not be found";
         public static final String GIVEN_COLLECTION_NOT_FOUND =  "Collection with the ID %d could not be found";
         public static final String GIVEN_AUTHOR_NOT_FOUND =  "Author with the ID %d could not be found";
         public static final String GIVEN_RENTAL_NOT_FOUND =  "Rental with the ID %d could not be found";
+        public static final String BOOK_IS_NOT_AVAILABLE_TO_USER = "This user does not own this book";
+        public static final String INVALID_READING_STATUS = "This book cannot accept this status";
+        public static final String CANNOT_DELETE_RENTED_BOOK = "Rented books cannot be removed from user association";
 
         private ExceptionMessages() {}
     }

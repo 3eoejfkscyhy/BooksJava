@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +54,8 @@ public class ReviewService {
                         ))
         );
         }
+        review.setLeftAt(LocalDate.now());
+        review.setIsEdited(false);
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
@@ -71,6 +74,9 @@ public class ReviewService {
     }
 
     public Set<Review> findReviews(Set<Long> reviewIDs) {
+        if(reviewIDs == null) {
+            return new HashSet<>();
+        }
         return reviewIDs.stream()
                 .map(this::findReview)
                 .collect(Collectors.toSet());

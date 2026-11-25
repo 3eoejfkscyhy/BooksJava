@@ -19,6 +19,7 @@ public record BookDTO(
     @NotNull
     @Positive(message = ValidationMessages.BOOK_LENGHT_VALID)
      Long bookLength,
+    @NotBlank
     @Pattern(regexp = ValidationRules.LANGUAGE_PATTERN, message = ValidationMessages.LANGUAGE_MUST_BE_LATIN_LETTERS)
      String language,
     @NotNull(message = ValidationMessages.BOOK_TYPE_REQUIRED)

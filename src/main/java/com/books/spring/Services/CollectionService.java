@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -94,6 +95,9 @@ public class CollectionService {
     }
 
     public Set<Collection> findCollections(Set<Long> collectionIDs) {
+        if(collectionIDs == null) {
+            return new HashSet<>();
+        }
         return collectionIDs.stream()
                 .map(this::findCollection)
                 .collect(Collectors.toSet());

@@ -48,6 +48,7 @@ public class BookService {
 
         Set<Review> reviews = reviewService.findReviews(dto.reviewIDs());
         book.setReviews(reviews);
+        reviews.forEach(review -> review.setBook(book));
 
         Set<Genre> genres = genreService.findGenres(dto.genreIDs());
         book.setBookGenres(genres);
@@ -55,7 +56,8 @@ public class BookService {
 
         Set<Collection> collections = collectionService.findCollections(dto.collectionIDs());
         book.setCollections(collections);
-       
+        collections.forEach(collection -> collection.getBooks().add(book));
+
 
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -124,6 +126,4 @@ public class BookService {
             throw new BadRequestException(ExceptionMessages.PHYSICAL_BOOKS_CANT_BE_RENTED);
         }
     }
-
-    
 }
