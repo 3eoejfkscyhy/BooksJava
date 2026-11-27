@@ -1,25 +1,16 @@
 package com.books.spring.Services;
 
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import static org.mockito.Mockito.when;
+import java.math.BigDecimal;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import java.util.*;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import jakarta.validation.Validator;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-
-
+import jakarta.validation.*;
 import com.books.spring.DTOs.BookDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Mappers.BookMapper;
@@ -44,7 +35,7 @@ public class BookServiceTests {
 void getByISBNReturnsMappedBook()
 {
     Book THLatT = Book.builder()
-  .isbn("9870230748392")
+  .isbn("9780230748392")
   .title("Tierry Henry: Lonely at the Top")
   .bookLength(352L)
   .language("English")
@@ -54,10 +45,10 @@ void getByISBNReturnsMappedBook()
           .build();
 
     BookDTO THLatTDTO = new BookDTO(null, null, null, null, null, null, null, null, null, null, null, null, null);
-    when(bookRepository.findById("9870230748392")).thenReturn(Optional.of(THLatT));
+    when(bookRepository.findById("9780230748392")).thenReturn(Optional.of(THLatT));
     when(bookMapper.toDto(THLatT)).thenReturn(THLatTDTO);
 
-    BookDTO result = bookService.getByIsbn("9870230748392");
+    BookDTO result = bookService.getByIsbn("9780230748392");
     assertThat(result).isSameAs(THLatTDTO);
 }
 

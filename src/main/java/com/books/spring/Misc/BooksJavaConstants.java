@@ -132,7 +132,7 @@ public final class BooksJavaConstants {
         public static final String STARS_MIN = "0.0";
         public static final String STARS_MAX = "5.0";
 
-        public static final String ISBN_PATTERN = "9[78][89]\\d{10}";
+        public static final String ISBN_PATTERN = "97[89]\\d{10}";
         public static final String LANGUAGE_PATTERN = "[A-Za-z]+";
         public static final String PASSWORD_PATTERN = "[a-zA-Z0-9]+";
 

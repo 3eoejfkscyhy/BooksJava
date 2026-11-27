@@ -1,15 +1,12 @@
 package com.books.spring.Services;
 
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import java.math.BigDecimal;
 import java.util.*;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,9 +17,7 @@ import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Misc.BooksJavaFunctions;
 import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
-import jakarta.validation.Validator;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
+import jakarta.validation.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {

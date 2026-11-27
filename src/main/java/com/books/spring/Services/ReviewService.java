@@ -1,6 +1,7 @@
 package com.books.spring.Services;
 
 import com.books.spring.DTOs.ReviewDTO;
+import com.books.spring.DTOs.ReviewChangeDTO;
 import com.books.spring.Mappers.ReviewMapper;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Models.Review;
@@ -11,9 +12,7 @@ import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +32,8 @@ public class ReviewService {
 
     public ReviewDTO getById(Long reviewID) { return reviewMapper.toDto(findReview(reviewID)); }
 
-    public ReviewDTO create(ReviewDTO dto) {
-        Review review = reviewMapper.toEntity(dto);
+    public ReviewDTO create(ReviewChangeDTO dto) {
+        Review review = new Review(null, dto.headline(),dto.body(), dto.stars(),null, null, null, null);
         review.setReviewID(null);
          if(dto.isbn()!=null)
         {
@@ -59,7 +58,7 @@ public class ReviewService {
         return reviewMapper.toDto(reviewRepository.save(review));
     }
 
-    public ReviewDTO update(Long reviewID, ReviewDTO dto) {
+    public ReviewDTO update(Long reviewID, ReviewChangeDTO dto) {
         Review review = findReview(reviewID);
         review.setHeadline(dto.headline());
         review.setBody(dto.body());

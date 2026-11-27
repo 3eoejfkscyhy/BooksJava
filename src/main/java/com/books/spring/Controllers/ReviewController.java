@@ -1,6 +1,7 @@
 package com.books.spring.Controllers;
 
 import com.books.spring.DTOs.ReviewDTO;
+import com.books.spring.DTOs.ReviewChangeDTO;
 import com.books.spring.Services.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,12 @@ public class ReviewController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ReviewDTO create(@Valid @RequestBody ReviewDTO dto) {
+    public ReviewDTO create(@Valid @RequestBody ReviewChangeDTO dto) {
         return reviewService.create(dto);
     }
 
     @PutMapping(Paths.REVIEW_ID)
-    public ReviewDTO update(@PathVariable Long reviewID, @Valid @RequestBody ReviewDTO dto) {
+    public ReviewDTO update(@PathVariable Long reviewID, @Valid @RequestBody ReviewChangeDTO dto) {
         return reviewService.update(reviewID, dto);
     }
 

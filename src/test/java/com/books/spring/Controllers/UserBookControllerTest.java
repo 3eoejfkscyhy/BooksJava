@@ -1,19 +1,16 @@
 package com.books.spring.Controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.*;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.*;
-
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.books.spring.DTOs.UserBookDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Misc.BooksJavaConstants.*;
@@ -31,13 +28,13 @@ class UserBookControllerTest {
            @Test
     void getByIdReturnsTheUserBooksAsJson() throws Exception {
         when(userBookService.getByUserID(1L)).thenReturn(List.of(userBook(1L, "9780345287793", UserBooks.Status.Rented, 78l,false,120L),
-                                                   userBook(1L, "9870141019703", UserBooks.Status.Owned, 65l,false,290L)));
+                                                   userBook(1L, "9780141019703", UserBooks.Status.Owned, 65l,false,290L)));
 
         mockMvc.perform(get("/api/user-books/user/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].isbn").value("9780345287793"))
-                .andExpect(jsonPath("$[1].isbn").value("9870141019703"));
+                .andExpect(jsonPath("$[1].isbn").value("9780141019703"));
     }
 
                 @Test 

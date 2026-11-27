@@ -1,8 +1,6 @@
 package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-
 import com.books.spring.Misc.BooksJavaConstants.*;
 
 public record UpdateUserDTO( 
@@ -15,11 +13,12 @@ public record UpdateUserDTO(
     @Email(message = ValidationMessages.EMAIL_VALID)
      String email,
 
-    @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
-     String status,
+    @NotBlank(message = ValidationMessages.PASSWORD_REQUIRED)
+    @Size(min = ValidationRules.PASSWORD_MIN_LENGTH, message = ValidationMessages.PASSWORD_SIZE_VALID)
+    @Pattern(regexp = ValidationRules.PASSWORD_PATTERN, message = ValidationMessages.PASSWORD_VALID_FORMAT)
+    String password,
 
-    @PositiveOrZero
-    @Digits(integer = ValidationRules.BALANCE_WHOLE, fraction = ValidationRules.FRACTION)
-     BigDecimal balance
+    @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
+     String status
 )
 {}

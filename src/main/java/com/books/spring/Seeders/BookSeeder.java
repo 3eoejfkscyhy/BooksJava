@@ -32,7 +32,7 @@ public class BookSeeder implements CommandLineRunner{
             return;
         }
   Book THLatT = Book.builder()
-  .isbn("9870230748392")
+  .isbn("9780230748392")
   .title("Tierry Henry: Lonely at the Top")
   .bookLength(352L)
   .language("English")
@@ -44,7 +44,7 @@ public class BookSeeder implements CommandLineRunner{
           .build();
 
     Book CwJ = Book.builder()
-  .isbn("9870141019703")
+  .isbn("9780141019703")
   .title("Cook with Jamie")
   .bookLength(448L)
   .language("English")

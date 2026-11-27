@@ -9,9 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.books.spring.DTOs.BookDTO;
-import com.books.spring.DTOs.ReviewDTO;
-import com.books.spring.DTOs.UserDTO;
+import com.books.spring.DTOs.*;
 import com.books.spring.Exception.*;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 
@@ -67,8 +65,12 @@ public class BooksJavaFunctions {
     }
 
 
-    public static ReviewDTO review(Long reviewID, String headline,String body,BigDecimal stars, String isbn,Long userID) {
-        return new ReviewDTO(reviewID, headline,body,stars, isbn,userID,LocalDate.now(),false);
+    public static ReviewDTO review(Long reviewID, String headline,String body,BigDecimal stars, String isbn,Long userID,Boolean isEdited) {
+        return new ReviewDTO(reviewID, headline,body,stars, isbn,userID,LocalDate.now(),isEdited);
+    }
+
+        public static ReviewChangeDTO reviewChange(String headline,String body,BigDecimal stars, String isbn,Long userID) {
+        return new ReviewChangeDTO(headline,body,stars, isbn,userID);
     }
 
 

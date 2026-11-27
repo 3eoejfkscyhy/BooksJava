@@ -37,7 +37,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("I read this book in 3 days and it was a very interesting dive into Henry's history. Definitely check it out!")
      .stars(new BigDecimal(4.5))
      .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,2L))
-     .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9870230748392"))
+     .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9780230748392"))
      .leftAt(LocalDate.of(2026, 12, 2))
      .build();
 
@@ -46,7 +46,7 @@ public class ReviewSeeder implements CommandLineRunner {
      .body("So i'm a chef and wanted to expand my skill set, so i bought this book and i was very dissapointed. I cooked the fried rice and it was awful, Don't recommend!")
      .stars(new BigDecimal(0.0))
       .writtenBy(BooksJavaFunctions.findUserSeeder(userRepo,3L))
-      .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9870141019703"))
+      .book(BooksJavaFunctions.findBookSeeder(bookRepo,"9780141019703"))
       .leftAt(LocalDate.of(2026, 12, 5))
      .build();
 

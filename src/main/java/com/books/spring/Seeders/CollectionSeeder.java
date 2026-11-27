@@ -33,13 +33,13 @@ public class CollectionSeeder implements CommandLineRunner{
   Collection FM = Collection.builder()
   .collectionName("Football Memoirs")
   .user(BooksJavaFunctions.findUserSeeder(userRepo,2L))
-  .books(addBooks(new String[]{"9870230748392", "9789545280320"}))
+  .books(addBooks(new String[]{"9780230748392", "9789545280320"}))
   .build();
 
     Collection MB = Collection.builder()
   .collectionName("My Books")
   .user(BooksJavaFunctions.findUserSeeder(userRepo,1L))
-  .books(addBooks(new String[]{"9870230748392", "9789545280320", "9788178530857", "9870141019703"}))
+  .books(addBooks(new String[]{"9780230748392", "9789545280320", "9788178530857", "9780141019703"}))
   .build();
 
    Collection UC = Collection.builder()

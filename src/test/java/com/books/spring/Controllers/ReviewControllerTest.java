@@ -1,22 +1,17 @@
 package com.books.spring.Controllers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.*;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-
 import java.math.BigDecimal;
 import java.util.*;
-
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.books.spring.DTOs.ReviewDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Misc.BooksJavaFunctions;
@@ -35,9 +30,9 @@ class ReviewControllerTest {
       @Test
     void getAllReturnsTheReviewsAsJson() throws Exception {
         when(reviewService.getAll()).thenReturn(List.of( BooksJavaFunctions.review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
-                                     new BigDecimal(4.50), "9780545437643",5L),
+                                     new BigDecimal(4.50), "9780545437643",5L,false),
                                                     BooksJavaFunctions.review(2L, "Do not recommend!", "",
-                                     new BigDecimal(1.50), "9780545437643",9L)));
+                                     new BigDecimal(1.50), "9780545437643",9L,false)));
 
         mockMvc.perform(get(Paths.REVIEW_PATH))
                 .andExpect(status().isOk())
@@ -51,7 +46,7 @@ class ReviewControllerTest {
             @Test 
      void createReturns201AndSavedReview() throws Exception{
         ReviewDTO savedReview = BooksJavaFunctions.review(1L, "This is the most funniest book i have read", "Like every great lasagna, Garfield was born in the kitchen of an Italian restaurant on a winter's night in 1978, while outside snow fell like grated Parmesan cheese. He weighed five pounds, six ounces at birth—that's big for a kitten!—and right from the start showed a passion for Italian food",
-                                     new BigDecimal(4.50), "9780545437643",5L);
+                                     new BigDecimal(4.50), "9780545437643",5L,false);
         when(reviewService.create(any())).thenReturn(savedReview);
 
         mockMvc.perform(post(Paths.REVIEW_PATH)

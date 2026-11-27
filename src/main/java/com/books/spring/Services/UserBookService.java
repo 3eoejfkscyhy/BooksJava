@@ -1,11 +1,7 @@
 package com.books.spring.Services;
 
-import com.books.spring.DTOs.RentalDTO;
-import com.books.spring.DTOs.RentalRequestDTO;
 import com.books.spring.DTOs.UserBookDTO;
-import com.books.spring.Mappers.RentalMapper;
 import com.books.spring.Mappers.UserBookMapper;
-import com.books.spring.Misc.BooksJavaConstants;
 import com.books.spring.Misc.BooksJavaConstants.ExceptionMessages;
 import com.books.spring.Misc.UserBookId;
 import  com.books.spring.Misc.BooksJavaFunctions;
@@ -16,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

@@ -1,8 +1,6 @@
 package com.books.spring.DTOs;
 
 import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-
 import com.books.spring.Misc.BooksJavaConstants.*;
 
 public record RegisterUserDTO( 
@@ -20,9 +18,6 @@ public record RegisterUserDTO(
     String password,
 
     @Size(max = ValidationRules.STATUS_MAX_LENGTH, message = ValidationMessages.STATUS_SIZE_VALID)
-    String status,
-
-    @Digits(integer = ValidationRules.BALANCE_WHOLE, fraction = ValidationRules.FRACTION)
-    BigDecimal balance
+    String status
 )
 {}

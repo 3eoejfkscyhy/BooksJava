@@ -9,10 +9,8 @@ import com.books.spring.Models.User;
 import com.books.spring.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import com.books.spring.Exception.*;
-
 import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.List;
@@ -58,7 +56,7 @@ public class UserService {
     public UserDTO update(Long userID, UpdateUserDTO dto) {
         User user = BooksJavaFunctions.findUser(userRepository,userID);
 
-        if(userRepository.existsByEmailAndUSerIDNot(dto.email(), userID)) {
+        if(userRepository.existsByEmailAndUserIDNot(dto.email(), userID)) {
             throw new ConflictException(ExceptionMessages.EMAIL_IS_IN_USE);
         }
         if(userRepository.existsByUsernameAndUserIDNot(dto.username(), userID)) {
@@ -67,6 +65,7 @@ public class UserService {
 
         user.setUsername(dto.username());
         user.setEmail(dto.email());
+        user.setPassword(dto.password());
         user.setStatus(dto.status());
         return userMapper.toDto(userRepository.save(user));
     }
@@ -75,7 +74,7 @@ public class UserService {
         userRepository.delete(BooksJavaFunctions.findUser(userRepository,userID));
     }
 
-    public String decryptPass(Long userID) { 
+    public String decryptPass(Long userID) {  
          String decryptedPass = new String(Base64.getDecoder().decode(BooksJavaFunctions.findUser(userRepository,userID).getPassword())); 
          return LogMessages.DECRYPTED_PASSWORD.formatted(userID,decryptedPass);
         }

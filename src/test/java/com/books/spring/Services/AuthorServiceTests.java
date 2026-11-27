@@ -1,24 +1,16 @@
 package com.books.spring.Services;
 
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.*;
+import java.time.LocalDate;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import java.util.*;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
 import com.books.spring.DTOs.AuthorDTO;
 import com.books.spring.Exception.NotFoundException;
 import com.books.spring.Mappers.AuthorMapper;
@@ -40,7 +32,7 @@ public class AuthorServiceTests {
 void getByIdReturnsMappedAuthor()
 {
     Author Cixin = Author.builder().authorID(1L).firstName("Cixin").lastName("Liu").DOB(LocalDate.of(1963, 6, 23)).booksWritten(9).build();
-    AuthorDTO CixinDTO = new AuthorDTO(null, null, null, null, null, null);
+    AuthorDTO CixinDTO = new AuthorDTO( null, null, null, null, null,null);
     when(authorRepository.findByAuthorID(1L)).thenReturn(Optional.of(Cixin));
     when(authorMapper.toDto(Cixin)).thenReturn(CixinDTO);
 
